@@ -3,40 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aesthetic Memory Suite ✨</title>
+    <title>Royal Memory Album ✨</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --accent: #ffb3c1;
-            --accent-glow: rgba(255, 179, 193, 0.4);
-            --glass-bg: rgba(20, 10, 15, 0.65);
-            --border-line: rgba(255, 179, 193, 0.25);
-            --bg-gradient: radial-gradient(circle at 50% 30%, #2b0b18 0%, #080306 100%);
+            --accent-glow: rgba(255, 179, 193, 0.45);
+            --glass-bg: rgba(20, 10, 15, 0.75);
+            --border-line: rgba(255, 179, 193, 0.35);
+            --bg-gradient: radial-gradient(circle at 50% 30%, #350b1e 0%, #080306 100%);
         }
 
         body.theme-royal-gold {
             --accent: #f3d085;
-            --accent-glow: rgba(243, 208, 133, 0.4);
-            --glass-bg: rgba(25, 10, 10, 0.7);
-            --border-line: rgba(243, 208, 133, 0.25);
-            --bg-gradient: radial-gradient(circle at 50% 30%, #29080c 0%, #050102 100%);
+            --accent-glow: rgba(243, 208, 133, 0.45);
+            --glass-bg: rgba(25, 10, 10, 0.78);
+            --border-line: rgba(243, 208, 133, 0.35);
+            --bg-gradient: radial-gradient(circle at 50% 30%, #30080c 0%, #050102 100%);
         }
 
         body.theme-midnight-galaxy {
             --accent: #c8b6ff;
-            --accent-glow: rgba(200, 182, 255, 0.4);
-            --glass-bg: rgba(10, 12, 25, 0.7);
-            --border-line: rgba(200, 182, 255, 0.25);
-            --bg-gradient: radial-gradient(circle at 50% 30%, #101633 0%, #03040a 100%);
+            --accent-glow: rgba(200, 182, 255, 0.45);
+            --glass-bg: rgba(10, 12, 25, 0.78);
+            --border-line: rgba(200, 182, 255, 0.35);
+            --bg-gradient: radial-gradient(circle at 50% 30%, #151a3a 0%, #03040a 100%);
         }
 
         body.theme-emerald-gold {
             --accent: #90e0ef;
-            --accent-glow: rgba(144, 224, 239, 0.4);
-            --glass-bg: rgba(8, 22, 18, 0.7);
-            --border-line: rgba(144, 224, 239, 0.25);
-            --bg-gradient: radial-gradient(circle at 50% 30%, #06291d 0%, #020a07 100%);
+            --accent-glow: rgba(144, 224, 239, 0.45);
+            --glass-bg: rgba(8, 22, 18, 0.78);
+            --border-line: rgba(144, 224, 239, 0.35);
+            --bg-gradient: radial-gradient(circle at 50% 30%, #083324 0%, #020a07 100%);
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -45,134 +45,173 @@
             background: var(--bg-gradient);
             height: 100vh; display: flex; align-items: center; justify-content: center;
             font-family: 'Plus Jakarta Sans', sans-serif; overflow: hidden; color: #fff;
+            perspective: 1500px;
         }
 
         #bgCanvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 0; }
 
-        .card-container {
-            width: 360px; height: 560px; position: relative; z-index: 10;
+        /* MULTI-FILTER PRESET STYLES */
+        .filter-vintage-glow { filter: sepia(0.25) contrast(1.1) brightness(1.05) drop-shadow(0 0 10px var(--accent-glow)); }
+        .filter-rose-dream { filter: saturate(1.2) hue-rotate(-15deg) contrast(1.05) drop-shadow(0 0 12px rgba(255, 143, 163, 0.5)); }
+        .filter-luxe-film { filter: contrast(1.25) brightness(1.08) saturate(1.1); }
+
+        /* 3D ALBUM BOOK WRAPPER */
+        .album-book {
+            width: 380px; height: 590px; position: relative; z-index: 10;
+            transform-style: preserve-3d; transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .card-page {
+        .album-page {
             width: 100%; height: 100%; position: absolute; background: var(--glass-bg);
-            backdrop-filter: blur(25px); border-radius: 24px; padding: 30px 24px;
+            backdrop-filter: blur(30px); border-radius: 24px; padding: 28px 22px;
             display: flex; flex-direction: column; align-items: center; justify-content: space-between;
             text-align: center; border: 1px solid var(--border-line);
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7);
-            opacity: 0; pointer-events: none; transform: scale(0.95); transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.8), inset 0 0 15px rgba(255,255,255,0.05);
+            backface-visibility: hidden; transform-origin: left center;
+            transition: transform 0.9s cubic-bezier(0.645, 0.045, 0.355, 1), opacity 0.6s ease;
+            opacity: 0; pointer-events: none;
         }
 
-        .card-page.active { opacity: 1; pointer-events: auto; transform: scale(1); }
+        .album-page.active { opacity: 1; pointer-events: auto; transform: rotateY(0deg); }
+        .album-page.flipped { transform: rotateY(-180deg); opacity: 0; pointer-events: none; }
 
+        /* DECORATIVE PHOTO FRAME (LACE & TAPES) */
+        .decorative-frame {
+            position: relative; padding: 10px; background: rgba(255, 255, 255, 0.06);
+            border-radius: 18px; border: 1px dashed var(--accent);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.5);
+            animation: pulseGlow 3s infinite alternate ease-in-out;
+        }
+
+        .decorative-frame::before {
+            content: '🌸'; position: absolute; top: -12px; left: -10px; font-size: 1.2rem; z-index: 5;
+        }
+        .decorative-frame::after {
+            content: '✨'; position: absolute; bottom: -10px; right: -8px; font-size: 1.2rem; z-index: 5;
+        }
+
+        @keyframes pulseGlow {
+            0% { box-shadow: 0 0 15px var(--accent-glow); }
+            100% { box-shadow: 0 0 30px var(--accent); }
+        }
+
+        .photo-inner { width: 100%; height: 100%; border-radius: 12px; overflow: hidden; position: relative; }
+        .photo-inner img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.5s ease; }
+
+        /* SCRATCH & TAP FRAME */
+        .scratch-box { width: 220px; height: 250px; }
+        .scratch-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; cursor: pointer; z-index: 3; }
+
+        /* SCRAPBOOK COLLAGE GRID */
+        .scrapbook-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; width: 100%; }
+        .collage-item {
+            height: 120px; background: rgba(255,255,255,0.08); padding: 6px; border-radius: 12px;
+            border: 1px solid var(--border-line); transition: transform 0.3s ease; cursor: pointer;
+        }
+        .collage-item:nth-child(1) { transform: rotate(-3deg); }
+        .collage-item:nth-child(2) { transform: rotate(2deg); }
+        .collage-item:nth-child(3) { transform: rotate(3deg); }
+        .collage-item:nth-child(4) { transform: rotate(-2deg); }
+        .collage-item:hover { transform: scale(1.06) rotate(0deg); z-index: 8; }
+
+        /* TYPOGRAPHY */
         h1.title {
-            font-family: 'Italiana', serif; font-size: 2.2rem; font-weight: 400;
+            font-family: 'Italiana', serif; font-size: 2.1rem; font-weight: 400;
             background: linear-gradient(135deg, #fff 30%, var(--accent) 100%);
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            letter-spacing: 1px;
         }
+        .tag { font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); opacity: 0.85; }
+        .typewriter-text { font-size: 0.85rem; color: #f0f0f0; line-height: 1.6; font-weight: 300; white-space: pre-wrap; }
 
-        .tag { font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); opacity: 0.8; }
-
-        /* --- FLICKER & SHINE EFFECT --- */
-        .flicker-frame {
-            position: relative; border-radius: 16px; overflow: hidden;
-            border: 1px solid var(--border-line);
-            box-shadow: 0 0 15px var(--accent-glow);
-            animation: flickerGlow 2.5s infinite alternate ease-in-out;
-        }
-
-        .flicker-frame::after {
-            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
-            background: linear-gradient(60deg, transparent 30%, rgba(255,255,255,0.25) 50%, transparent 70%);
-            transform: rotate(30deg); animation: shineBorder 4s infinite linear; pointer-events: none;
-        }
-
-        @keyframes flickerGlow {
-            0% { opacity: 0.85; box-shadow: 0 0 10px var(--accent-glow); }
-            50% { opacity: 1; box-shadow: 0 0 25px var(--accent); }
-            100% { opacity: 0.9; box-shadow: 0 0 12px var(--accent-glow); }
-        }
-
-        @keyframes shineBorder {
-            0% { transform: translateY(-100%) rotate(30deg); }
-            100% { transform: translateY(100%) rotate(30deg); }
-        }
-
-        .flicker-frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
-
-        /* --- SCRATCH & TAP FRAME --- */
-        .scratch-container { width: 210px; height: 210px; }
-        .scratch-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; cursor: pointer; z-index: 2; }
-
-        /* ALBUM GRID */
-        .album-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; }
-        .grid-box { height: 110px; width: 100%; }
-
-        .typewriter-text { font-size: 0.85rem; color: #e2e2e2; line-height: 1.6; font-weight: 300; white-space: pre-wrap; }
-
+        /* BUTTONS */
         .action-btn {
-            background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-line);
-            color: var(--accent); padding: 12px 28px; border-radius: 40px;
-            font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase;
+            background: rgba(255, 255, 255, 0.08); border: 1px solid var(--border-line);
+            color: var(--accent); padding: 11px 26px; border-radius: 40px;
+            font-size: 0.72rem; letter-spacing: 2px; text-transform: uppercase;
             cursor: pointer; transition: all 0.3s ease; backdrop-filter: blur(10px);
         }
-        .action-btn:hover { background: var(--accent); color: #000; box-shadow: 0 0 20px var(--accent-glow); }
+        .action-btn:hover { background: var(--accent); color: #000; box-shadow: 0 0 25px var(--accent-glow); }
 
-        /* CAKE ANIMATION */
-        .cake-wrapper { position: relative; width: 90px; height: 90px; margin: 15px 0; }
-        .cake-body { position: absolute; bottom: 0; width: 100%; height: 40px; background: rgba(255,255,255,0.1); border-radius: 10px 10px 0 0; border-top: 2px solid var(--accent); }
-        .candle-stick { position: absolute; bottom: 40px; left: 50%; width: 6px; height: 25px; background: #fff; border-radius: 3px; transform: translateX(-50%); }
-        .candle-flame {
-            position: absolute; bottom: 65px; left: 50%; width: 12px; height: 20px;
-            background: radial-gradient(ellipse, #ffd166 0%, #ff5e00 70%, transparent 100%);
-            border-radius: 50%; transform: translateX(-50%); animation: flameWobble 0.2s infinite alternate;
+        /* ENHANCED CANDLE ANIMATION */
+        .candle-stage { position: relative; width: 110px; height: 110px; margin: 10px 0; }
+        .aura-glow {
+            position: absolute; top: 15%; left: 50%; transform: translate(-50%, -50%);
+            width: 80px; height: 80px; background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+            opacity: 0.5; animation: auraPulse 1.5s infinite alternate; pointer-events: none;
         }
-        @keyframes flameWobble { 0% { transform: translateX(-50%) scale(1); } 100% { transform: translateX(-50%) scale(1.15); } }
+        @keyframes auraPulse { 0% { opacity: 0.3; transform: translate(-50%, -50%) scale(0.9); } 100% { opacity: 0.7; transform: translate(-50%, -50%) scale(1.2); } }
+
+        .cake-body { position: absolute; bottom: 0; width: 100%; height: 42px; background: rgba(255,255,255,0.12); border-radius: 12px 12px 0 0; border-top: 2px solid var(--accent); }
+        .candle-stick { position: absolute; bottom: 42px; left: 50%; width: 8px; height: 28px; background: #fff; border-radius: 4px; transform: translateX(-50%); }
+        .candle-flame {
+            position: absolute; bottom: 70px; left: 50%; width: 14px; height: 24px;
+            background: radial-gradient(ellipse at bottom, #ffe600 0%, #ff5e00 65%, transparent 100%);
+            border-radius: 50%; transform: translateX(-50%); cursor: pointer;
+            animation: flameDancing 0.18s infinite alternate ease-in-out; filter: drop-shadow(0 0 10px #ff9900);
+        }
+        @keyframes flameDancing { 0% { transform: translateX(-50%) scale(1) rotate(-2deg); } 100% { transform: translateX(-50%) scale(1.15) rotate(2deg); } }
+
+        /* MUSIC CONTROL BUTTON */
+        .music-toggle {
+            position: fixed; top: 20px; right: 20px; z-index: 99;
+            background: rgba(0,0,0,0.5); border: 1px solid var(--border-line);
+            color: var(--accent); width: 38px; height: 38px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center; cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
     <canvas id="bgCanvas"></canvas>
 
-    <div class="card-container">
-        <!-- PAGE 1 -->
-        <div class="card-page active" id="p1">
-            <div class="tag" id="p1-sender">Special Memory</div>
+    <div class="music-toggle" id="musicBtn" onclick="toggleAudio()">🎵</div>
+
+    <div class="album-book" id="albumBook">
+        <!-- PAGE 1: ALBUM COVER -->
+        <div class="album-page active" id="p1">
+            <div class="tag" id="p1-sender">Royal Scrapbook</div>
             <h1 class="title" id="p1-title">Happy Birthday</h1>
-            <div style="min-height: 60px;"><p class="typewriter-text" data-text="A minimal memory suite for someone extra special..."></p></div>
-            <button class="action-btn" onclick="switchPage(2)">ENTER SUITE ✨</button>
-        </div>
-
-        <!-- PAGE 2 (Scratch / Tap Photo) -->
-        <div class="card-page" id="p2">
-            <div class="tag">Chapter I • Reveal</div>
-            <div style="font-size: 0.8rem; color: #aaa;">Scratch or Tap below to uncover</div>
-            <div class="flicker-frame scratch-container">
-                <img id="img-scratch" src="" alt="Memory">
-                <canvas id="scratchCanvas" class="scratch-canvas"></canvas>
+            <div class="decorative-frame" style="width: 170px; height: 170px;">
+                <div class="photo-inner"><img id="cover-img" src="" alt="Cover"></div>
             </div>
-            <button class="action-btn" onclick="switchPage(3)">NEXT GALLERY ➔</button>
+            <div style="min-height: 45px;"><p class="typewriter-text" data-text="Tap anywhere to bloom flowers & open your album..."></p></div>
+            <button class="action-btn" onclick="openAlbum(2)">UNFOLD ALBUM ✨</button>
         </div>
 
-        <!-- PAGE 3 (Gallery) -->
-        <div class="card-page" id="p3">
-            <div class="tag">Chapter II • Moments</div>
-            <div class="album-grid" id="albumGrid"></div>
-            <button class="action-btn" onclick="switchPage(4)">READ WISHES ➔</button>
+        <!-- PAGE 2: SCRATCH/TAP DECORATIVE PHOTO -->
+        <div class="album-page" id="p2">
+            <div class="tag">Chapter I • Secret Memory</div>
+            <div style="font-size: 0.78rem; color: #ddd;">Scratch canvas or simple Tap to unveil 🌸</div>
+            <div class="decorative-frame scratch-box">
+                <div class="photo-inner">
+                    <img id="img-scratch" src="" alt="Memory">
+                    <canvas id="scratchCanvas" class="scratch-canvas"></canvas>
+                </div>
+            </div>
+            <button class="action-btn" onclick="nextPage(2, 3)">VIEW GALLERY ➔</button>
         </div>
 
-        <!-- PAGE 4 (Wishes) -->
-        <div class="card-page" id="p4">
-            <div class="tag">Chapter III • Notes</div>
-            <div style="min-height: 200px; display:flex; align-items:center;"><p class="typewriter-text" id="wishesTypewriter" data-text=""></p></div>
-            <button class="action-btn" onclick="switchPage(5)">BLOW CANDLE ➔</button>
+        <!-- PAGE 3: SCRAPBOOK COLLAGE -->
+        <div class="album-page" id="p3">
+            <div class="tag">Chapter II • Memories Collage</div>
+            <div class="scrapbook-grid" id="albumGrid"></div>
+            <div style="font-size: 0.75rem; color: #aaa;">Tap images for flower shower 🌸</div>
+            <button class="action-btn" onclick="nextPage(3, 4)">READ WISHES ➔</button>
         </div>
 
-        <!-- PAGE 5 (Blow Candle) -->
-        <div class="card-page" id="p5">
-            <div class="tag">Make a Wish</div>
+        <!-- PAGE 4: PERSONAL WISHES -->
+        <div class="album-page" id="p4">
+            <div class="tag">Chapter III • Warm Wishes</div>
+            <div style="min-height: 220px; display:flex; align-items:center;"><p class="typewriter-text" id="wishesTypewriter" data-text=""></p></div>
+            <button class="action-btn" onclick="nextPage(4, 5)">CELEBRATE ➔</button>
+        </div>
+
+        <!-- PAGE 5: CANDLE CELEBRATION -->
+        <div class="album-page" id="p5">
+            <div class="tag">Final Chapter • Make A Wish</div>
             <h1 class="title" id="p5-receiver">Happy Birthday</h1>
-            <div class="cake-wrapper">
+            <div class="candle-stage">
+                <div class="aura-glow"></div>
                 <div class="candle-flame" id="flame"></div>
                 <div class="candle-stick"></div>
                 <div class="cake-body"></div>
@@ -181,65 +220,106 @@
         </div>
     </div>
 
+    <audio id="bdayAudio" loop></audio>
+
     <script>
         const cfg = {
             theme: localStorage.getItem('cfg_theme') || "rose-gold",
-            receiver: localStorage.getItem('cfg_receiver') || "Birthday Girl",
-            sender: localStorage.getItem('cfg_sender') || "Someone Special",
+            receiver: localStorage.getItem('cfg_receiver') || "Birthday Queen",
+            sender: localStorage.getItem('cfg_sender') || "Your Best Friend",
             expiry: localStorage.getItem('cfg_expiry') || "2026-08-15T23:59",
             passcode: localStorage.getItem('cfg_passcode') || "1234",
-            wishes: (localStorage.getItem('cfg_wishes') || "Wishing you warmth and joy., May all your big dreams turn real.").split(','),
-            photos: (localStorage.getItem('cfg_photos') || "https://picsum.photos/400/500?random=1,https://picsum.photos/400/500?random=2,https://picsum.photos/400/500?random=3,https://picsum.photos/400/500?random=4").split(',')
+            filter: localStorage.getItem('cfg_filter') || "vintage-glow",
+            music: localStorage.getItem('cfg_music') || "https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3?filename=happy-birthday-15220.mp3",
+            wishes: (localStorage.getItem('cfg_wishes') || "May your year shine brighter than the stars., Wishing you endless love, luck, and joy.").split(','),
+            photos: (localStorage.getItem('cfg_photos') || "https://picsum.photos/500/600?random=11,https://picsum.photos/500/600?random=22,https://picsum.photos/500/600?random=33,https://picsum.photos/500/600?random=44").split(',')
         };
 
         if (cfg.theme !== "rose-gold") document.body.classList.add(`theme-${cfg.theme}`);
 
-        document.getElementById('p1-sender').innerText = `From ${cfg.sender}`;
+        document.getElementById('p1-sender').innerText = `Album Crafted By ${cfg.sender}`;
         document.getElementById('p1-title').innerText = `Happy Birthday ${cfg.receiver}`;
         document.getElementById('p5-receiver').innerText = `To ${cfg.receiver}`;
-        document.getElementById('img-scratch').src = cfg.photos[0] || "https://picsum.photos/400/500";
+        document.getElementById('cover-img').src = cfg.photos[0] || "https://picsum.photos/500/600";
+        document.getElementById('img-scratch').src = cfg.photos[0] || "https://picsum.photos/500/600";
         document.getElementById('wishesTypewriter').setAttribute('data-text', cfg.wishes.join('\n\n✨ '));
+        document.getElementById('bdayAudio').src = cfg.music;
+
+        const filterClass = `filter-${cfg.filter}`;
+        document.getElementById('cover-img').classList.add(filterClass);
+        document.getElementById('img-scratch').classList.add(filterClass);
 
         const grid = document.getElementById('albumGrid');
         cfg.photos.slice(0, 4).forEach(url => {
             const div = document.createElement('div');
-            div.className = 'flicker-frame grid-box';
-            div.innerHTML = `<img src="${url.trim()}">`;
+            div.className = 'decorative-frame collage-item';
+            div.innerHTML = `<div class="photo-inner"><img class="${filterClass}" src="${url.trim()}"></div>`;
             grid.appendChild(div);
         });
 
-        function switchPage(pageNo) {
-            document.querySelectorAll('.card-page').forEach(p => p.classList.remove('active'));
-            const target = document.getElementById(`p${pageNo}`);
-            target.classList.add('active');
-            
-            const textEl = target.querySelector('.typewriter-text');
-            if (textEl) {
-                const txt = textEl.getAttribute('data-text');
-                textEl.innerHTML = ''; let i = 0;
-                function type() {
-                    if (i < txt.length) {
-                        textEl.innerHTML += (txt.charAt(i) === '\n') ? '<br>' : txt.charAt(i);
-                        i++; setTimeout(type, 25);
-                    }
-                }
-                type();
+        /* FLOWER SHOWER ON CLICK/TAP */
+        document.addEventListener('click', (e) => {
+            const flowers = ['🌸', '🌺', '🌹', '✨', '🌷', '🌾'];
+            for (let i = 0; i < 8; i++) {
+                const f = document.createElement('div');
+                f.innerText = flowers[Math.floor(Math.random() * flowers.length)];
+                f.style.cssText = `position:fixed;left:${e.clientX}px;top:${e.clientY}px;font-size:${Math.random()*16 + 12}px;pointer-events:none;z-index:99999;transition:all 1.2s ease-out;`;
+                document.body.appendChild(f);
+                setTimeout(() => {
+                    f.style.transform = `translate(${(Math.random()-0.5)*180}px, ${(Math.random()-0.5)*180 + 80}px) scale(0)`;
+                    f.style.opacity = '0';
+                }, 20);
+                setTimeout(() => f.remove(), 1200);
             }
+        });
 
-            if (pageNo === 2) initScratchAndTap();
-            if (pageNo === 5) initCandle();
+        function toggleAudio() {
+            const audio = document.getElementById('bdayAudio');
+            if (audio.paused) { audio.play(); document.getElementById('musicBtn').innerText = "🔊"; }
+            else { audio.pause(); document.getElementById('musicBtn').innerText = "🔈"; }
         }
 
-        function initScratchAndTap() {
+        function openAlbum(pageNo) {
+            document.getElementById('bdayAudio').play().catch(()=>{});
+            nextPage(1, pageNo);
+        }
+
+        function nextPage(from, to) {
+            const fromPage = document.getElementById(`p${from}`);
+            const toPage = document.getElementById(`p${to}`);
+
+            fromPage.classList.add('flipped');
+            fromPage.classList.remove('active');
+
+            setTimeout(() => {
+                toPage.classList.add('active');
+                const textEl = toPage.querySelector('.typewriter-text');
+                if (textEl) {
+                    const txt = textEl.getAttribute('data-text');
+                    textEl.innerHTML = ''; let i = 0;
+                    function type() {
+                        if (i < txt.length) {
+                            textEl.innerHTML += (txt.charAt(i) === '\n') ? '<br>' : txt.charAt(i);
+                            i++; setTimeout(type, 25);
+                        }
+                    }
+                    type();
+                }
+                if (to === 2) initScratch();
+                if (to === 5) initCandle();
+            }, 300);
+        }
+
+        function initScratch() {
             const canvas = document.getElementById('scratchCanvas');
             if (!canvas || canvas.dataset.done) return;
             canvas.dataset.done = "true";
             const ctx = canvas.getContext('2d');
             canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight;
 
-            ctx.fillStyle = '#221118'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#221018'; ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = '#ffb3c1'; ctx.font = '500 12px "Plus Jakarta Sans"'; ctx.textAlign = 'center';
-            ctx.fillText('SCRATCH OR TAP HERE', canvas.width/2, canvas.height/2);
+            ctx.fillText('SCRATCH OR TAP TO UNVEIL 🌸', canvas.width/2, canvas.height/2);
 
             let scratching = false;
             function clearAt(x, y) {
@@ -263,7 +343,6 @@
                 clearAt(e.touches[0].clientX - rect.left, e.touches[0].clientY - rect.top);
             });
 
-            // TAP REVEAL SUPPORT
             canvas.addEventListener('click', (e) => {
                 const rect = canvas.getBoundingClientRect();
                 clearAt(e.clientX - rect.left, e.clientY - rect.top);
@@ -274,7 +353,7 @@
             const flame = document.getElementById('flame');
             flame.onclick = () => {
                 flame.style.display = 'none';
-                confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } });
+                confetti({ particleCount: 180, spread: 100, origin: { y: 0.6 } });
             };
 
             navigator.mediaDevices?.getUserMedia({ audio: true }).then(stream => {
@@ -286,7 +365,7 @@
                     analyzer.getByteFrequencyData(data);
                     if (data.reduce((a, b) => a + b) / data.length > 40) {
                         flame.style.display = 'none';
-                        confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
+                        confetti({ particleCount: 200, spread: 110, origin: { y: 0.6 } });
                         stream.getTracks().forEach(t => t.stop()); return;
                     }
                     requestAnimationFrame(check);
@@ -295,17 +374,17 @@
             }).catch(() => {});
         }
 
-        // Bokeh Background
+        /* BACKGROUND FLOATING SPARKLES */
         const bg = document.getElementById('bgCanvas'), bCtx = bg.getContext('2d');
         bg.width = window.innerWidth; bg.height = window.innerHeight;
-        let pts = Array.from({length: 30}, () => ({x: Math.random()*bg.width, y: Math.random()*bg.height, r: Math.random()*3+1, s: -(Math.random()*0.3+0.1)}));
+        let pts = Array.from({length: 35}, () => ({x: Math.random()*bg.width, y: Math.random()*bg.height, r: Math.random()*2.5+1, s: -(Math.random()*0.3+0.1)}));
         function drawBg() {
             bCtx.clearRect(0,0,bg.width,bg.height);
-            bCtx.fillStyle = 'rgba(255, 179, 193, 0.2)';
+            bCtx.fillStyle = 'rgba(255, 179, 193, 0.25)';
             pts.forEach(p => { p.y += p.s; if(p.y < 0) p.y = bg.height; bCtx.beginPath(); bCtx.arc(p.x, p.y, p.r, 0, Math.PI*2); bCtx.fill(); });
             requestAnimationFrame(drawBg);
         }
-        drawBg(); switchPage(1);
+        drawBg();
     </script>
 </body>
 </html>
