@@ -3,117 +3,107 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Photo & Music Admin Panel</title>
+    <title>Master Admin Control</title>
     <style>
-        body { background: #0f0810; color: #ffb3c1; font-family: sans-serif; padding: 20px; }
+        body { background: #0b0710; color: #ffb3c1; font-family: sans-serif; padding: 20px; }
         .card { max-width: 500px; margin: 0 auto 20px auto; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; border: 1px solid #ffb3c1; }
-        textarea, input { width: 95%; padding: 10px; background: #000; color: #fff; border: 1px solid #ffb3c1; border-radius: 8px; margin: 8px 0; }
+        input[type="text"], input[type="number"], textarea { width: 95%; padding: 10px; background: #000; color: #fff; border: 1px solid #ffb3c1; border-radius: 8px; margin: 6px 0; }
         button { width: 100%; padding: 12px; background: #ff758f; color: #000; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; margin-top: 10px; }
-        button:hover { background: #ff4d6d; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .search-box { display: flex; gap: 5px; }
-        .search-box input { width: 75%; }
-        .search-box button { width: 25%; margin-top: 8px; padding: 10px; }
+        .song-item { background: #1b102b; padding: 8px; margin-top: 5px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; }
+        .song-item button { width: auto; padding: 5px 10px; margin: 0; background: #00f5d4; }
     </style>
 </head>
 <body>
 
-    <!-- 1. PHOTO MANAGER -->
+    <!-- 1. PHOTOS SECTION (GALLERY UPLOAD + DIRECT URL BOTH) -->
     <div class="card">
-        <h2>🖼️ Dynamic Photo Manager</h2>
-        <label>Album Photos URLs (Comma separated):</label>
-        <textarea id="photoList" rows="4" placeholder="https://image1.jpg, https://image2.jpg"></textarea>
+        <h2>🖼️ Photos Management</h2>
+        <label>Option A: Direct Gallery Upload (No URLs)</label>
+        <input type="file" id="photoPicker" accept="image/*" multiple onchange="handleImageUpload(event)">
+        
+        <hr style="border-color: rgba(255,255,255,0.1); margin: 15px 0;">
+        
+        <label>Option B: Image URLs (Comma separated)</label>
+        <textarea id="photoUrls" rows="3" placeholder="https://img1.jpg, https://img2.jpg"></textarea>
     </div>
 
-    <!-- 2. MUSIC SEARCH & TIMELINE MANAGER -->
+    <!-- 2. MUSIC & TIMELINE SECTION -->
     <div class="card">
-        <h2>🎵 Online Music & Timeline Sync</h2>
+        <h2>🎵 Music & Timeline Control</h2>
         
-        <!-- Online Music Search / Direct Link -->
-        <label>Search Song / Paste Audio MP3 Link:</label>
-        <div class="search-box">
-            <input type="text" id="customSongUrl" placeholder="Paste Direct MP3 URL or Spotify Embed Link">
-            <button onclick="searchMusic()">Search</button>
+        <label>In-App Music Search Engine:</label>
+        <div style="display:flex; gap:5px;">
+            <input type="text" id="songQuery" placeholder="Song ka naam search karein...">
+            <button style="width:30%; margin: 6px 0 0 0;" onclick="searchTracks()">Search</button>
         </div>
-        <small style="color:#aaa;">*Tip: Paste direct MP3 links from Pixabay, Archive.org or Spotify preview audio links.</small>
+        <div id="searchResults" style="max-height:120px; overflow-y:auto;"></div>
+        
+        <label style="margin-top:10px; display:block;">Or Direct Song MP3 URL:</label>
+        <input type="text" id="customSongUrl" placeholder="https://example.com/song.mp3">
 
-        <h4 style="margin-top: 15px; margin-bottom: 5px;">⏱️ Page Wise Audio Start Time (Seconds):</h4>
+        <h4 style="margin-top:15px; margin-bottom:5px;">⏱️ Timeline Audio Timestamps (Seconds):</h4>
         <div class="grid-2">
-            <div>
-                <label>Cover Page (Sec):</label>
-                <input type="number" id="p1Time" value="0">
-            </div>
-            <div>
-                <label>Scratch Page (Sec):</label>
-                <input type="number" id="p2Time" value="10">
-            </div>
-            <div>
-                <label>Gallery Page (Sec):</label>
-                <input type="number" id="p3Time" value="20">
-            </div>
-            <div>
-                <label>Wishes Page (Sec):</label>
-                <input type="number" id="p4Time" value="30">
-            </div>
+            <div><label>Cover (Sec):</label><input type="number" id="p1Time" value="0"></div>
+            <div><label>Scratch (Sec):</label><input type="number" id="p2Time" value="10"></div>
+            <div><label>Gallery (Sec):</label><input type="number" id="p3Time" value="20"></div>
+            <div><label>Wishes (Sec):</label><input type="number" id="p4Time" value="30"></div>
         </div>
-        <label style="margin-top:5px; display:block;">Candle Page (Sec):</label>
-        <input type="number" id="p5Time" value="40">
-        
-        <button onclick="saveAllSettings()">SAVE ALL SETTINGS ✨</button>
     </div>
+
+    <button style="max-width:500px; display:block; margin:0 auto; background:#00f5d4; color:#000;" onclick="saveAll()">SAVE ALL SETTINGS ✨</button>
 
     <script>
-        // Load existing saved values on page load
-        document.getElementById('photoList').value = localStorage.getItem('cfg_photos') || "";
+        let uploadedPhotos = [];
+
+        // Load existing
+        document.getElementById('photoUrls').value = localStorage.getItem('cfg_photos_urls') || "";
         document.getElementById('customSongUrl').value = localStorage.getItem('cfg_music') || "";
 
-        try {
-            const savedTimeline = JSON.parse(localStorage.getItem('cfg_audio_timeline'));
-            if(savedTimeline) {
-                if(savedTimeline.page1) document.getElementById('p1Time').value = savedTimeline.page1.startTime || 0;
-                if(savedTimeline.page2) document.getElementById('p2Time').value = savedTimeline.page2.startTime || 10;
-                if(savedTimeline.page3) document.getElementById('p3Time').value = savedTimeline.page3.startTime || 20;
-                if(savedTimeline.page4) document.getElementById('p4Time').value = savedTimeline.page4.startTime || 30;
-                if(savedTimeline.page5) document.getElementById('p5Time').value = savedTimeline.page5.startTime || 40;
-            }
-        } catch(e){}
-
-        // Online Search helper
-        function searchMusic() {
-            const query = document.getElementById('customSongUrl').value;
-            if(!query) {
-                alert("Pehle search query ya URL daalein.");
-                return;
-            }
-            if(!query.startsWith('http')) {
-                // Redirect to search open source audio platform
-                window.open(`https://pixabay.com/music/search/${encodeURIComponent(query)}/`, '_blank');
-                alert("Pixabay Music khul gaya hai. Apne pasand ka song choose karke 'Copy Link Address' karein aur yahan URL field me paste karein.");
-            } else {
-                alert("Link verified! Save button dabayein.");
-            }
+        function handleImageUpload(e) {
+            uploadedPhotos = [];
+            Array.from(e.target.files).slice(0, 4).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(evt) { uploadedPhotos.push(evt.target.result); };
+                reader.readAsDataURL(file);
+            });
         }
 
-        // Save All Settings Function
-        function saveAllSettings() {
-            // 1. Save Photos
-            const photosInput = document.getElementById('photoList').value;
-            localStorage.setItem('cfg_photos', photosInput);
+        async function searchTracks() {
+            const query = document.getElementById('songQuery').value.trim();
+            if(!query) return;
+            const res = await fetch(`https://api.jamendo.com/v3.0/tracks/?client_id=56d30c95&format=json&limit=4&search=${encodeURIComponent(query)}`);
+            const data = await res.json();
+            const resultsDiv = document.getElementById('searchResults');
+            resultsDiv.innerHTML = "";
+            data.results.forEach(track => {
+                const div = document.createElement('div');
+                div.className = 'song-item';
+                div.innerHTML = `<span>${track.name}</span><button onclick="document.getElementById('customSongUrl').value='${track.audio}'">Select</button>`;
+                resultsDiv.appendChild(div);
+            });
+        }
 
-            // 2. Save Music & Timelines
+        function saveAll() {
+            if(uploadedPhotos.length > 0) {
+                localStorage.setItem('cfg_photos', uploadedPhotos.join('|||'));
+            } else if(document.getElementById('photoUrls').value) {
+                localStorage.setItem('cfg_photos', document.getElementById('photoUrls').value.split(',').join('|||'));
+                localStorage.setItem('cfg_photos_urls', document.getElementById('photoUrls').value);
+            }
+
             const songUrl = document.getElementById('customSongUrl').value;
             localStorage.setItem('cfg_music', songUrl);
 
             const timeline = {
-                page1: { url: songUrl, startTime: parseInt(document.getElementById('p1Time').value) || 0 },
-                page2: { url: songUrl, startTime: parseInt(document.getElementById('p2Time').value) || 10 },
-                page3: { url: songUrl, startTime: parseInt(document.getElementById('p3Time').value) || 20 },
-                page4: { url: songUrl, startTime: parseInt(document.getElementById('p4Time').value) || 30 },
-                page5: { url: songUrl, startTime: parseInt(document.getElementById('p5Time').value) || 40 }
+                page1: { startTime: parseInt(document.getElementById('p1Time').value) || 0 },
+                page2: { startTime: parseInt(document.getElementById('p2Time').value) || 10 },
+                page3: { startTime: parseInt(document.getElementById('p3Time').value) || 20 },
+                page4: { startTime: parseInt(document.getElementById('p4Time').value) || 30 }
             };
             localStorage.setItem('cfg_audio_timeline', JSON.stringify(timeline));
 
-            alert("Photos, Music aur Timeline Audio Settings successfully update ho chuki hain! ✨");
+            alert("Settings Saved Successfully! ✨");
         }
     </script>
 </body>
