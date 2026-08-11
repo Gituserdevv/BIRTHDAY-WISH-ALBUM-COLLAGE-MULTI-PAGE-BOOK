@@ -4,18 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Royal Multi-Page Greeting Book</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:wght@600&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:wght@600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #120911;
-            --card-bg: rgba(28, 16, 26, 0.92);
+            --bg-color: #120512;
+            --card-bg: rgba(28, 12, 26, 0.94);
             --accent-pink: #ff758f;
+            --gold-accent: #ffd700;
             --accent-glow: rgba(255, 117, 143, 0.8);
             --text-color: #fce4ec;
             --font-main: 'Poppins', sans-serif;
-            --title-size: 1.2rem;
-            --photo-height: 125px;
-            --border-radius: 14px;
+            --border-radius: 18px;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; transition: all 0.35s ease; }
@@ -29,17 +28,17 @@
             overflow: hidden; position: relative;
         }
 
-        /* Sparkle Background Layer */
+        /* Ambient Glowing Background */
         .stars-bg {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none;
-            background: radial-gradient(circle at 50% 50%, #2a1124 0%, #120911 100%);
+            background: radial-gradient(circle at 50% 50%, #2e0e29 0%, #120512 100%);
             z-index: 1;
         }
         .stars-bg.flash { animation: bgFlash 0.5s ease-out; }
         @keyframes bgFlash {
-            0% { background: radial-gradient(circle at 50% 50%, #ff758f 0%, #2a1124 100%); }
-            100% { background: radial-gradient(circle at 50% 50%, #2a1124 0%, #120911 100%); }
+            0% { background: radial-gradient(circle at 50% 50%, #ff758f 0%, #2e0e29 100%); }
+            100% { background: radial-gradient(circle at 50% 50%, #2e0e29 0%, #120512 100%); }
         }
 
         #particleContainer {
@@ -47,7 +46,7 @@
             pointer-events: none; z-index: 2; overflow: hidden;
         }
         .particle {
-            position: absolute; font-size: 1.3rem; pointer-events: none;
+            position: absolute; font-size: 1.4rem; pointer-events: none;
             animation: floatDown 3.5s linear infinite;
         }
         @keyframes floatDown {
@@ -55,52 +54,68 @@
             100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
         }
 
-        /* Main Window Wrapper */
+        /* MAIN DECORATIVE BOOK WRAPPER */
         .book-wrapper {
             position: relative; z-index: 5;
-            width: 90%; max-width: 420px; min-height: 480px;
+            width: 92%; max-width: 440px; min-height: 520px;
             background: var(--card-bg);
-            border-radius: 24px;
-            border: 1px solid rgba(255, 117, 143, 0.4);
-            box-shadow: 0 0 35px rgba(0, 0, 0, 0.9), 0 0 20px var(--accent-glow);
+            border-radius: 28px;
+            border: 2px solid var(--accent-pink);
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.9), 0 0 25px var(--accent-glow), inset 0 0 15px rgba(255,117,143,0.2);
             backdrop-filter: blur(15px);
-            padding: 22px 18px;
+            padding: 24px 20px;
             display: flex; flex-direction: column; justify-content: space-between;
             align-items: center; text-align: center;
         }
 
-        /* Pages System */
-        .page { display: none; width: 100%; height: 100%; flex-direction: column; align-items: center; justify-content: space-between; gap: 12px; }
-        .page.active { display: flex; animation: fadeIn 0.5s forwards; }
+        /* Decorative Floral Badges */
+        .corner-badge {
+            position: absolute; font-size: 1.3rem; pointer-events: none; z-index: 6;
+        }
+        .cb-tl { top: -12px; left: -12px; }
+        .cb-tr { top: -12px; right: -12px; }
+        .cb-bl { bottom: -12px; left: -12px; }
+        .cb-br { bottom: -12px; right: -12px; }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.95); }
-            to { opacity: 1; transform: scale(1); }
+        /* Pages System */
+        .page { display: none; width: 100%; height: 100%; flex-direction: column; align-items: center; justify-content: space-between; gap: 14px; }
+        .page.active { display: flex; animation: pageUnfold 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+
+        @keyframes pageUnfold {
+            from { opacity: 0; transform: scale(0.85) rotateX(15deg); }
+            to { opacity: 1; transform: scale(1) rotateX(0deg); }
         }
 
         .chapter-title {
-            font-size: var(--title-size); letter-spacing: 2px;
-            color: #ffb3c1; text-transform: uppercase; font-weight: 700;
-            text-shadow: 0 0 8px var(--accent-glow);
+            font-size: 1.25rem; letter-spacing: 2px;
+            color: var(--gold-accent); font-weight: 700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+            display: flex; align-items: center; gap: 6px; justify-content: center;
         }
 
-        /* PAGE 1: COVER GREETING */
-        .cover-envelope {
-            width: 100%; height: 260px;
-            background: linear-gradient(135deg, rgba(255,117,143,0.15), rgba(255,255,255,0.05));
-            border: 2px dashed var(--accent-pink); border-radius: 18px;
+        /* PAGE 1: ENVELOPE GREETING COVER */
+        .envelope-card {
+            position: relative; width: 100%; height: 300px;
+            background: linear-gradient(135deg, rgba(255,117,143,0.2), rgba(255,215,0,0.1));
+            border: 2px dashed var(--accent-pink); border-radius: var(--border-radius);
             display: flex; flex-direction: column; justify-content: center; align-items: center;
-            gap: 12px; padding: 15px; box-shadow: inset 0 0 15px rgba(255,117,143,0.2);
+            gap: 15px; padding: 20px; box-shadow: inset 0 0 20px rgba(255,117,143,0.3);
         }
-        .big-icon { font-size: 3.5rem; animation: pulse 1.5s infinite alternate; }
-        @keyframes pulse { 0% { transform: scale(1); } 100% { transform: scale(1.15); } }
+        .royal-seal {
+            width: 80px; height: 80px; border-radius: 50%;
+            background: linear-gradient(135deg, #ff758f 0%, #ff4d6d 100%);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2.2rem; box-shadow: 0 0 20px var(--accent-pink), 0 0 10px var(--gold-accent);
+            animation: pulseGlow 1.8s infinite alternate;
+        }
+        @keyframes pulseGlow { 0% { transform: scale(1); } 100% { transform: scale(1.12); } }
 
-        /* PAGE 2: MAIN SINGLE SCRATCH CARD */
+        /* PAGE 2: PORTRAIT SCRATCH CARD */
         .single-scratch-card {
-            position: relative; width: 100%; height: 260px;
+            position: relative; width: 100%; height: 280px;
             border-radius: var(--border-radius); overflow: hidden;
-            border: 2px solid var(--accent-pink);
-            box-shadow: 0 0 15px var(--accent-pink);
+            border: 2px solid var(--gold-accent);
+            box-shadow: 0 0 20px rgba(255,215,0,0.4);
             cursor: pointer;
         }
         .single-scratch-card img { width: 100%; height: 100%; object-fit: cover; }
@@ -108,58 +123,56 @@
         /* PAGE 3: 4-PHOTO COLLAGE GRID */
         .collage-grid {
             display: grid; grid-template-columns: repeat(2, 1fr);
-            gap: 10px; width: 100%;
+            gap: 12px; width: 100%;
         }
 
         .photo-card {
             position: relative; border-radius: var(--border-radius); overflow: hidden;
-            height: var(--photo-height);
-            border: 2px solid var(--accent-pink);
-            box-shadow: 0 0 10px rgba(255, 117, 143, 0.4);
-            cursor: pointer;
-            animation: blinkGlow 1.5s infinite alternate;
+            height: 125px; border: 2px solid var(--accent-pink);
+            box-shadow: 0 0 12px rgba(255, 117, 143, 0.4);
+            cursor: pointer; animation: blinkGlow 1.6s infinite alternate;
         }
-        .photo-card:nth-child(2) { animation-delay: 0.3s; }
-        .photo-card:nth-child(3) { animation-delay: 0.6s; }
-        .photo-card:nth-child(4) { animation-delay: 0.9s; }
+        .photo-card:nth-child(2) { animation-delay: 0.4s; }
+        .photo-card:nth-child(3) { animation-delay: 0.8s; }
+        .photo-card:nth-child(4) { animation-delay: 1.2s; }
 
         @keyframes blinkGlow {
-            0% { box-shadow: 0 0 4px rgba(255, 117, 143, 0.2); border-color: rgba(255, 117, 143, 0.3); }
-            100% { box-shadow: 0 0 20px var(--accent-pink), 0 0 8px #fff; border-color: #ffffff; }
+            0% { box-shadow: 0 0 4px rgba(255, 117, 143, 0.3); border-color: rgba(255, 117, 143, 0.4); }
+            100% { box-shadow: 0 0 22px var(--accent-pink), 0 0 10px #ffffff; border-color: var(--gold-accent); }
         }
         .photo-card img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* Scratch Layer Overlay */
+        /* Scratch Overlay Layer */
         .scratch-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, #d4af37 0%, #fffdd0 50%, #aa771c 100%);
-            display: flex; justify-content: center; align-items: center;
-            color: #3a2228; font-weight: 800; font-size: 0.75rem; letter-spacing: 1px;
+            background: linear-gradient(135deg, #ffd700 0%, #fffdd0 50%, #d4af37 100%);
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+            color: #3a1c00; font-weight: 800; font-size: 0.8rem; letter-spacing: 1px;
             z-index: 4; border-radius: var(--border-radius);
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
+            box-shadow: inset 0 0 12px rgba(0,0,0,0.3); gap: 4px;
         }
         .scratch-overlay.revealed { opacity: 0; pointer-events: none; transform: scale(1.1); }
 
         /* PAGE 4: WISHES & CAKE */
         .wish-box {
-            background: rgba(255,255,255,0.05); border: 1px solid var(--accent-pink);
-            border-radius: 14px; padding: 12px; font-size: 0.85rem; line-height: 1.4; color: #ffe6ea;
-            max-height: 200px; overflow-y: auto; text-shadow: 0 0 5px rgba(0,0,0,0.5);
+            background: rgba(255,255,255,0.06); border: 1px solid var(--accent-pink);
+            border-radius: 16px; padding: 15px; font-size: 0.9rem; line-height: 1.5; color: #ffe6ea;
+            max-height: 200px; overflow-y: auto; box-shadow: inset 0 0 10px rgba(0,0,0,0.4);
         }
 
-        /* Bottom Controls */
-        .nav-controls { display: flex; gap: 10px; width: 100%; justify-content: center; margin-top: 10px; }
+        /* Navigation Controls */
+        .nav-controls { display: flex; gap: 12px; width: 100%; justify-content: center; margin-top: 5px; }
         .nav-btn {
             background: linear-gradient(135deg, #ff758f 0%, #ff4d6d 100%);
-            border: none; color: #fff; padding: 9px 20px; border-radius: 30px;
-            font-size: 0.8rem; font-weight: 700; cursor: pointer;
-            box-shadow: 0 0 12px var(--accent-pink);
+            border: none; color: #fff; padding: 10px 22px; border-radius: 30px;
+            font-size: 0.85rem; font-weight: 700; cursor: pointer;
+            box-shadow: 0 0 15px var(--accent-pink);
         }
-        .nav-btn.secondary { background: rgba(255,255,255,0.1); border: 1px solid var(--accent-pink); box-shadow: none; }
+        .nav-btn.secondary { background: rgba(255,255,255,0.12); border: 1px solid var(--accent-pink); box-shadow: none; }
 
         .music-toggle {
             position: absolute; top: 15px; right: 15px; z-index: 10;
-            width: 38px; height: 38px; border-radius: 50%;
+            width: 40px; height: 40px; border-radius: 50%;
             background: rgba(255, 255, 255, 0.15); border: 1px solid var(--accent-pink);
             color: #fff; display: flex; align-items: center; justify-content: center;
             cursor: pointer; backdrop-filter: blur(5px);
@@ -178,43 +191,52 @@
 
     <div class="book-wrapper">
 
+        <!-- Floral Corner Decorations -->
+        <div class="corner-badge cb-tl">🌸</div>
+        <div class="corner-badge cb-tr">✨</div>
+        <div class="corner-badge cb-bl">💖</div>
+        <div class="corner-badge cb-br">🌸</div>
+
         <!-- PAGE 1: COVER GREETING PAGE -->
         <div class="page active" id="page1">
-            <div class="chapter-title" id="titlePage1">HAPPY BIRTHDAY QUEEN! 👑</div>
-            <div class="cover-envelope">
-                <div class="big-icon">💌</div>
-                <p style="font-size: 0.9rem; font-weight: 600; color: #ffccd5;">A Special Magical Greeting Book</p>
-                <p style="font-size: 0.75rem; color: #c97a8e;">Prepared with love & magical moments</p>
+            <div class="chapter-title" id="titlePage1">👑 HAPPY BIRTHDAY QUEEN! 👑</div>
+            <div class="envelope-card">
+                <div class="royal-seal">💌</div>
+                <p style="font-size: 1.05rem; font-weight: 700; color: #ffe6ea;">A Special Magical Greeting Book</p>
+                <p style="font-size: 0.8rem; color: #ffb3c1;">Unfold to reveal memories, wishes & surprises</p>
             </div>
             <div class="nav-controls">
-                <button class="nav-btn" onclick="goToPage(2)">OPEN GREETING ➔</button>
+                <button class="nav-btn" onclick="goToPage(2)">UNFOLD GREETING ➔</button>
             </div>
         </div>
 
-        <!-- PAGE 2: SINGLE MAIN SCRATCH CARD -->
+        <!-- PAGE 2: PORTRAIT SCRATCH CARD -->
         <div class="page" id="page2">
-            <div class="chapter-title">CHAPTER I • MAIN SURPRISE</div>
+            <div class="chapter-title">✨ MAIN PORTRAIT SURPRISE ✨</div>
             <div class="single-scratch-card" onclick="scratchAndReveal(this, event)">
-                <div class="scratch-overlay">✨ SCRATCH TO REVEAL PHOTO ✨</div>
+                <div class="scratch-overlay">
+                    <span style="font-size:1.5rem;">👑</span>
+                    <span>SCRATCH TO REVEAL</span>
+                </div>
                 <img id="imgMain" src="https://images.unsplash.com/photo-1513151233558-d860c5398176?w=600">
             </div>
-            <p style="font-size:0.75rem; color:#c97a8e;">Tap to scratch & unlock the main portrait 🌸</p>
+            <p style="font-size:0.75rem; color:#ffb3c1;">Tap image to scratch & burst flower petals 🌸</p>
             <div class="nav-controls">
                 <button class="nav-btn secondary" onclick="goToPage(1)">BACK</button>
-                <button class="nav-btn" onclick="goToPage(3)">NEXT: COLLAGE ➔</button>
+                <button class="nav-btn" onclick="goToPage(3)">MEMORIES COLLAGE ➔</button>
             </div>
         </div>
 
         <!-- PAGE 3: 4-PHOTO COLLAGE GRID PAGE -->
         <div class="page" id="page3">
-            <div class="chapter-title" id="albumTitle">CHAPTER II • MEMORIES COLLAGE</div>
+            <div class="chapter-title" id="albumTitle">💖 MEMORIES COLLAGE 💖</div>
             <div class="collage-grid">
                 <div class="photo-card" onclick="scratchAndReveal(this, event)">
-                    <div class="scratch-overlay">✨ SCRATCH</div>
+                    <div class="scratch-overlay">✨ UNLOCK</div>
                     <img id="img0" src="https://images.unsplash.com/photo-1513151233558-d860c5398176?w=600">
                 </div>
                 <div class="photo-card" onclick="scratchAndReveal(this, event)">
-                    <div class="scratch-overlay">🌸 UNLOCK</div>
+                    <div class="scratch-overlay">🌸 REVEAL</div>
                     <img id="img1" src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=600">
                 </div>
                 <div class="photo-card" onclick="scratchAndReveal(this, event)">
@@ -226,19 +248,19 @@
                     <img id="img3" src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=600">
                 </div>
             </div>
-            <p style="font-size:0.7rem; color:#c97a8e;">Tap each photo to scratch & blast sparkles 💖</p>
+            <p style="font-size:0.72rem; color:#ffb3c1;">Tap each photo card to unlock magical moments ✨</p>
             <div class="nav-controls">
                 <button class="nav-btn secondary" onclick="goToPage(2)">BACK</button>
                 <button class="nav-btn" onclick="goToPage(4)">READ WISHES ➔</button>
             </div>
         </div>
 
-        <!-- PAGE 4: WISHES PAGE -->
+        <!-- PAGE 4: WISHES & CAKE PAGE -->
         <div class="page" id="page4">
-            <div class="chapter-title">CHAPTER III • SPECIAL WISHES</div>
-            <div style="font-size:2.5rem; margin:5px 0;">🎂🎉</div>
+            <div class="chapter-title">🎂 SPECIAL BIRTHDAY WISHES 🎂</div>
+            <div style="font-size: 2.8rem; margin: 4px 0;">🎉🎂🎈</div>
             <div class="wish-box" id="wishText">
-                May your day be filled with endless joy, laughter, warmth, and beautiful surprises! Keep shining bright like the star you are. Happy Birthday! ✨🌸
+                May your birthday be filled with endless joy, magic, warmth, and beautiful smiles! Keep shining bright always! ✨💖
             </div>
             <div class="nav-controls">
                 <button class="nav-btn secondary" onclick="goToPage(3)">BACK</button>
@@ -253,7 +275,6 @@
         const musicBtn = document.getElementById('musicBtn');
         let currentPage = 1;
 
-        // Auto Default Music Collection
         const DEFAULT_SONGS = {
             p1: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
             p2: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
@@ -268,11 +289,8 @@
         };
 
         function applySavedStyles() {
-            // Apply Font & Title
             const font = localStorage.getItem('cfg_font') || "'Poppins', sans-serif";
-            const titleSize = localStorage.getItem('cfg_title_size') || '1.2rem';
             document.documentElement.style.setProperty('--font-main', font);
-            document.documentElement.style.setProperty('--title-size', titleSize);
 
             const savedTitle = localStorage.getItem('cfg_title');
             if (savedTitle) {
@@ -280,13 +298,12 @@
                 document.getElementById('titlePage1').innerText = savedTitle;
             }
 
-            // Apply Sizes
-            const photoHeight = localStorage.getItem('cfg_photo_height') || '125px';
-            const borderRadius = localStorage.getItem('cfg_border_radius') || '14px';
-            document.documentElement.style.setProperty('--photo-height', photoHeight);
-            document.documentElement.style.setProperty('--border-radius', borderRadius);
+            const savedWish = localStorage.getItem('cfg_wish');
+            if (savedWish) document.getElementById('wishText').innerText = savedWish;
 
-            // Apply Photos
+            const corners = localStorage.getItem('cfg_corners') || '18px';
+            document.documentElement.style.setProperty('--border-radius', corners);
+
             const savedPhotos = localStorage.getItem('cfg_photos');
             if (savedPhotos) {
                 const photos = savedPhotos.split('|||');
@@ -309,9 +326,9 @@
         function playPageMusic(pageNum) {
             const savedSongs = JSON.parse(localStorage.getItem('cfg_multi_songs') || '{}');
             const songKey = `p${pageNum}`;
-            const songData = savedSongs[songKey] || { url: DEFAULT_SONGS[songKey] };
+            const songData = savedSongs[songKey];
             
-            const songUrl = (songData.url && songData.url.trim() !== '') ? songData.url : DEFAULT_SONGS[songKey];
+            const songUrl = (songData && songData.trim() !== '') ? songData : DEFAULT_SONGS[songKey];
 
             if (audio.src !== songUrl) {
                 audio.src = songUrl;
@@ -329,26 +346,23 @@
             }
         }
 
-        // Scratch & Sparkle Blast
         function scratchAndReveal(card, e) {
             const overlay = card.querySelector('.scratch-overlay');
             if (overlay) overlay.classList.add('revealed');
 
-            // Flash Background
             const bg = document.getElementById('bgLayer');
             bg.classList.add('flash');
             setTimeout(() => bg.classList.remove('flash'), 500);
 
-            // Explosion Particles
-            const pType = localStorage.getItem('cfg_particle_type') || 'flower';
+            const pType = localStorage.getItem('cfg_particles') || 'flower';
             const icons = pType === 'star' ? ['⭐', '✨', '💫'] : pType === 'glitter' ? ['💖', '💎', '✨'] : ['🌸', '🌺', '✨', '💖'];
 
-            for (let i = 0; i < 14; i++) {
+            for (let i = 0; i < 16; i++) {
                 const p = document.createElement('div');
                 p.className = 'particle';
                 p.innerText = icons[Math.floor(Math.random() * icons.length)];
-                p.style.left = (e.clientX + (Math.random() * 80 - 40)) + 'px';
-                p.style.top = (e.clientY + (Math.random() * 80 - 40)) + 'px';
+                p.style.left = (e.clientX + (Math.random() * 90 - 45)) + 'px';
+                p.style.top = (e.clientY + (Math.random() * 90 - 45)) + 'px';
                 p.style.animationDuration = (1.2 + Math.random() * 1.5) + 's';
                 document.getElementById('particleContainer').appendChild(p);
 
@@ -358,7 +372,7 @@
 
         function startParticleRain() {
             const container = document.getElementById('particleContainer');
-            const pType = localStorage.getItem('cfg_particle_type') || 'flower';
+            const pType = localStorage.getItem('cfg_particles') || 'flower';
             const icons = pType === 'star' ? ['⭐', '✨'] : pType === 'glitter' ? ['💖', '✨'] : ['🌸', '✨'];
 
             setInterval(() => {
