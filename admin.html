@@ -3,169 +3,136 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Royal Studio | Advanced Waveform & Audio Administration</title>
+    <title>Royal Studio | Compact Audio Waveform Dashboard</title>
     <style>
         :root {
-            --bg-gradient: linear-gradient(135deg, #fff5f7 0%, #ffe6ea 50%, #fff0f3 100%);
-            --panel-bg: rgba(255, 255, 255, 0.94);
+            --bg-gradient: linear-gradient(135deg, #fff5f7 0%, #ffe6ea 100%);
+            --panel-bg: rgba(255, 255, 255, 0.95);
             --pink-accent: #ff758f;
             --rose-gold: #c97a8e;
             --pink-soft: #ffccd5;
             --pink-light: #fff0f3;
             --text-dark: #3a2228;
             --border-soft: rgba(255, 117, 143, 0.3);
-            --shadow-soft: 0 10px 25px rgba(255, 117, 143, 0.12);
+            --shadow-soft: 0 4px 15px rgba(255, 117, 143, 0.1);
             --danger-red: #ff4d6d;
             --success-green: #2ec4b6;
         }
 
-        * { box-sizing: border-box; transition: all 0.2s ease; }
+        * { box-sizing: border-box; transition: all 0.15s ease; }
 
         body {
             background: var(--bg-gradient);
             color: var(--text-dark);
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            margin: 0;
-            padding: 20px;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: flex-start;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            margin: 0; padding: 10px 15px;
+            font-size: 0.8rem;
         }
 
         .master-wrapper {
-            width: 100%;
-            max-width: 1400px;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+            width: 100%; max-width: 1550px; margin: 0 auto;
+            display: flex; flex-direction: column; gap: 10px;
         }
 
         .header-panel {
-            background: var(--panel-bg);
-            border: 1.5px solid var(--border-soft);
-            border-radius: 16px;
-            padding: 15px 25px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: var(--shadow-soft);
+            background: var(--panel-bg); border: 1px solid var(--border-soft);
+            border-radius: 12px; padding: 8px 18px;
+            display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-soft);
         }
-
-        .header-panel h1 { margin: 0; font-size: 1.4rem; color: var(--pink-accent); font-weight: 800; }
-        .header-panel p { margin: 0; color: var(--rose-gold); font-size: 0.85rem; }
+        .header-panel h1 { margin: 0; font-size: 1.1rem; color: var(--pink-accent); font-weight: 800; }
+        .header-panel p { margin: 0; color: var(--rose-gold); font-size: 0.75rem; }
 
         .dashboard-grid {
-            display: grid;
-            grid-template-columns: 1fr 1.2fr;
-            gap: 15px;
-            align-items: start;
+            display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 10px; align-items: start;
         }
 
-        .column { display: flex; flex-direction: column; gap: 15px; }
+        .column { display: flex; flex-direction: column; gap: 10px; }
 
         .card-section {
-            background: var(--panel-bg);
-            border: 1.5px solid var(--border-soft);
-            border-radius: 18px;
-            padding: 18px;
-            box-shadow: var(--shadow-soft);
+            background: var(--panel-bg); border: 1px solid var(--border-soft);
+            border-radius: 12px; padding: 10px 12px; box-shadow: var(--shadow-soft);
         }
-
         .card-section h2 {
-            margin-top: 0; margin-bottom: 12px; font-size: 1rem; color: var(--pink-accent);
-            display: flex; align-items: center; gap: 8px; border-bottom: 1.5px solid var(--pink-light); padding-bottom: 8px;
+            margin: 0 0 8px 0; font-size: 0.85rem; color: var(--pink-accent);
+            display: flex; align-items: center; justify-content: space-between;
+            border-bottom: 1px solid var(--pink-light); padding-bottom: 4px;
         }
 
-        .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .form-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        .form-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+        .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
 
-        .input-group { display: flex; flex-direction: column; gap: 4px; }
-        .input-group label { font-size: 0.78rem; font-weight: 700; color: var(--text-dark); }
+        .input-group { display: flex; flex-direction: column; gap: 2px; }
+        .input-group label { font-size: 0.7rem; font-weight: 700; color: var(--text-dark); }
 
         input[type="text"], input[type="number"], textarea {
-            width: 100%; padding: 8px 10px; background: #ffffff; color: var(--text-dark);
-            border: 1.5px solid var(--pink-soft); border-radius: 10px; font-size: 0.82rem; outline: none;
+            width: 100%; padding: 4px 6px; background: #fff; color: var(--text-dark);
+            border: 1px solid var(--pink-soft); border-radius: 6px; font-size: 0.75rem; outline: none;
         }
 
         .slot-card {
-            background: var(--pink-light); border: 1.5px dashed var(--pink-soft);
-            border-radius: 12px; padding: 8px; display: flex; flex-direction: column; gap: 6px; align-items: center;
+            background: var(--pink-light); border: 1px dashed var(--pink-soft);
+            border-radius: 8px; padding: 4px; display: flex; flex-direction: column; gap: 4px; align-items: center;
         }
-
         .slot-preview {
-            width: 100%; height: 90px; background: #ffffff; border-radius: 8px;
+            width: 100%; height: 50px; background: #fff; border-radius: 6px;
             display: flex; align-items: center; justify-content: center; overflow: hidden; border: 1px solid var(--pink-soft);
         }
         .slot-preview img { width: 100%; height: 100%; object-fit: cover; }
 
         .upload-btn {
-            background: var(--pink-accent); color: #ffffff; text-align: center;
-            padding: 6px 0; border-radius: 8px; font-size: 0.72rem; font-weight: 700; cursor: pointer; flex: 1; display: block;
+            background: var(--pink-accent); color: #fff; text-align: center;
+            padding: 3px 0; border-radius: 5px; font-size: 0.65rem; font-weight: 700; cursor: pointer; flex: 1;
         }
-
         .delete-btn {
-            background: var(--danger-red); color: #ffffff; border: none; border-radius: 8px;
-            padding: 6px 8px; font-size: 0.72rem; font-weight: 700; cursor: pointer;
+            background: var(--danger-red); color: #fff; border: none; border-radius: 5px;
+            padding: 3px 6px; font-size: 0.65rem; cursor: pointer;
         }
-
         input[type="file"] { display: none; }
 
         .btn-submit {
-            padding: 10px 18px; background: linear-gradient(135deg, #ff758f 0%, #ff4d6d 100%);
-            color: #ffffff; font-weight: 800; font-size: 0.88rem; border: none; border-radius: 12px; cursor: pointer;
-            box-shadow: 0 6px 15px rgba(255, 77, 109, 0.25);
+            padding: 6px 14px; background: linear-gradient(135deg, #ff758f 0%, #ff4d6d 100%);
+            color: #fff; font-weight: 800; font-size: 0.78rem; border: none; border-radius: 8px; cursor: pointer;
         }
-
         .btn-reset {
-            padding: 10px 18px; background: #ffffff; color: var(--text-dark);
-            border: 1.5px solid var(--pink-soft); font-weight: 700; font-size: 0.88rem; border-radius: 12px; cursor: pointer;
+            padding: 6px 14px; background: #fff; color: var(--text-dark);
+            border: 1px solid var(--pink-soft); font-weight: 700; font-size: 0.78rem; border-radius: 8px; cursor: pointer;
         }
 
-        .page-audio-box {
-            background: #ffffff; border: 1.5px solid var(--pink-soft); border-radius: 12px; padding: 12px; margin-bottom: 12px;
+        /* INSTAGRAM STORY STYLE WAVEFORM SCRUBBER */
+        .insta-search-card {
+            background: #fff; border: 1px solid var(--pink-soft); border-radius: 8px;
+            padding: 8px; margin-top: 6px; display: flex; flex-direction: column; gap: 6px;
         }
 
-        .page-audio-box h3 {
-            margin: 0 0 8px 0; font-size: 0.85rem; color: var(--pink-accent); display: flex; justify-content: space-between; align-items: center;
+        .insta-wave-box {
+            position: relative; width: 100%; height: 38px; background: #fff0f3;
+            border-radius: 6px; overflow: hidden; display: flex; align-items: center; cursor: pointer;
         }
 
-        .waveform-container {
-            width: 100%; height: 35px; background: #fff0f3; border-radius: 8px; margin: 8px 0; display: flex;
-            align-items: center; justify-content: space-between; padding: 0 5px; gap: 3px; cursor: pointer;
+        .insta-wave-canvas {
+            width: 100%; height: 100%; display: block;
         }
 
-        .waveform-bar {
-            flex: 1; background: var(--pink-soft); height: 30%; border-radius: 3px; transition: height 0.15s ease, background 0.15s ease;
+        .play-head {
+            position: absolute; top: 0; bottom: 0; width: 2px; background: var(--danger-red);
+            left: 0%; z-index: 5; pointer-events: none;
         }
 
-        .waveform-bar.active { background: var(--pink-accent); height: 85%; }
-
-        /* SEARCH RESULT ITEM STYLING WITH LIVE SOUND WAVE */
-        .search-item {
-            background: #ffffff; border: 1px solid var(--pink-soft); border-radius: 10px;
-            padding: 8px 12px; margin-top: 8px; display: flex; align-items: center; justify-content: space-between; gap: 10px;
-        }
-        
-        .mini-wave {
-            display: flex; gap: 2px; align-items: center; height: 16px;
-        }
-        .mini-wave-bar {
-            width: 3px; height: 4px; background: var(--pink-accent); border-radius: 2px;
-        }
-        .mini-wave.playing .mini-wave-bar {
-            animation: bounce 0.6s infinite alternate ease-in-out;
-        }
-        .mini-wave.playing .mini-wave-bar:nth-child(2) { animation-delay: 0.2s; }
-        .mini-wave.playing .mini-wave-bar:nth-child(3) { animation-delay: 0.4s; }
-
-        @keyframes bounce {
-            0% { height: 4px; }
-            100% { height: 16px; }
+        .trim-overlay {
+            position: absolute; top: 0; bottom: 0; background: rgba(255, 117, 143, 0.3);
+            border-left: 2px solid var(--pink-accent); border-right: 2px solid var(--pink-accent);
+            pointer-events: none; z-index: 4;
         }
 
-        .play-chip { background: var(--success-green); color: #fff; border: none; padding: 5px 12px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; font-weight: 700; }
-        .action-chip { background: var(--pink-accent); color: #fff; border: none; padding: 5px 12px; border-radius: 6px; cursor: pointer; font-size: 0.75rem; font-weight: 700; }
+        .btn-chip {
+            background: var(--pink-accent); color: #fff; border: none; padding: 3px 8px;
+            border-radius: 5px; font-size: 0.7rem; font-weight: 700; cursor: pointer;
+        }
+        .btn-play { background: var(--success-green); }
+
+        .pages-audio-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+        }
     </style>
 </head>
 <body>
@@ -174,10 +141,10 @@
         <div class="header-panel">
             <div>
                 <h1>🌸 Studio Master Administration Dashboard</h1>
-                <p>Waveform Visual Trimmer, Multi-Song & Candle Page Engine</p>
+                <p>Instagram Story Waveform Trimmer & Multi-Audio Engine</p>
             </div>
-            <div style="display:flex; gap:10px;">
-                <button class="btn-reset" onclick="resetToDefaults()">Reset Defaults 🔄</button>
+            <div style="display:flex; gap:8px;">
+                <button class="btn-reset" onclick="resetToDefaults()">Reset 🔄</button>
                 <button class="btn-submit" onclick="saveMasterConfig()">Save Changes ✨</button>
             </div>
         </div>
@@ -189,54 +156,54 @@
                     <h2>🖼️ Dedicated Page Photos (4 Primary Slots)</h2>
                     <div class="form-grid-4">
                         <div class="slot-card">
-                            <span style="font-size:0.75rem; font-weight:700;">1. Cover</span>
-                            <div class="slot-preview" id="preview1"><span style="color:#aaa; font-size:0.7rem;">No Asset</span></div>
-                            <div style="display:flex; gap:4px; width:100%;">
+                            <span style="font-size:0.65rem; font-weight:700;">1. Cover</span>
+                            <div class="slot-preview" id="preview1"><span style="color:#aaa; font-size:0.6rem;">No Asset</span></div>
+                            <div style="display:flex; gap:2px; width:100%;">
                                 <label for="file1" class="upload-btn">Upload</label>
                                 <button class="delete-btn" onclick="removePhoto(0)">🗑️</button>
                             </div>
                             <input type="file" id="file1" accept="image/*" onchange="handleImageUpload(event, 0)">
-                            <input type="text" id="url1" placeholder="Or URL..." onchange="handleUrlInput(this.value, 0)">
+                            <input type="text" id="url1" placeholder="URL..." onchange="handleUrlInput(this.value, 0)">
                         </div>
 
                         <div class="slot-card">
-                            <span style="font-size:0.75rem; font-weight:700;">2. Scratch</span>
-                            <div class="slot-preview" id="preview2"><span style="color:#aaa; font-size:0.7rem;">No Asset</span></div>
-                            <div style="display:flex; gap:4px; width:100%;">
+                            <span style="font-size:0.65rem; font-weight:700;">2. Scratch</span>
+                            <div class="slot-preview" id="preview2"><span style="color:#aaa; font-size:0.6rem;">No Asset</span></div>
+                            <div style="display:flex; gap:2px; width:100%;">
                                 <label for="file2" class="upload-btn">Upload</label>
                                 <button class="delete-btn" onclick="removePhoto(1)">🗑️</button>
                             </div>
                             <input type="file" id="file2" accept="image/*" onchange="handleImageUpload(event, 1)">
-                            <input type="text" id="url2" placeholder="Or URL..." onchange="handleUrlInput(this.value, 1)">
+                            <input type="text" id="url2" placeholder="URL..." onchange="handleUrlInput(this.value, 1)">
                         </div>
 
                         <div class="slot-card">
-                            <span style="font-size:0.75rem; font-weight:700;">3. Gallery</span>
-                            <div class="slot-preview" id="preview3"><span style="color:#aaa; font-size:0.7rem;">No Asset</span></div>
-                            <div style="display:flex; gap:4px; width:100%;">
+                            <span style="font-size:0.65rem; font-weight:700;">3. Gallery</span>
+                            <div class="slot-preview" id="preview3"><span style="color:#aaa; font-size:0.6rem;">No Asset</span></div>
+                            <div style="display:flex; gap:2px; width:100%;">
                                 <label for="file3" class="upload-btn">Upload</label>
                                 <button class="delete-btn" onclick="removePhoto(2)">🗑️</button>
                             </div>
                             <input type="file" id="file3" accept="image/*" onchange="handleImageUpload(event, 2)">
-                            <input type="text" id="url3" placeholder="Or URL..." onchange="handleUrlInput(this.value, 2)">
+                            <input type="text" id="url3" placeholder="URL..." onchange="handleUrlInput(this.value, 2)">
                         </div>
 
                         <div class="slot-card">
-                            <span style="font-size:0.75rem; font-weight:700;">4. Wishes</span>
-                            <div class="slot-preview" id="preview4"><span style="color:#aaa; font-size:0.7rem;">No Asset</span></div>
-                            <div style="display:flex; gap:4px; width:100%;">
+                            <span style="font-size:0.65rem; font-weight:700;">4. Wishes</span>
+                            <div class="slot-preview" id="preview4"><span style="color:#aaa; font-size:0.6rem;">No Asset</span></div>
+                            <div style="display:flex; gap:2px; width:100%;">
                                 <label for="file4" class="upload-btn">Upload</label>
                                 <button class="delete-btn" onclick="removePhoto(3)">🗑️</button>
                             </div>
                             <input type="file" id="file4" accept="image/*" onchange="handleImageUpload(event, 3)">
-                            <input type="text" id="url4" placeholder="Or URL..." onchange="handleUrlInput(this.value, 3)">
+                            <input type="text" id="url4" placeholder="URL..." onchange="handleUrlInput(this.value, 3)">
                         </div>
                     </div>
                 </div>
 
                 <div class="card-section">
                     <h2>✨ Album Config & Messages</h2>
-                    <div class="form-grid-2" style="margin-bottom:8px;">
+                    <div class="form-grid-2" style="margin-bottom:6px;">
                         <div class="input-group">
                             <label>Album Title Name</label>
                             <input type="text" id="cfgTitle" placeholder="Happy Birthday Queen!">
@@ -246,7 +213,7 @@
                             <input type="text" id="cfgRecipient" placeholder="Sarah">
                         </div>
                     </div>
-                    <div class="input-group" style="margin-bottom:8px;">
+                    <div class="input-group" style="margin-bottom:6px;">
                         <label>Scratch Card Reward Text</label>
                         <input type="text" id="cfgScratchText">
                     </div>
@@ -257,66 +224,60 @@
                 </div>
             </div>
 
-            <!-- RIGHT COLUMN: SEARCH & WAVEFORM AUDIO ENGINE -->
+            <!-- RIGHT COLUMN: INSTA WAVE & PAGES AUDIO -->
             <div class="column">
                 <div class="card-section">
-                    <h2>🎧 Search Track Preview & Play</h2>
-                    <div class="input-group">
-                        <div style="display:flex; gap:6px;">
-                            <input type="text" id="songQuery" placeholder="Search track e.g. gumnaam, kesariya...">
-                            <button style="width:100px; background:var(--pink-accent); color:white; border:none; border-radius:10px; font-weight:bold; cursor:pointer;" onclick="searchMusic()">Search</button>
-                        </div>
+                    <h2>🎧 Music Search & Insta Story Scrubber</h2>
+                    <div style="display:flex; gap:6px;">
+                        <input type="text" id="songQuery" placeholder="Search track (e.g. gumnaam, kesariya...)">
+                        <button class="btn-chip" style="width:80px;" onclick="searchMusic()">Search</button>
                     </div>
                     <div id="searchResultsBox"></div>
                 </div>
 
                 <div class="card-section">
-                    <h2>📊 Waveform Multi-Audio & Candle Page Sync</h2>
+                    <h2>📊 Multi-Audio & Candle Sync</h2>
+                    <div class="pages-audio-grid">
+                        <div class="slot-card" style="align-items:stretch; background:#fff;">
+                            <span style="font-size:0.7rem; font-weight:700; color:var(--pink-accent);">1. Cover Song</span>
+                            <input type="text" id="songUrl_p1" placeholder="MP3 URL">
+                            <div class="form-grid-2">
+                                <input type="number" id="start_p1" placeholder="Start" value="0">
+                                <input type="number" id="end_p1" placeholder="End" value="30">
+                            </div>
+                            <button class="btn-chip btn-play" onclick="previewAudioSlot(1)">▶ Play Cut</button>
+                        </div>
 
-                    <!-- PAGE 1 -->
-                    <div class="page-audio-box">
-                        <h3><span>1. Cover Page Song</span><button class="play-chip" onclick="previewAudioSlot(1)">▶ Play Cut</button></h3>
-                        <input type="text" id="songUrl_p1" placeholder="MP3 URL for Cover Page">
-                        <div class="waveform-container" id="wave_p1" onclick="scrubWaveform(1, event)"></div>
-                        <div class="form-grid-2">
-                            <div class="input-group"><label>Start Cut (Sec)</label><input type="number" id="start_p1" value="0"></div>
-                            <div class="input-group"><label>End Cut (Sec)</label><input type="number" id="end_p1" value="30"></div>
+                        <div class="slot-card" style="align-items:stretch; background:#fff;">
+                            <span style="font-size:0.7rem; font-weight:700; color:var(--pink-accent);">2. Scratch Song</span>
+                            <input type="text" id="songUrl_p2" placeholder="MP3 URL">
+                            <div class="form-grid-2">
+                                <input type="number" id="start_p2" placeholder="Start" value="0">
+                                <input type="number" id="end_p2" placeholder="End" value="30">
+                            </div>
+                            <button class="btn-chip btn-play" onclick="previewAudioSlot(2)">▶ Play Cut</button>
+                        </div>
+
+                        <div class="slot-card" style="align-items:stretch; background:#fff;">
+                            <span style="font-size:0.7rem; font-weight:700; color:var(--pink-accent);">3. Gallery Song</span>
+                            <input type="text" id="songUrl_p3" placeholder="MP3 URL">
+                            <div class="form-grid-2">
+                                <input type="number" id="start_p3" placeholder="Start" value="0">
+                                <input type="number" id="end_p3" placeholder="End" value="30">
+                            </div>
+                            <button class="btn-chip btn-play" onclick="previewAudioSlot(3)">▶ Play Cut</button>
+                        </div>
+
+                        <div class="slot-card" style="align-items:stretch; background:#fff5f7; border-color:var(--pink-accent);">
+                            <span style="font-size:0.7rem; font-weight:700; color:var(--pink-accent);">🕯️ 4. Candle Page Song</span>
+                            <input type="text" id="songUrl_p4" placeholder="MP3 URL">
+                            <div class="form-grid-2">
+                                <input type="number" id="start_p4" placeholder="Start" value="0">
+                                <input type="number" id="end_p4" placeholder="End" value="30">
+                            </div>
+                            <button class="btn-chip btn-play" onclick="previewAudioSlot(4)">▶ Play Cut</button>
                         </div>
                     </div>
-
-                    <!-- PAGE 2 -->
-                    <div class="page-audio-box">
-                        <h3><span>2. Scratch Card Page Song</span><button class="play-chip" onclick="previewAudioSlot(2)">▶ Play Cut</button></h3>
-                        <input type="text" id="songUrl_p2" placeholder="MP3 URL for Scratch Page">
-                        <div class="waveform-container" id="wave_p2" onclick="scrubWaveform(2, event)"></div>
-                        <div class="form-grid-2">
-                            <div class="input-group"><label>Start Cut (Sec)</label><input type="number" id="start_p2" value="0"></div>
-                            <div class="input-group"><label>End Cut (Sec)</label><input type="number" id="end_p2" value="30"></div>
-                        </div>
-                    </div>
-
-                    <!-- PAGE 3 -->
-                    <div class="page-audio-box">
-                        <h3><span>3. Gallery Page Song</span><button class="play-chip" onclick="previewAudioSlot(3)">▶ Play Cut</button></h3>
-                        <input type="text" id="songUrl_p3" placeholder="MP3 URL for Gallery Page">
-                        <div class="waveform-container" id="wave_p3" onclick="scrubWaveform(3, event)"></div>
-                        <div class="form-grid-2">
-                            <div class="input-group"><label>Start Cut (Sec)</label><input type="number" id="start_p3" value="0"></div>
-                            <div class="input-group"><label>End Cut (Sec)</label><input type="number" id="end_p3" value="30"></div>
-                        </div>
-                    </div>
-
-                    <!-- PAGE 4 CANDLE / WISH PAGE -->
-                    <div class="page-audio-box" style="border-color: var(--pink-accent); background:#fff5f7;">
-                        <h3><span>🕯️ 4. Candle Moment / Wishes Page Song</span><button class="play-chip" onclick="previewAudioSlot(4)">▶ Play Cut</button></h3>
-                        <input type="text" id="songUrl_p4" placeholder="MP3 URL for Candle Page">
-                        <div class="waveform-container" id="wave_p4" onclick="scrubWaveform(4, event)"></div>
-                        <div class="form-grid-2">
-                            <div class="input-group"><label>Start Cut (Sec)</label><input type="number" id="start_p4" value="0"></div>
-                            <div class="input-group"><label>End Cut (Sec)</label><input type="number" id="end_p4" value="30"></div>
-                        </div>
-                    </div>
-
                 </div>
             </div>
         </div>
@@ -326,7 +287,7 @@
 
     <script>
         let albumPhotos = ["", "", "", ""];
-        let currentPlayingUrl = null;
+        let activeAudioTrack = null;
 
         const DEFAULT_CONFIG = {
             photos: [
@@ -348,46 +309,8 @@
         };
 
         window.onload = function() {
-            renderWaveforms();
             loadSavedConfig();
         };
-
-        function renderWaveforms() {
-            for(let p=1; p<=4; p++) {
-                const container = document.getElementById(`wave_p${p}`);
-                container.innerHTML = "";
-                for(let i=0; i<30; i++) {
-                    const bar = document.createElement('div');
-                    bar.className = 'waveform-bar';
-                    const height = Math.floor(Math.random() * 65) + 20;
-                    bar.style.height = height + '%';
-                    container.appendChild(bar);
-                }
-            }
-        }
-
-        function scrubWaveform(pageIndex, event) {
-            const container = document.getElementById(`wave_p${pageIndex}`);
-            const rect = container.getBoundingClientRect();
-            const clickX = event.clientX - rect.left;
-            const percentage = clickX / rect.width;
-            
-            const player = document.getElementById('globalPreviewPlayer');
-            const totalDuration = player.duration || 60;
-            const newStart = Math.floor(percentage * totalDuration);
-
-            document.getElementById(`start_p${pageIndex}`).value = newStart;
-            document.getElementById(`end_p${pageIndex}`).value = Math.min(newStart + 20, Math.floor(totalDuration));
-
-            const bars = container.querySelectorAll('.waveform-bar');
-            const activeIndex = Math.floor(percentage * bars.length);
-            bars.forEach((bar, idx) => {
-                if(idx <= activeIndex) bar.classList.add('active');
-                else bar.classList.remove('active');
-            });
-
-            previewAudioSlot(pageIndex);
-        }
 
         function loadSavedConfig() {
             const savedPhotos = localStorage.getItem('cfg_photos');
@@ -455,82 +378,112 @@
 
         function removePhoto(index, updateStorage = true) {
             albumPhotos[index] = "";
-            document.getElementById(`preview${index + 1}`).innerHTML = `<span style="color:#aaa; font-size:0.7rem;">No Asset</span>`;
+            document.getElementById(`preview${index + 1}`).innerHTML = `<span style="color:#aaa; font-size:0.6rem;">No Asset</span>`;
             document.getElementById(`url${index + 1}`).value = "";
             document.getElementById(`file${index + 1}`).value = "";
             if(updateStorage) localStorage.setItem('cfg_photos', albumPhotos.join('|||'));
         }
 
-        /* SEARCH TRACKS & PLAY OPTION WITH WAVE ANIMATION */
+        /* SEARCH & INSTA WAVE SCRUBBER DRAWING */
         async function searchMusic() {
             const query = document.getElementById('songQuery').value.trim();
             if (!query) return alert("Search term enter karein!");
 
             const box = document.getElementById('searchResultsBox');
-            box.innerHTML = "<p style='font-size:0.75rem; color:#888;'>Searching songs...</p>";
+            box.innerHTML = "<p style='font-size:0.7rem; color:#888;'>Searching songs...</p>";
 
             try {
-                const res = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(query)}&media=music&limit=4`);
+                const res = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(query)}&media=music&limit=3`);
                 const data = await res.json();
                 
                 box.innerHTML = "";
                 if (!data.results || data.results.length === 0) {
-                    box.innerHTML = "<p style='font-size:0.75rem; color:red;'>No tracks found.</p>";
+                    box.innerHTML = "<p style='font-size:0.7rem; color:red;'>No tracks found.</p>";
                     return;
                 }
 
                 data.results.forEach((track, idx) => {
-                    const el = document.createElement('div');
-                    el.className = "search-item";
-                    el.innerHTML = `
-                        <div style="display:flex; align-items:center; gap:8px;">
-                            <button class="play-chip" id="searchPlayBtn_${idx}" onclick="toggleSearchPlay('${track.previewUrl}', ${idx})">▶ Play</button>
+                    const card = document.createElement('div');
+                    card.className = 'insta-search-card';
+                    card.innerHTML = `
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
                             <span><b>${track.trackName}</b> <small style="color:#888;">(${track.artistName})</small></span>
-                        </div>
-                        <div style="display:flex; align-items:center; gap:10px;">
-                            <div class="mini-wave" id="waveAnim_${idx}">
-                                <div class="mini-wave-bar"></div>
-                                <div class="mini-wave-bar"></div>
-                                <div class="mini-wave-bar"></div>
+                            <div style="display:flex; gap:4px;">
+                                <button class="btn-chip btn-play" id="pBtn_${idx}" onclick="toggleInstaPlay('${track.previewUrl}', ${idx})">▶ Play</button>
+                                <button class="btn-chip" onclick="applyToSlotPrompt('${track.previewUrl}')">Use Song</button>
                             </div>
-                            <button class="action-chip" onclick="applyToSlotPrompt('${track.previewUrl}')">Use Song</button>
+                        </div>
+                        <div class="insta-wave-box" onclick="scrubInstaWave(event, '${track.previewUrl}', ${idx})">
+                            <canvas class="insta-wave-canvas" id="canvas_${idx}"></canvas>
+                            <div class="play-head" id="head_${idx}"></div>
+                            <div class="trim-overlay" id="trim_${idx}" style="left:0%; width:100%;"></div>
                         </div>
                     `;
-                    box.appendChild(el);
+                    box.appendChild(card);
+                    drawWaveformCanvas(`canvas_${idx}`);
                 });
             } catch (e) {
-                box.innerHTML = "<p style='font-size:0.75rem; color:red;'>Error searching tracks.</p>";
+                box.innerHTML = "<p style='font-size:0.7rem; color:red;'>Error searching tracks.</p>";
             }
         }
 
-        function toggleSearchPlay(url, idx) {
-            const player = document.getElementById('globalPreviewPlayer');
-            const btn = document.getElementById(`searchPlayBtn_${idx}`);
-            const waveAnim = document.getElementById(`waveAnim_${idx}`);
+        function drawWaveformCanvas(canvasId) {
+            const canvas = document.getElementById(canvasId);
+            if(!canvas) return;
+            const ctx = canvas.getContext('2d');
+            canvas.width = canvas.offsetWidth || 300;
+            canvas.height = 38;
 
-            if (currentPlayingUrl === url && !player.paused) {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const numBars = 45;
+            const barWidth = (canvas.width / numBars) - 2;
+
+            for(let i=0; i<numBars; i++) {
+                const h = Math.floor(Math.random() * 26) + 6;
+                const x = i * (barWidth + 2);
+                const y = (canvas.height - h) / 2;
+                ctx.fillStyle = "#ffccd5";
+                ctx.fillRect(x, y, barWidth, h);
+            }
+        }
+
+        function toggleInstaPlay(url, idx) {
+            const player = document.getElementById('globalPreviewPlayer');
+            const btn = document.getElementById(`pBtn_${idx}`);
+            const head = document.getElementById(`head_${idx}`);
+
+            if(activeAudioTrack === url && !player.paused) {
                 player.pause();
                 btn.innerText = "▶ Play";
-                waveAnim.classList.remove('playing');
-                currentPlayingUrl = null;
             } else {
-                // Reset all other search buttons
-                document.querySelectorAll('.play-chip').forEach(b => {
-                    if(b.id.startsWith('searchPlayBtn_')) b.innerText = "▶ Play";
-                });
-                document.querySelectorAll('.mini-wave').forEach(w => w.classList.remove('playing'));
-
                 player.src = url;
                 player.play();
                 btn.innerText = "⏸ Pause";
-                waveAnim.classList.add('playing');
-                currentPlayingUrl = url;
+                activeAudioTrack = url;
+
+                player.ontimeupdate = function() {
+                    const pct = (player.currentTime / player.duration) * 100;
+                    if(head) head.style.left = pct + '%';
+                };
 
                 player.onended = function() {
                     btn.innerText = "▶ Play";
-                    waveAnim.classList.remove('playing');
-                    currentPlayingUrl = null;
+                    if(head) head.style.left = '0%';
                 };
+            }
+        }
+
+        function scrubInstaWave(event, url, idx) {
+            const box = event.currentTarget;
+            const rect = box.getBoundingClientRect();
+            const clickX = event.clientX - rect.left;
+            const pct = clickX / rect.width;
+
+            const player = document.getElementById('globalPreviewPlayer');
+            if(player.src.includes(url)) {
+                player.currentTime = pct * player.duration;
+            } else {
+                toggleInstaPlay(url, idx);
             }
         }
 
@@ -555,7 +508,7 @@
         }
 
         function applyToSlotPrompt(url) {
-            const slotNum = prompt("Kounse Page / Mombatti (Candle) Page par ye gana lagana hai? (1, 2, 3, ya 4):", "4");
+            const slotNum = prompt("Kounse Page / Candle Page par ye gana lagana hai? (1, 2, 3, ya 4):", "4");
             if(slotNum >= 1 && slotNum <= 4) {
                 document.getElementById(`songUrl_p${slotNum}`).value = url;
                 alert(`Page ${slotNum} par song active ho gaya!`);
