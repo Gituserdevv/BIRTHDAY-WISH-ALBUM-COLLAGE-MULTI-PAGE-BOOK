@@ -39,7 +39,7 @@
         .header-panel h1 { margin: 0; font-size: 1.1rem; color: var(--pink-accent); font-weight: 800; }
         .header-panel p { margin: 0; color: var(--rose-gold); font-size: 0.75rem; }
 
-        .dashboard-grid { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 10px; align-items: start; }
+        .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: start; }
         .column { display: flex; flex-direction: column; gap: 10px; }
 
         .card-section {
@@ -54,11 +54,12 @@
 
         .form-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
         .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+        .form-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
 
         .input-group { display: flex; flex-direction: column; gap: 2px; }
         .input-group label { font-size: 0.7rem; font-weight: 700; color: var(--text-dark); }
 
-        input[type="text"], input[type="number"], textarea {
+        input[type="text"], input[type="number"], select, textarea {
             width: 100%; padding: 4px 6px; background: #fff; color: var(--text-dark);
             border: 1px solid var(--pink-soft); border-radius: 6px; font-size: 0.75rem; outline: none;
         }
@@ -81,7 +82,7 @@
         .btn-reset { padding: 6px 14px; background: #fff; color: var(--text-dark); border: 1px solid var(--pink-soft); font-weight: 700; font-size: 0.78rem; border-radius: 8px; cursor: pointer; }
 
         .insta-search-card { background: #fff; border: 1px solid var(--pink-soft); border-radius: 8px; padding: 8px; margin-top: 6px; display: flex; flex-direction: column; gap: 6px; }
-        .insta-wave-box { position: relative; width: 100%; height: 40px; background: #fff0f3; border-radius: 6px; overflow: hidden; display: flex; align-items: center; cursor: pointer; user-select: none; }
+        .insta-wave-box { position: relative; width: 100%; height: 36px; background: #fff0f3; border-radius: 6px; overflow: hidden; display: flex; align-items: center; cursor: pointer; user-select: none; }
         .insta-wave-canvas { width: 100%; height: 100%; display: block; }
         
         .play-head { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--danger-red); left: 0%; z-index: 5; pointer-events: none; }
@@ -99,7 +100,7 @@
         <div class="header-panel">
             <div>
                 <h1>🌸 Studio Master Administration Dashboard</h1>
-                <p>Instagram Story Waveform Trimmer & Multi-Audio Engine</p>
+                <p>Full Suite Engine: Themes, Filters, Scratch Effects & Waveform Trimmer</p>
             </div>
             <div style="display:flex; gap:8px;">
                 <button class="btn-reset" onclick="resetToDefaults()">Reset 🔄</button>
@@ -108,9 +109,10 @@
         </div>
 
         <div class="dashboard-grid">
+            <!-- LEFT COLUMN -->
             <div class="column">
                 <div class="card-section">
-                    <h2>🖼️ Dedicated Page Photos (4 Primary Slots)</h2>
+                    <h2>🖼️ Photo Assets & Image Filters</h2>
                     <div class="form-grid-4">
                         <div class="slot-card">
                             <span style="font-size:0.65rem; font-weight:700;">1. Cover</span>
@@ -156,10 +158,54 @@
                             <input type="text" id="url4" placeholder="URL..." onchange="handleUrlInput(this.value, 3)">
                         </div>
                     </div>
+
+                    <!-- IMAGE FILTERS & EFFECTS -->
+                    <div style="margin-top: 8px;">
+                        <div class="input-group">
+                            <label>🎨 Photo Visual Filter / Tone</label>
+                            <select id="cfgImageFilter">
+                                <option value="none">Normal (Original Colors)</option>
+                                <option value="vintage">Vintage Warm Glow</option>
+                                <option value="softpink">Soft Romantic Pink</option>
+                                <option value="grayscale">Classic Black & White</option>
+                                <option value="sepia">Nostalgic Sepia</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="card-section">
-                    <h2>✨ Album Config & Messages</h2>
+                    <h2>🎨 Themes & Scratch Card Styling</h2>
+                    <div class="form-grid-3" style="margin-bottom:6px;">
+                        <div class="input-group">
+                            <label>Album Color Theme</label>
+                            <select id="cfgTheme">
+                                <option value="pink">Pink Blush (Default)</option>
+                                <option value="gold">Royal Gold</option>
+                                <option value="midnight">Midnight Romance</option>
+                                <option value="lavender">Lavender Dreams</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Scratch Coating Style</label>
+                            <select id="cfgScratchStyle">
+                                <option value="silver">Silver Foil</option>
+                                <option value="gold">Gold Dust</option>
+                                <option value="pink">Glitter Pink</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Candle Blow Page</label>
+                            <select id="cfgCandleToggle">
+                                <option value="enabled">Enabled (Interactive Candle)</option>
+                                <option value="disabled">Disabled</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-section">
+                    <h2>✨ Messages & Wish Content</h2>
                     <div class="form-grid-2" style="margin-bottom:6px;">
                         <div class="input-group">
                             <label>Album Title Name</label>
@@ -181,9 +227,10 @@
                 </div>
             </div>
 
+            <!-- RIGHT COLUMN -->
             <div class="column">
                 <div class="card-section">
-                    <h2>🎧 Music Search & Insta Story Scrubber</h2>
+                    <h2>🎧 Music Search & Insta Wave Scrubber</h2>
                     <div style="display:flex; gap:6px;">
                         <input type="text" id="songQuery" placeholder="Search track (e.g. gumnam, kesariya...)">
                         <button class="btn-chip" style="width:80px;" onclick="searchMusic()">Search</button>
@@ -192,7 +239,7 @@
                 </div>
 
                 <div class="card-section">
-                    <h2>📊 Multi-Audio & Candle Sync</h2>
+                    <h2>📊 Page Audio Trimmer & Candle Sync</h2>
                     <div class="pages-audio-grid">
                         <div class="slot-card" style="align-items:stretch; background:#fff;">
                             <span style="font-size:0.7rem; font-weight:700; color:var(--pink-accent);">1. Cover Song</span>
@@ -253,6 +300,10 @@
                 "https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=600",
                 "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=600"
             ],
+            theme: "pink",
+            imageFilter: "none",
+            scratchStyle: "silver",
+            candleToggle: "enabled",
             title: "Happy Birthday Queen! 👑",
             recipient: "Sarah",
             songs: {
@@ -279,6 +330,11 @@
                     removePhoto(idx, false);
                 }
             });
+
+            document.getElementById('cfgTheme').value = localStorage.getItem('cfg_theme') || DEFAULT_CONFIG.theme;
+            document.getElementById('cfgImageFilter').value = localStorage.getItem('cfg_image_filter') || DEFAULT_CONFIG.imageFilter;
+            document.getElementById('cfgScratchStyle').value = localStorage.getItem('cfg_scratch_style') || DEFAULT_CONFIG.scratchStyle;
+            document.getElementById('cfgCandleToggle').value = localStorage.getItem('cfg_candle_toggle') || DEFAULT_CONFIG.candleToggle;
 
             document.getElementById('cfgTitle').value = localStorage.getItem('cfg_title') || DEFAULT_CONFIG.title;
             document.getElementById('cfgRecipient').value = localStorage.getItem('cfg_recipient') || DEFAULT_CONFIG.recipient;
@@ -338,7 +394,7 @@
             if (!query) return alert("Search term enter karein!");
 
             const box = document.getElementById('searchResultsBox');
-            box.innerHTML = "<p style='font-size:0.7rem; color:#888;'>Searching songs...</p>";
+            box.innerHTML = "<p style='font-size:0.7rem; color:#888;'>Searching tracks...</p>";
 
             try {
                 const res = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(query)}&media=music&limit=3`);
@@ -358,7 +414,7 @@
                         <div style="display:flex; justify-content:space-between; align-items:center;">
                             <span><b>${track.trackName}</b> <small style="color:#888;">(${track.artistName})</small></span>
                             <div style="display:flex; gap:4px;">
-                                <button class="btn-chip btn-play" id="pBtn_${idx}" onclick="toggleInstaPlay('${track.previewUrl}', ${idx})">▶ Play Selection</button>
+                                <button class="btn-chip btn-play" id="pBtn_${idx}" onclick="toggleInstaPlay('${track.previewUrl}', ${idx})">▶ Play Cut</button>
                                 <button class="btn-chip" onclick="applyToSlotPrompt('${track.previewUrl}', ${idx})">Use Song</button>
                             </div>
                         </div>
@@ -382,14 +438,14 @@
             if(!canvas) return;
             const ctx = canvas.getContext('2d');
             canvas.width = canvas.offsetWidth || 300;
-            canvas.height = 40;
+            canvas.height = 36;
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             const numBars = 45;
             const barWidth = (canvas.width / numBars) - 2;
 
             for(let i=0; i<numBars; i++) {
-                const h = Math.floor(Math.random() * 28) + 6;
+                const h = Math.floor(Math.random() * 24) + 6;
                 const x = i * (barWidth + 2);
                 const y = (canvas.height - h) / 2;
                 ctx.fillStyle = "#ff758f";
@@ -440,7 +496,7 @@
 
             if(activeAudioTrack === url && !player.paused) {
                 player.pause();
-                btn.innerText = "▶ Play Selection";
+                btn.innerText = "▶ Play Cut";
             } else {
                 player.src = url;
                 player.currentTime = sel.start;
@@ -454,7 +510,7 @@
 
                     if(player.currentTime >= sel.end) {
                         player.pause();
-                        btn.innerText = "▶ Play Selection";
+                        btn.innerText = "▶ Play Cut";
                     }
                 };
             }
@@ -500,6 +556,11 @@
 
         function saveMasterConfig() {
             localStorage.setItem('cfg_photos', albumPhotos.join('|||'));
+            localStorage.setItem('cfg_theme', document.getElementById('cfgTheme').value);
+            localStorage.setItem('cfg_image_filter', document.getElementById('cfgImageFilter').value);
+            localStorage.setItem('cfg_scratch_style', document.getElementById('cfgScratchStyle').value);
+            localStorage.setItem('cfg_candle_toggle', document.getElementById('cfgCandleToggle').value);
+
             localStorage.setItem('cfg_title', document.getElementById('cfgTitle').value);
             localStorage.setItem('cfg_recipient', document.getElementById('cfgRecipient').value);
             localStorage.setItem('cfg_scratch_text', document.getElementById('cfgScratchText').value);
