@@ -1,98 +1,30 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Royal Scrapbook Control Center ✨</title>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <title>Photo Manager Admin</title>
     <style>
-        :root { --accent: #ff8fa3; --bg: #0d070b; }
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
-        body { background: var(--bg); color: #fff; padding: 20px; display: flex; justify-content: center; }
-        .admin-card { width: 100%; max-width: 580px; background: rgba(255, 255, 255, 0.04); border: 1px solid rgba(255, 143, 163, 0.25); border-radius: 20px; padding: 25px; backdrop-filter: blur(15px); }
-        h2 { color: var(--accent); margin-bottom: 20px; text-align: center; font-size: 1.3rem; font-weight: 600; }
-        .section { margin-bottom: 16px; }
-        label { display: block; font-size: 0.75rem; color: #ffb3c1; margin-bottom: 6px; letter-spacing: 1px; text-transform: uppercase; }
-        input, textarea, select { width: 100%; padding: 11px; background: rgba(0,0,0,0.5); border: 1px solid rgba(255, 143, 163, 0.25); color: #fff; border-radius: 10px; font-size: 0.85rem; margin-bottom: 6px; outline: none; }
-        button { background: linear-gradient(135deg, #ff758f, #ffb3c1); color: #000; font-weight: 600; padding: 12px; border: none; border-radius: 12px; cursor: pointer; width: 100%; font-size: 0.9rem; transition: 0.3s; margin-top: 10px; }
-        button:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255, 117, 143, 0.4); }
+        body { background: #0f0810; color: #ffb3c1; font-family: sans-serif; padding: 20px; }
+        .card { max-width: 500px; margin: 0 auto; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; border: 1px solid #ffb3c1; }
+        textarea { width: 100%; padding: 10px; background: #000; color: #fff; border: 1px solid #ffb3c1; border-radius: 8px; margin: 10px 0; }
+        button { width: 100%; padding: 12px; background: #ff758f; color: #000; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; }
     </style>
 </head>
 <body>
-    <div class="admin-card">
-        <h2>👑 Royal Decorative Album Admin</h2>
-
-        <div class="section">
-            <label>1. Aesthetic Palette</label>
-            <select id="themeStyle">
-                <option value="rose-gold">Rose Gold & Romance (Blush Pink & Glow)</option>
-                <option value="royal-gold">Velvet Wine & Gold (Rich Classic)</option>
-                <option value="midnight-galaxy">Cosmic Silver & Violet (Metallic Galaxy)</option>
-                <option value="emerald-gold">Emerald & Diamond (Luxe Green)</option>
-            </select>
-        </div>
-
-        <div class="section">
-            <label>2. Receiver & Sender</label>
-            <input type="text" id="receiverName" placeholder="For Whom? (e.g. Princess)">
-            <input type="text" id="senderName" placeholder="From Whom?">
-        </div>
-
-        <div class="section">
-            <label>3. Expiry Date & Master Passcode</label>
-            <input type="datetime-local" id="expiryDate">
-            <input type="text" id="passcode" placeholder="Passcode (e.g. 1234)">
-        </div>
-
-        <div class="section">
-            <label>4. Photo Filter Preset Style</label>
-            <select id="filterStyle">
-                <option value="vintage-glow">Vintage Warm + Soft Glow Vignette</option>
-                <option value="rose-dream">Rose Blush + Pastel Dream Tone</option>
-                <option value="luxe-film">Luxe Golden Film + High Contrast</option>
-            </select>
-        </div>
-
-        <div class="section">
-            <label>5. Background Music Link (MP3 URL)</label>
-            <input type="text" id="bgMusicUrl" placeholder="MP3 Audio Link">
-        </div>
-
-        <div class="section">
-            <label>6. Personal Wishes (Comma Separated)</label>
-            <textarea id="wishesList" rows="2" placeholder="Wish 1, Wish 2"></textarea>
-        </div>
-
-        <div class="section">
-            <label>7. Album Photo URLs (Comma Separated)</label>
-            <textarea id="photoUrls" rows="3" placeholder="Image Links..."></textarea>
-        </div>
-
-        <button onclick="saveSettings()">Save Album Configuration ✨</button>
+    <div class="card">
+        <h2>🖼️ Dynamic Photo Manager</h2>
+        <label>Album Photos URLs (Comma separated):</label>
+        <textarea id="photoList" rows="5" placeholder="https://image1.jpg, https://image2.jpg"></textarea>
+        <button onclick="savePhotos()">UPDATE ALBUM PHOTOS ✨</button>
     </div>
 
     <script>
-        document.getElementById('themeStyle').value = localStorage.getItem('cfg_theme') || "rose-gold";
-        document.getElementById('receiverName').value = localStorage.getItem('cfg_receiver') || "Birthday Queen";
-        document.getElementById('senderName').value = localStorage.getItem('cfg_sender') || "Your Best Friend";
-        document.getElementById('expiryDate').value = localStorage.getItem('cfg_expiry') || "2026-08-15T23:59";
-        document.getElementById('passcode').value = localStorage.getItem('cfg_passcode') || "1234";
-        document.getElementById('filterStyle').value = localStorage.getItem('cfg_filter') || "vintage-glow";
-        document.getElementById('bgMusicUrl').value = localStorage.getItem('cfg_music') || "https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73467.mp3?filename=happy-birthday-15220.mp3";
-        document.getElementById('wishesList').value = localStorage.getItem('cfg_wishes') || "May your year be filled with pure magic and endless laughter ✨, You deserve all the stars in the universe., Stay sweet, iconic, and fabulous!";
-        document.getElementById('photoUrls').value = localStorage.getItem('cfg_photos') || "https://picsum.photos/500/600?random=11,https://picsum.photos/500/600?random=22,https://picsum.photos/500/600?random=33,https://picsum.photos/500/600?random=44";
-
-        function saveSettings() {
-            localStorage.setItem('cfg_theme', document.getElementById('themeStyle').value);
-            localStorage.setItem('cfg_receiver', document.getElementById('receiverName').value);
-            localStorage.setItem('cfg_sender', document.getElementById('senderName').value);
-            localStorage.setItem('cfg_expiry', document.getElementById('expiryDate').value);
-            localStorage.setItem('cfg_passcode', document.getElementById('passcode').value);
-            localStorage.setItem('cfg_filter', document.getElementById('filterStyle').value);
-            localStorage.setItem('cfg_music', document.getElementById('bgMusicUrl').value);
-            localStorage.setItem('cfg_wishes', document.getElementById('wishesList').value);
-            localStorage.setItem('cfg_photos', document.getElementById('photoUrls').value);
-            alert("Settings Updated Successfully! Open index.html to view your decorated album.");
+        document.getElementById('photoList').value = localStorage.getItem('cfg_photos') || "";
+        function savePhotos() {
+            const input = document.getElementById('photoList').value;
+            localStorage.setItem('cfg_photos', input);
+            alert("Photos updated successfully!");
         }
     </script>
 </body>
