@@ -3,108 +3,318 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Master Admin Control</title>
+    <title>Sovereign Studio | Master Control Panel</title>
     <style>
-        body { background: #0b0710; color: #ffb3c1; font-family: sans-serif; padding: 20px; }
-        .card { max-width: 500px; margin: 0 auto 20px auto; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; border: 1px solid #ffb3c1; }
-        input[type="text"], input[type="number"], textarea { width: 95%; padding: 10px; background: #000; color: #fff; border: 1px solid #ffb3c1; border-radius: 8px; margin: 6px 0; }
-        button { width: 100%; padding: 12px; background: #ff758f; color: #000; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; margin-top: 10px; }
-        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .song-item { background: #1b102b; padding: 8px; margin-top: 5px; border-radius: 6px; display: flex; justify-content: space-between; align-items: center; }
-        .song-item button { width: auto; padding: 5px 10px; margin: 0; background: #00f5d4; }
+        :root {
+            --bg: #0b0710;
+            --card-bg: rgba(255, 255, 255, 0.04);
+            --border: rgba(255, 117, 143, 0.25);
+            --accent: #ff758f;
+            --accent-cyan: #00f5d4;
+            --text: #ffb3c1;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            margin: 0;
+            padding: 30px 15px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .dashboard {
+            width: 100%;
+            max-width: 650px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 15px;
+        }
+
+        .header h1 {
+            font-size: 1.5rem;
+            color: #fff;
+            margin: 0;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .card h2 {
+            font-size: 1.05rem;
+            color: var(--accent);
+            margin-top: 0;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .slot-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .photo-slot {
+            background: rgba(0,0,0,0.3);
+            border: 1px dashed var(--border);
+            border-radius: 12px;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            align-items: center;
+            text-align: center;
+        }
+
+        .photo-slot label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .preview-box {
+            width: 100%;
+            height: 90px;
+            background: #150d21;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .preview-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .preview-box span {
+            font-size: 0.7rem;
+            color: #666;
+        }
+
+        input[type="file"], input[type="text"], input[type="number"] {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 8px 10px;
+            background: #160d21;
+            color: #fff;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 0.8rem;
+        }
+
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 14px;
+            background: var(--accent-cyan);
+            color: #000;
+            font-weight: 800;
+            font-size: 0.95rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .song-item {
+            background: #160d21;
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin-top: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.8rem;
+        }
+
+        .song-item button {
+            background: var(--accent);
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
-    <!-- 1. PHOTOS SECTION (GALLERY UPLOAD + DIRECT URL BOTH) -->
-    <div class="card">
-        <h2>🖼️ Photos Management</h2>
-        <label>Option A: Direct Gallery Upload (No URLs)</label>
-        <input type="file" id="photoPicker" accept="image/*" multiple onchange="handleImageUpload(event)">
-        
-        <hr style="border-color: rgba(255,255,255,0.1); margin: 15px 0;">
-        
-        <label>Option B: Image URLs (Comma separated)</label>
-        <textarea id="photoUrls" rows="3" placeholder="https://img1.jpg, https://img2.jpg"></textarea>
+<div class="dashboard">
+    <div class="header">
+        <h1>⚙️ Studio Master Studio</h1>
+        <small style="color:#888;">Complete Layout & Media Asset Manager</small>
     </div>
 
-    <!-- 2. MUSIC & TIMELINE SECTION -->
+    <!-- 1. DEDICATED SLOTTED PHOTO MANAGER -->
     <div class="card">
-        <h2>🎵 Music & Timeline Control</h2>
-        
-        <label>In-App Music Search Engine:</label>
-        <div style="display:flex; gap:5px;">
-            <input type="text" id="songQuery" placeholder="Song ka naam search karein...">
-            <button style="width:30%; margin: 6px 0 0 0;" onclick="searchTracks()">Search</button>
+        <h2>🖼️ Photo Slots (Dedicated Pages)</h2>
+        <div class="slot-grid">
+            <!-- Slot 1 -->
+            <div class="photo-slot">
+                <label>1. Cover Photo</label>
+                <div class="preview-box" id="pBox1"><span>No Image</span></div>
+                <input type="file" accept="image/*" onchange="processSlot(event, 0)">
+                <input type="text" id="url1" placeholder="Or URL..." onchange="updateFromUrl(this.value, 0)">
+            </div>
+            <!-- Slot 2 -->
+            <div class="photo-slot">
+                <label>2. Scratch Card</label>
+                <div class="preview-box" id="pBox2"><span>No Image</span></div>
+                <input type="file" accept="image/*" onchange="processSlot(event, 1)">
+                <input type="text" id="url2" placeholder="Or URL..." onchange="updateFromUrl(this.value, 1)">
+            </div>
+            <!-- Slot 3 -->
+            <div class="photo-slot">
+                <label>3. Gallery Image 1</label>
+                <div class="preview-box" id="pBox3"><span>No Image</span></div>
+                <input type="file" accept="image/*" onchange="processSlot(event, 2)">
+                <input type="text" id="url3" placeholder="Or URL..." onchange="updateFromUrl(this.value, 2)">
+            </div>
+            <!-- Slot 4 -->
+            <div class="photo-slot">
+                <label>4. Gallery Image 2</label>
+                <div class="preview-box" id="pBox4"><span>No Image</span></div>
+                <input type="file" accept="image/*" onchange="processSlot(event, 3)">
+                <input type="text" id="url4" placeholder="Or URL..." onchange="updateFromUrl(this.value, 3)">
+            </div>
         </div>
-        <div id="searchResults" style="max-height:120px; overflow-y:auto;"></div>
-        
-        <label style="margin-top:10px; display:block;">Or Direct Song MP3 URL:</label>
-        <input type="text" id="customSongUrl" placeholder="https://example.com/song.mp3">
+    </div>
 
-        <h4 style="margin-top:15px; margin-bottom:5px;">⏱️ Timeline Audio Timestamps (Seconds):</h4>
+    <!-- 2. MUSIC ENGINE & TIMELINES -->
+    <div class="card">
+        <h2>🎵 Audio & Timeline Engine</h2>
+        
+        <label style="font-size:0.8rem; color:#aaa;">In-App Track Search Engine:</label>
+        <div style="display:flex; gap:6px; margin-top:4px;">
+            <input type="text" id="songSearch" placeholder="Search track name...">
+            <button style="width:25%; background:var(--accent); border:none; border-radius:6px; font-weight:bold; cursor:pointer;" onclick="searchTrack()">Search</button>
+        </div>
+        <div id="searchResults"></div>
+
+        <label style="font-size:0.8rem; color:#aaa; margin-top:12px; display:block;">Or Direct MP3 Track URL:</label>
+        <input type="text" id="audioUrl" placeholder="https://domain.com/song.mp3">
+
+        <h4 style="margin: 15px 0 8px 0; font-size: 0.85rem; color: var(--accent-cyan);">⏱️ Precise Audio Offset Timestamps (Secs):</h4>
         <div class="grid-2">
-            <div><label>Cover (Sec):</label><input type="number" id="p1Time" value="0"></div>
-            <div><label>Scratch (Sec):</label><input type="number" id="p2Time" value="10"></div>
-            <div><label>Gallery (Sec):</label><input type="number" id="p3Time" value="20"></div>
-            <div><label>Wishes (Sec):</label><input type="number" id="p4Time" value="30"></div>
+            <div><label style="font-size:0.75rem;">Cover Sec:</label><input type="number" id="t1" value="0"></div>
+            <div><label style="font-size:0.75rem;">Scratch Sec:</label><input type="number" id="t2" value="10"></div>
+            <div><label style="font-size:0.75rem;">Gallery Sec:</label><input type="number" id="t3" value="20"></div>
+            <div><label style="font-size:0.75rem;">Wishes Sec:</label><input type="number" id="t4" value="30"></div>
         </div>
     </div>
 
-    <button style="max-width:500px; display:block; margin:0 auto; background:#00f5d4; color:#000;" onclick="saveAll()">SAVE ALL SETTINGS ✨</button>
+    <button class="btn-primary" onclick="commitChanges()">DEPLOY TO ALBUM ✨</button>
+</div>
 
-    <script>
-        let uploadedPhotos = [];
+<script>
+    let photoSlots = ["", "", "", ""];
 
-        // Load existing
-        document.getElementById('photoUrls').value = localStorage.getItem('cfg_photos_urls') || "";
-        document.getElementById('customSongUrl').value = localStorage.getItem('cfg_music') || "";
+    // Compressed Image Handler (Fixes broken image issue)
+    function processSlot(event, index) {
+        const file = event.target.files[0];
+        if(!file) return;
 
-        function handleImageUpload(e) {
-            uploadedPhotos = [];
-            Array.from(e.target.files).slice(0, 4).forEach(file => {
-                const reader = new FileReader();
-                reader.onload = function(evt) { uploadedPhotos.push(evt.target.result); };
-                reader.readAsDataURL(file);
-            });
-        }
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = new Image();
+            img.src = e.target.result;
+            img.onload = function() {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                // Compress dimensions to avoid localStorage overflow
+                const maxDim = 800;
+                let w = img.width;
+                let h = img.height;
+                if(w > maxDim || h > maxDim) {
+                    if(w > h) { h = Math.round((h * maxDim) / w); w = maxDim; }
+                    else { w = Math.round((w * maxDim) / h); h = maxDim; }
+                }
 
-        async function searchTracks() {
-            const query = document.getElementById('songQuery').value.trim();
-            if(!query) return;
-            const res = await fetch(`https://api.jamendo.com/v3.0/tracks/?client_id=56d30c95&format=json&limit=4&search=${encodeURIComponent(query)}`);
-            const data = await res.json();
-            const resultsDiv = document.getElementById('searchResults');
-            resultsDiv.innerHTML = "";
-            data.results.forEach(track => {
-                const div = document.createElement('div');
-                div.className = 'song-item';
-                div.innerHTML = `<span>${track.name}</span><button onclick="document.getElementById('customSongUrl').value='${track.audio}'">Select</button>`;
-                resultsDiv.appendChild(div);
-            });
-        }
+                canvas.width = w;
+                canvas.height = h;
+                ctx.drawImage(img, 0, 0, w, h);
 
-        function saveAll() {
-            if(uploadedPhotos.length > 0) {
-                localStorage.setItem('cfg_photos', uploadedPhotos.join('|||'));
-            } else if(document.getElementById('photoUrls').value) {
-                localStorage.setItem('cfg_photos', document.getElementById('photoUrls').value.split(',').join('|||'));
-                localStorage.setItem('cfg_photos_urls', document.getElementById('photoUrls').value);
+                const compressedData = canvas.toDataURL('image/jpeg', 0.7);
+                photoSlots[index] = compressedData;
+                renderPreview(index, compressedData);
             }
+        };
+        reader.readAsDataURL(file);
+    }
 
-            const songUrl = document.getElementById('customSongUrl').value;
-            localStorage.setItem('cfg_music', songUrl);
+    function updateFromUrl(url, index) {
+        if(!url) return;
+        photoSlots[index] = url;
+        renderPreview(index, url);
+    }
 
-            const timeline = {
-                page1: { startTime: parseInt(document.getElementById('p1Time').value) || 0 },
-                page2: { startTime: parseInt(document.getElementById('p2Time').value) || 10 },
-                page3: { startTime: parseInt(document.getElementById('p3Time').value) || 20 },
-                page4: { startTime: parseInt(document.getElementById('p4Time').value) || 30 }
-            };
-            localStorage.setItem('cfg_audio_timeline', JSON.stringify(timeline));
+    function renderPreview(index, src) {
+        const box = document.getElementById(`pBox${index + 1}`);
+        box.innerHTML = `<img src="${src}">`;
+    }
 
-            alert("Settings Saved Successfully! ✨");
-        }
-    </script>
+    async function searchTrack() {
+        const query = document.getElementById('songSearch').value;
+        if(!query) return;
+        const res = await fetch(`https://api.jamendo.com/v3.0/tracks/?client_id=56d30c95&format=json&limit=3&search=${encodeURIComponent(query)}`);
+        const data = await res.json();
+        const results = document.getElementById('searchResults');
+        results.innerHTML = "";
+        data.results.forEach(t => {
+            const item = document.createElement('div');
+            item.className = 'song-item';
+            item.innerHTML = `<span>${t.name}</span><button onclick="document.getElementById('audioUrl').value='${t.audio}'">Select</button>`;
+            results.appendChild(item);
+        });
+    }
+
+    function commitChanges() {
+        localStorage.setItem('cfg_photos', photoSlots.join('|||'));
+        localStorage.setItem('cfg_music', document.getElementById('audioUrl').value);
+        
+        const timeline = {
+            page1: { startTime: parseInt(document.getElementById('t1').value) || 0 },
+            page2: { startTime: parseInt(document.getElementById('t2').value) || 10 },
+            page3: { startTime: parseInt(document.getElementById('t3}).value) || 20 },
+            page4: { startTime: parseInt(document.getElementById('t4').value) || 30 }
+        };
+        localStorage.setItem('cfg_audio_timeline', JSON.stringify(timeline));
+
+        alert("Album Assets Successfully Deployed! Open index.html to test.");
+    }
+</script>
 </body>
 </html>
