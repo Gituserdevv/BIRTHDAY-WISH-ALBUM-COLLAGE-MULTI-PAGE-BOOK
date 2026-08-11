@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Royal Studio | Admin Master Dashboard</title>
+    <title>Royal Studio | Master Administration Dashboard</title>
     <style>
         :root {
             --bg-gradient: linear-gradient(135deg, #fff5f7 0%, #ffe6ea 50%, #fff0f3 100%);
-            --panel-bg: rgba(255, 255, 255, 0.92);
+            --panel-bg: rgba(255, 255, 255, 0.94);
             --pink-accent: #ff758f;
             --rose-gold: #c97a8e;
             --pink-soft: #ffccd5;
@@ -15,6 +15,7 @@
             --text-dark: #3a2228;
             --border-soft: rgba(255, 117, 143, 0.3);
             --shadow-soft: 0 10px 25px rgba(255, 117, 143, 0.12);
+            --danger-red: #ff4d6d;
         }
 
         * {
@@ -36,7 +37,6 @@
             overflow-x: hidden;
         }
 
-        /* Floating Petals Effect */
         .petal {
             position: fixed;
             background: #ffb3c1;
@@ -90,7 +90,11 @@
             font-size: 0.85rem;
         }
 
-        /* 2-COLUMN DASHBOARD GRID TO USE SIDE SPACE */
+        .header-actions {
+            display: flex;
+            gap: 10px;
+        }
+
         .dashboard-grid {
             display: grid;
             grid-template-columns: 1.3fr 1fr;
@@ -165,7 +169,6 @@
             box-shadow: 0 0 0 3px rgba(255, 117, 143, 0.15);
         }
 
-        /* Asset Slots Compact */
         .slot-card {
             background: var(--pink-light);
             border: 1.5px dashed var(--pink-soft);
@@ -195,6 +198,12 @@
             object-fit: cover;
         }
 
+        .slot-actions {
+            display: flex;
+            gap: 4px;
+            width: 100%;
+        }
+
         .upload-btn {
             background: var(--pink-accent);
             color: #ffffff;
@@ -204,8 +213,19 @@
             font-size: 0.72rem;
             font-weight: 700;
             cursor: pointer;
-            width: 100%;
+            flex: 1;
             display: block;
+        }
+
+        .delete-btn {
+            background: var(--danger-red);
+            color: #ffffff;
+            border: none;
+            border-radius: 8px;
+            padding: 6px 8px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            cursor: pointer;
         }
 
         input[type="file"] {
@@ -213,21 +233,26 @@
         }
 
         .btn-submit {
-            grid-column: span 2;
-            padding: 14px;
+            padding: 10px 18px;
             background: linear-gradient(135deg, #ff758f 0%, #ff4d6d 100%);
             color: #ffffff;
             font-weight: 800;
-            font-size: 0.95rem;
+            font-size: 0.88rem;
             border: none;
-            border-radius: 14px;
+            border-radius: 12px;
             cursor: pointer;
-            box-shadow: 0 8px 20px rgba(255, 77, 109, 0.3);
-            letter-spacing: 0.5px;
+            box-shadow: 0 6px 15px rgba(255, 77, 109, 0.25);
         }
 
-        .btn-submit:hover {
-            transform: translateY(-1px);
+        .btn-reset {
+            padding: 10px 18px;
+            background: #ffffff;
+            color: var(--text-dark);
+            border: 1.5px solid var(--pink-soft);
+            font-weight: 700;
+            font-size: 0.88rem;
+            border-radius: 12px;
+            cursor: pointer;
         }
 
         .song-result-item {
@@ -265,22 +290,27 @@
         <div class="header-panel">
             <div>
                 <h1>🌸 Studio Master Administration Dashboard</h1>
-                <p>Manage Photos, Audio Engine & Wishes in real-time</p>
+                <p>Manage Photos, Audio Engine, Custom Code Injection & Wishes</p>
             </div>
-            <button class="btn-submit" style="grid-column: auto; width: 220px; padding: 10px;" onclick="saveMasterConfig()">SAVE ALL CHANGES ✨</button>
+            <div class="header-actions">
+                <button class="btn-reset" onclick="resetToDefaults()">Reset Defaults 🔄</button>
+                <button class="btn-submit" onclick="saveMasterConfig()">Save Changes ✨</button>
+            </div>
         </div>
 
         <div class="dashboard-grid">
-            <!-- LEFT COLUMN: PHOTO ASSETS & GENERAL CONFIG -->
             <div class="column">
-                <!-- PHOTO SLOTS -->
+                <!-- PHOTO ASSET MANAGER WITH REMOVE BUTTON -->
                 <div class="card-section">
                     <h2>🖼️ Dedicated Page Photos (4 Primary Slots)</h2>
                     <div class="form-grid-4">
                         <div class="slot-card">
                             <span style="font-size:0.75rem; font-weight:700;">1. Cover</span>
                             <div class="slot-preview" id="preview1"><span style="color:#aaa; font-size:0.7rem;">No Asset</span></div>
-                            <label for="file1" class="upload-btn">Upload</label>
+                            <div class="slot-actions">
+                                <label for="file1" class="upload-btn">Upload</label>
+                                <button class="delete-btn" onclick="removePhoto(0)">🗑️</button>
+                            </div>
                             <input type="file" id="file1" accept="image/*" onchange="handleImageUpload(event, 0)">
                             <input type="text" id="url1" placeholder="Or URL..." onchange="handleUrlInput(this.value, 0)">
                         </div>
@@ -288,7 +318,10 @@
                         <div class="slot-card">
                             <span style="font-size:0.75rem; font-weight:700;">2. Scratch Card</span>
                             <div class="slot-preview" id="preview2"><span style="color:#aaa; font-size:0.7rem;">No Asset</span></div>
-                            <label for="file2" class="upload-btn">Upload</label>
+                            <div class="slot-actions">
+                                <label for="file2" class="upload-btn">Upload</label>
+                                <button class="delete-btn" onclick="removePhoto(1)">🗑️</button>
+                            </div>
                             <input type="file" id="file2" accept="image/*" onchange="handleImageUpload(event, 1)">
                             <input type="text" id="url2" placeholder="Or URL..." onchange="handleUrlInput(this.value, 1)">
                         </div>
@@ -296,7 +329,10 @@
                         <div class="slot-card">
                             <span style="font-size:0.75rem; font-weight:700;">3. Gallery</span>
                             <div class="slot-preview" id="preview3"><span style="color:#aaa; font-size:0.7rem;">No Asset</span></div>
-                            <label for="file3" class="upload-btn">Upload</label>
+                            <div class="slot-actions">
+                                <label for="file3" class="upload-btn">Upload</label>
+                                <button class="delete-btn" onclick="removePhoto(2)">🗑️</button>
+                            </div>
                             <input type="file" id="file3" accept="image/*" onchange="handleImageUpload(event, 2)">
                             <input type="text" id="url3" placeholder="Or URL..." onchange="handleUrlInput(this.value, 2)">
                         </div>
@@ -304,19 +340,22 @@
                         <div class="slot-card">
                             <span style="font-size:0.75rem; font-weight:700;">4. Wishes</span>
                             <div class="slot-preview" id="preview4"><span style="color:#aaa; font-size:0.7rem;">No Asset</span></div>
-                            <label for="file4" class="upload-btn">Upload</label>
+                            <div class="slot-actions">
+                                <label for="file4" class="upload-btn">Upload</label>
+                                <button class="delete-btn" onclick="removePhoto(3)">🗑️</button>
+                            </div>
                             <input type="file" id="file4" accept="image/*" onchange="handleImageUpload(event, 3)">
                             <input type="text" id="url4" placeholder="Or URL..." onchange="handleUrlInput(this.value, 3)">
                         </div>
                     </div>
                 </div>
 
-                <!-- GENERAL CONFIG -->
+                <!-- GENERAL CONFIGURATION -->
                 <div class="card-section">
-                    <h2>✨ General Album Configuration</h2>
+                    <h2>✨ General Configuration & Lock Screen</h2>
                     <div class="form-grid-2" style="margin-bottom:8px;">
                         <div class="input-group">
-                            <label>Album Title</label>
+                            <label>Album Title Name</label>
                             <input type="text" id="cfgTitle" placeholder="Happy Birthday Queen!">
                         </div>
                         <div class="input-group">
@@ -326,7 +365,7 @@
                     </div>
                     <div class="form-grid-2">
                         <div class="input-group">
-                            <label>Lock Screen Key</label>
+                            <label>Passcode / Keylock</label>
                             <input type="text" id="cfgPasscode" placeholder="Optional Passcode">
                         </div>
                         <div class="input-group">
@@ -339,17 +378,29 @@
                         </div>
                     </div>
                 </div>
+
+                <!-- CODE INJECTION ENGINE -->
+                <div class="card-section">
+                    <h2>⚡ Inject Custom Code / Upgrade Module</h2>
+                    <div class="input-group">
+                        <label>Paste Script / Custom JS Feature Code below to execute on runtime:</label>
+                        <textarea id="cfgInjectedCode" rows="3" placeholder="// Paste custom JS code here or script URL...&#10;console.log('Custom plugin active!');"></textarea>
+                    </div>
+                    <div style="display:flex; gap:8px; margin-top:8px;">
+                        <button class="btn-submit" style="background:var(--pink-accent); font-size:0.78rem;" onclick="injectLiveCode()">Inject & Test Code Live 🚀</button>
+                        <button class="btn-reset" style="font-size:0.78rem;" onclick="clearInjectedCode()">Remove Code ❌</button>
+                    </div>
+                </div>
             </div>
 
-            <!-- RIGHT COLUMN: AUDIO ENGINE & MESSAGES -->
             <div class="column">
-                <!-- AUDIO & TIMELINES -->
+                <!-- AUDIO SEARCH & TIMELINE ENGINE -->
                 <div class="card-section">
-                    <h2>🎵 Audio Engine & Offset Timelines</h2>
+                    <h2>🎵 Audio Engine & Multi-Search API</h2>
                     <div class="input-group">
-                        <label>Online Track Search</label>
+                        <label>Online Track Search Engine (Hindi/English Tracks Compatible)</label>
                         <div style="display:flex; gap:6px;">
-                            <input type="text" id="songQuery" placeholder="Search track name...">
+                            <input type="text" id="songQuery" placeholder="Search track name e.g., gumnaam, sarar...">
                             <button style="width:100px; background:var(--pink-accent); color:white; border:none; border-radius:10px; font-weight:bold; cursor:pointer;" onclick="searchMusic()">Search</button>
                         </div>
                     </div>
@@ -360,7 +411,7 @@
                         <input type="text" id="cfgAudioUrl" placeholder="https://domain.com/song.mp3">
                     </div>
 
-                    <label style="margin-top:10px; font-size:0.78rem; font-weight:700; display:block;">⏱️ Page Offsets (Secs)</label>
+                    <label style="margin-top:10px; font-size:0.78rem; font-weight:700; display:block;">⏱️ Audio Offset Timestamps (Seconds)</label>
                     <div class="form-grid-4">
                         <div class="input-group"><label>Cover</label><input type="number" id="time1" value="0"></div>
                         <div class="input-group"><label>Scratch</label><input type="number" id="time2" value="10"></div>
@@ -369,16 +420,16 @@
                     </div>
                 </div>
 
-                <!-- MESSAGES -->
+                <!-- SECRET MESSAGES & NOTES -->
                 <div class="card-section">
-                    <h2>💌 Secret Text & Wish Note</h2>
+                    <h2>💌 Secret Text & Wish Greeting Note</h2>
                     <div class="input-group" style="margin-bottom:8px;">
-                        <label>Scratch Card Reward Text</label>
-                        <input type="text" id="cfgScratchText" placeholder="You win a dinner date! 🎟️">
+                        <label>Scratch Card Revealed Text</label>
+                        <input type="text" id="cfgScratchText" placeholder="You get 1 free trip anywhere with me! 🎟️">
                     </div>
                     <div class="input-group">
-                        <label>Heartfelt Note</label>
-                        <textarea id="cfgWishNote" rows="2" placeholder="Custom wish message..."></textarea>
+                        <label>Heartfelt Note (Page 4)</label>
+                        <textarea id="cfgWishNote" rows="3" placeholder="Custom birthday wish message..."></textarea>
                     </div>
                 </div>
             </div>
@@ -388,36 +439,61 @@
     <script>
         let albumPhotos = ["", "", "", ""];
 
+        const DEFAULT_CONFIG = {
+            photos: [
+                "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=600",
+                "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=600",
+                "https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=600",
+                "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=600"
+            ],
+            title: "Happy Birthday Queen! 👑",
+            recipient: "Sarah",
+            passcode: "",
+            theme: "petals",
+            audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+            timeline: { page1: { startTime: 0 }, page2: { startTime: 10 }, page3: { startTime: 25 }, page4: { startTime: 40 } },
+            scratchText: "You win a dinner date & unlimited ice cream! 🍨",
+            wishNote: "Wishing you a wonderful year ahead filled with happiness, health, and success! Happy Birthday! 🎉"
+        };
+
         window.onload = function() {
+            loadSavedConfig();
+        };
+
+        function loadSavedConfig() {
             const savedPhotos = localStorage.getItem('cfg_photos');
             if (savedPhotos) {
                 albumPhotos = savedPhotos.split('|||');
-                albumPhotos.forEach((src, idx) => {
-                    if (src) {
-                        updatePreview(idx, src);
-                        if (src.startsWith('http')) {
-                            document.getElementById(`url${idx + 1}`).value = src;
-                        }
-                    }
-                });
+            } else {
+                albumPhotos = [...DEFAULT_CONFIG.photos];
             }
 
-            document.getElementById('cfgTitle').value = localStorage.getItem('cfg_title') || "";
-            document.getElementById('cfgRecipient').value = localStorage.getItem('cfg_recipient') || "";
-            document.getElementById('cfgPasscode').value = localStorage.getItem('cfg_passcode') || "";
-            document.getElementById('cfgTheme').value = localStorage.getItem('cfg_theme') || "petals";
+            albumPhotos.forEach((src, idx) => {
+                if (src) {
+                    updatePreview(idx, src);
+                    document.getElementById(`url${idx + 1}`).value = src.startsWith('data:') ? '' : src;
+                } else {
+                    removePhoto(idx, false);
+                }
+            });
+
+            document.getElementById('cfgTitle').value = localStorage.getItem('cfg_title') || DEFAULT_CONFIG.title;
+            document.getElementById('cfgRecipient').value = localStorage.getItem('cfg_recipient') || DEFAULT_CONFIG.recipient;
+            document.getElementById('cfgPasscode').value = localStorage.getItem('cfg_passcode') || DEFAULT_CONFIG.passcode;
+            document.getElementById('cfgTheme').value = localStorage.getItem('cfg_theme') || DEFAULT_CONFIG.theme;
             
-            document.getElementById('cfgAudioUrl').value = localStorage.getItem('cfg_music') || "";
+            document.getElementById('cfgAudioUrl').value = localStorage.getItem('cfg_music') || DEFAULT_CONFIG.audioUrl;
 
-            const timeline = JSON.parse(localStorage.getItem('cfg_audio_timeline') || '{}');
-            if (timeline.page1) document.getElementById('time1').value = timeline.page1.startTime || 0;
-            if (timeline.page2) document.getElementById('time2').value = timeline.page2.startTime || 10;
-            if (timeline.page3) document.getElementById('time3').value = timeline.page3.startTime || 25;
-            if (timeline.page4) document.getElementById('time4').value = timeline.page4.startTime || 40;
+            const timeline = JSON.parse(localStorage.getItem('cfg_audio_timeline') || JSON.stringify(DEFAULT_CONFIG.timeline));
+            document.getElementById('time1').value = timeline.page1 ? timeline.page1.startTime : 0;
+            document.getElementById('time2').value = timeline.page2 ? timeline.page2.startTime : 10;
+            document.getElementById('time3').value = timeline.page3 ? timeline.page3.startTime : 25;
+            document.getElementById('time4').value = timeline.page4 ? timeline.page4.startTime : 40;
 
-            document.getElementById('cfgScratchText').value = localStorage.getItem('cfg_scratch_text') || "";
-            document.getElementById('cfgWishNote').value = localStorage.getItem('cfg_wish_note') || "";
-        };
+            document.getElementById('cfgScratchText').value = localStorage.getItem('cfg_scratch_text') || DEFAULT_CONFIG.scratchText;
+            document.getElementById('cfgWishNote').value = localStorage.getItem('cfg_wish_note') || DEFAULT_CONFIG.wishNote;
+            document.getElementById('cfgInjectedCode').value = localStorage.getItem('cfg_injected_code') || "";
+        }
 
         function handleImageUpload(event, index) {
             const file = event.target.files[0];
@@ -452,9 +528,8 @@
         }
 
         function handleUrlInput(url, index) {
-            if (!url) return;
             albumPhotos[index] = url;
-            updatePreview(index, url);
+            if (url) updatePreview(index, url);
         }
 
         function updatePreview(index, src) {
@@ -462,20 +537,28 @@
             container.innerHTML = `<img src="${src}">`;
         }
 
+        function removePhoto(index, updateStorage = true) {
+            albumPhotos[index] = "";
+            document.getElementById(`preview${index + 1}`).innerHTML = `<span style="color:#aaa; font-size:0.7rem;">No Asset</span>`;
+            document.getElementById(`url${index + 1}`).value = "";
+            document.getElementById(`file${index + 1}`).value = "";
+            if(updateStorage) localStorage.setItem('cfg_photos', albumPhotos.join('|||'));
+        }
+
         async function searchMusic() {
             const query = document.getElementById('songQuery').value.trim();
             if (!query) return alert("Search term enter karein!");
 
             const box = document.getElementById('searchResultsBox');
-            box.innerHTML = "<p style='font-size:0.75rem; color:#888;'>Searching tracks...</p>";
+            box.innerHTML = "<p style='font-size:0.75rem; color:#888;'>Searching iTunes API for Hindi & World tracks...</p>";
 
             try {
-                const res = await fetch(`https://api.jamendo.com/v3.0/tracks/?client_id=56d30c95&format=json&limit=3&search=${encodeURIComponent(query)}`);
+                const res = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(query)}&media=music&limit=4`);
                 const data = await res.json();
                 
                 box.innerHTML = "";
                 if (!data.results || data.results.length === 0) {
-                    box.innerHTML = "<p style='font-size:0.75rem; color:red;'>No tracks found.</p>";
+                    box.innerHTML = "<p style='font-size:0.75rem; color:red;'>No tracks found. Enter direct MP3 URL.</p>";
                     return;
                 }
 
@@ -483,19 +566,45 @@
                     const el = document.createElement('div');
                     el.className = 'song-result-item';
                     el.innerHTML = `
-                        <span><b>${track.name}</b> - ${track.artist_name}</span>
-                        <button onclick="selectTrack('${track.audio}')">Use</button>
+                        <span><b>${track.trackName}</b> - ${track.artistName}</span>
+                        <button onclick="selectTrack('${track.previewUrl}')">Use Song</button>
                     `;
                     box.appendChild(el);
                 });
             } catch (e) {
-                box.innerHTML = "<p style='font-size:0.75rem; color:red;'>Audio search error.</p>";
+                box.innerHTML = "<p style='font-size:0.75rem; color:red;'>Audio search error. Use direct URL.</p>";
             }
         }
 
         function selectTrack(url) {
             document.getElementById('cfgAudioUrl').value = url;
-            alert("Song track selected successfully!");
+            alert("Song Track Selected Successfully!");
+        }
+
+        function injectLiveCode() {
+            const code = document.getElementById('cfgInjectedCode').value;
+            if (!code.trim()) return alert("Pehle code enter karein!");
+            try {
+                eval(code);
+                localStorage.setItem('cfg_injected_code', code);
+                alert("Custom code injected and executed successfully! 🚀");
+            } catch (err) {
+                alert("Code Execution Error: " + err.message);
+            }
+        }
+
+        function clearInjectedCode() {
+            document.getElementById('cfgInjectedCode').value = "";
+            localStorage.removeItem('cfg_injected_code');
+            alert("Injected code removed.");
+        }
+
+        function resetToDefaults() {
+            if (confirm("Reset all settings to default configuration?")) {
+                localStorage.clear();
+                loadSavedConfig();
+                alert("All settings reset to defaults!");
+            }
         }
 
         function saveMasterConfig() {
@@ -517,6 +626,7 @@
 
             localStorage.setItem('cfg_scratch_text', document.getElementById('cfgScratchText').value);
             localStorage.setItem('cfg_wish_note', document.getElementById('cfgWishNote').value);
+            localStorage.setItem('cfg_injected_code', document.getElementById('cfgInjectedCode').value);
 
             alert("All configuration settings deployed successfully! ✨");
         }
