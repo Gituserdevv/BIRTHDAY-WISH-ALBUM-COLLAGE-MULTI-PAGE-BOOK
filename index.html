@@ -3,268 +3,169 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Royal Multi-Page Greeting Book</title>
-    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Playfair+Display:wght@600;700&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Wish Album</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg-color: #120512;
-            --card-bg: rgba(28, 12, 26, 0.94);
-            --accent-pink: #ff758f;
-            --gold-accent: #ffd700;
-            --accent-glow: rgba(255, 117, 143, 0.8);
-            --text-color: #fce4ec;
-            --font-main: 'Poppins', sans-serif;
-            --border-radius: 18px;
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; transition: all 0.35s ease; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: var(--font-main);
+            background: #0f0c1b;
+            color: #fff;
             min-height: 100vh;
             display: flex; justify-content: center; align-items: center;
             overflow: hidden; position: relative;
         }
 
-        /* Ambient Glowing Background */
-        .stars-bg {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none;
-            background: radial-gradient(circle at 50% 50%, #2e0e29 0%, #120512 100%);
+        .bg-glow {
+            position: absolute; width: 100%; height: 100%;
+            background: radial-gradient(circle, rgba(233, 69, 96, 0.15) 0%, rgba(15, 12, 27, 1) 80%);
             z-index: 1;
         }
-        .stars-bg.flash { animation: bgFlash 0.5s ease-out; }
-        @keyframes bgFlash {
-            0% { background: radial-gradient(circle at 50% 50%, #ff758f 0%, #2e0e29 100%); }
-            100% { background: radial-gradient(circle at 50% 50%, #2e0e29 0%, #120512 100%); }
-        }
 
-        #particleContainer {
-            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; z-index: 2; overflow: hidden;
-        }
-        .particle {
-            position: absolute; font-size: 1.4rem; pointer-events: none;
-            animation: floatDown 3.5s linear infinite;
-        }
-        @keyframes floatDown {
-            0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
-        }
-
-        /* MAIN DECORATIVE BOOK WRAPPER */
-        .book-wrapper {
+        .book-card {
             position: relative; z-index: 5;
-            width: 92%; max-width: 440px; min-height: 520px;
-            background: var(--card-bg);
-            border-radius: 28px;
-            border: 2px solid var(--accent-pink);
-            box-shadow: 0 0 40px rgba(0, 0, 0, 0.9), 0 0 25px var(--accent-glow), inset 0 0 15px rgba(255,117,143,0.2);
-            backdrop-filter: blur(15px);
-            padding: 24px 20px;
-            display: flex; flex-direction: column; justify-content: space-between;
-            align-items: center; text-align: center;
+            width: 90%; max-width: 420px; min-height: 520px;
+            background: #181528;
+            border-radius: 20px;
+            border: 1px solid #2a2440;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 20px rgba(233, 69, 96, 0.2);
+            padding: 25px 20px;
+            display: flex; flex-direction: column; justify-content: space-between; align-items: center; text-align: center;
         }
 
-        /* Decorative Floral Badges */
-        .corner-badge {
-            position: absolute; font-size: 1.3rem; pointer-events: none; z-index: 6;
+        .page { display: none; width: 100%; height: 100%; flex-direction: column; align-items: center; justify-content: space-between; gap: 15px; }
+        .page.active { display: flex; }
+
+        .title { font-size: 1.1rem; color: #ff758f; font-weight: 700; letter-spacing: 1px; }
+
+        /* Cover Envelope */
+        .cover-box {
+            width: 100%; height: 300px; background: rgba(255, 255, 255, 0.03);
+            border: 2px dashed #ff758f; border-radius: 14px;
+            display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 15px;
         }
-        .cb-tl { top: -12px; left: -12px; }
-        .cb-tr { top: -12px; right: -12px; }
-        .cb-bl { bottom: -12px; left: -12px; }
-        .cb-br { bottom: -12px; right: -12px; }
+        .cover-icon { font-size: 3.5rem; filter: drop-shadow(0 0 10px #ff758f); }
 
-        /* Pages System */
-        .page { display: none; width: 100%; height: 100%; flex-direction: column; align-items: center; justify-content: space-between; gap: 14px; }
-        .page.active { display: flex; animation: pageUnfold 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
-
-        @keyframes pageUnfold {
-            from { opacity: 0; transform: scale(0.85) rotateX(15deg); }
-            to { opacity: 1; transform: scale(1) rotateX(0deg); }
-        }
-
-        .chapter-title {
-            font-size: 1.25rem; letter-spacing: 2px;
-            color: var(--gold-accent); font-weight: 700;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
-            display: flex; align-items: center; gap: 6px; justify-content: center;
-        }
-
-        /* PAGE 1: ENVELOPE GREETING COVER */
-        .envelope-card {
+        /* Scratch Card */
+        .scratch-card {
             position: relative; width: 100%; height: 300px;
-            background: linear-gradient(135deg, rgba(255,117,143,0.2), rgba(255,215,0,0.1));
-            border: 2px dashed var(--accent-pink); border-radius: var(--border-radius);
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            gap: 15px; padding: 20px; box-shadow: inset 0 0 20px rgba(255,117,143,0.3);
+            border-radius: 14px; overflow: hidden; border: 2px solid #ffd700; cursor: pointer;
         }
-        .royal-seal {
-            width: 80px; height: 80px; border-radius: 50%;
-            background: linear-gradient(135deg, #ff758f 0%, #ff4d6d 100%);
-            display: flex; align-items: center; justify-content: center;
-            font-size: 2.2rem; box-shadow: 0 0 20px var(--accent-pink), 0 0 10px var(--gold-accent);
-            animation: pulseGlow 1.8s infinite alternate;
-        }
-        @keyframes pulseGlow { 0% { transform: scale(1); } 100% { transform: scale(1.12); } }
+        .scratch-card img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* PAGE 2: PORTRAIT SCRATCH CARD */
-        .single-scratch-card {
-            position: relative; width: 100%; height: 280px;
-            border-radius: var(--border-radius); overflow: hidden;
-            border: 2px solid var(--gold-accent);
-            box-shadow: 0 0 20px rgba(255,215,0,0.4);
-            cursor: pointer;
-        }
-        .single-scratch-card img { width: 100%; height: 100%; object-fit: cover; }
-
-        /* PAGE 3: 4-PHOTO COLLAGE GRID */
-        .collage-grid {
-            display: grid; grid-template-columns: repeat(2, 1fr);
-            gap: 12px; width: 100%;
-        }
-
+        /* Collage Grid */
+        .grid-2x2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; width: 100%; }
         .photo-card {
-            position: relative; border-radius: var(--border-radius); overflow: hidden;
-            height: 125px; border: 2px solid var(--accent-pink);
-            box-shadow: 0 0 12px rgba(255, 117, 143, 0.4);
-            cursor: pointer; animation: blinkGlow 1.6s infinite alternate;
-        }
-        .photo-card:nth-child(2) { animation-delay: 0.4s; }
-        .photo-card:nth-child(3) { animation-delay: 0.8s; }
-        .photo-card:nth-child(4) { animation-delay: 1.2s; }
-
-        @keyframes blinkGlow {
-            0% { box-shadow: 0 0 4px rgba(255, 117, 143, 0.3); border-color: rgba(255, 117, 143, 0.4); }
-            100% { box-shadow: 0 0 22px var(--accent-pink), 0 0 10px #ffffff; border-color: var(--gold-accent); }
+            position: relative; width: 100%; height: 130px;
+            border-radius: 12px; overflow: hidden; border: 1px solid #ff758f; cursor: pointer;
         }
         .photo-card img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* Scratch Overlay Layer */
         .scratch-overlay {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, #ffd700 0%, #fffdd0 50%, #d4af37 100%);
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            color: #3a1c00; font-weight: 800; font-size: 0.8rem; letter-spacing: 1px;
-            z-index: 4; border-radius: var(--border-radius);
-            box-shadow: inset 0 0 12px rgba(0,0,0,0.3); gap: 4px;
+            background: linear-gradient(135deg, #ffd700, #b8860b);
+            display: flex; justify-content: center; align-items: center;
+            font-weight: 700; font-size: 0.8rem; color: #000;
+            z-index: 3; transition: opacity 0.4s ease;
         }
-        .scratch-overlay.revealed { opacity: 0; pointer-events: none; transform: scale(1.1); }
+        .scratch-overlay.revealed { opacity: 0; pointer-events: none; }
 
-        /* PAGE 4: WISHES & CAKE */
-        .wish-box {
-            background: rgba(255,255,255,0.06); border: 1px solid var(--accent-pink);
-            border-radius: 16px; padding: 15px; font-size: 0.9rem; line-height: 1.5; color: #ffe6ea;
-            max-height: 200px; overflow-y: auto; box-shadow: inset 0 0 10px rgba(0,0,0,0.4);
+        /* Candle & Cake Interactive */
+        .cake-area { position: relative; margin: 10px 0; cursor: pointer; }
+        .cake-emoji { font-size: 4.5rem; }
+        .candle-flame {
+            position: absolute; top: 2px; left: 50%; transform: translateX(-50%);
+            width: 12px; height: 18px; background: #ff9d00; border-radius: 50% 50% 20% 20%;
+            box-shadow: 0 0 12px #ff9d00, 0 0 20px #ff0055;
+            animation: burn 0.15s infinite alternate;
+        }
+        @keyframes burn { 0% { transform: translateX(-50%) scale(1); } 100% { transform: translateX(-50%) scale(1.2); } }
+        .candle-flame.off { display: none; }
+
+        .wish-text {
+            background: rgba(255, 255, 255, 0.05); padding: 12px; border-radius: 10px;
+            font-size: 0.85rem; border: 1px solid rgba(255, 117, 143, 0.3); color: #ffe6ea; width: 100%;
         }
 
-        /* Navigation Controls */
-        .nav-controls { display: flex; gap: 12px; width: 100%; justify-content: center; margin-top: 5px; }
-        .nav-btn {
-            background: linear-gradient(135deg, #ff758f 0%, #ff4d6d 100%);
-            border: none; color: #fff; padding: 10px 22px; border-radius: 30px;
-            font-size: 0.85rem; font-weight: 700; cursor: pointer;
-            box-shadow: 0 0 15px var(--accent-pink);
+        .btn-nav {
+            background: #ff758f; color: #fff; border: none; padding: 10px 20px;
+            border-radius: 20px; font-weight: 600; cursor: pointer; font-size: 0.85rem;
         }
-        .nav-btn.secondary { background: rgba(255,255,255,0.12); border: 1px solid var(--accent-pink); box-shadow: none; }
+        .btn-secondary { background: rgba(255, 255, 255, 0.1); border: 1px solid #ff758f; }
+        .nav-group { display: flex; gap: 10px; width: 100%; justify-content: center; }
 
-        .music-toggle {
+        .audio-btn {
             position: absolute; top: 15px; right: 15px; z-index: 10;
-            width: 40px; height: 40px; border-radius: 50%;
-            background: rgba(255, 255, 255, 0.15); border: 1px solid var(--accent-pink);
-            color: #fff; display: flex; align-items: center; justify-content: center;
-            cursor: pointer; backdrop-filter: blur(5px);
+            background: rgba(255,255,255,0.1); border: 1px solid #ff758f; color: #fff;
+            width: 36px; height: 36px; border-radius: 50%; cursor: pointer;
         }
-        .music-toggle.playing { animation: spin 4s linear infinite; box-shadow: 0 0 15px var(--accent-pink); }
-        @keyframes spin { 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-    <div class="stars-bg" id="bgLayer"></div>
-    <div id="particleContainer"></div>
-
-    <button class="music-toggle" id="musicBtn" onclick="toggleAudio()">🎵</button>
+    <div class="bg-glow"></div>
+    <button class="audio-btn" onclick="toggleAudio()">🎵</button>
     <audio id="bgAudio" loop></audio>
 
-    <div class="book-wrapper">
+    <div class="book-card">
 
-        <!-- Floral Corner Decorations -->
-        <div class="corner-badge cb-tl">🌸</div>
-        <div class="corner-badge cb-tr">✨</div>
-        <div class="corner-badge cb-bl">💖</div>
-        <div class="corner-badge cb-br">🌸</div>
-
-        <!-- PAGE 1: COVER GREETING PAGE -->
-        <div class="page active" id="page1">
-            <div class="chapter-title" id="titlePage1">👑 HAPPY BIRTHDAY QUEEN! 👑</div>
-            <div class="envelope-card">
-                <div class="royal-seal">💌</div>
-                <p style="font-size: 1.05rem; font-weight: 700; color: #ffe6ea;">A Special Magical Greeting Book</p>
-                <p style="font-size: 0.8rem; color: #ffb3c1;">Unfold to reveal memories, wishes & surprises</p>
+        <!-- PAGE 1 -->
+        <div class="page active" id="p1">
+            <div class="title" id="t1">HAPPY BIRTHDAY QUEEN! 👑</div>
+            <div class="cover-box">
+                <div class="cover-icon">💌</div>
+                <p style="font-size: 0.9rem; color: #ffccd5;">A Special Wish Album For You</p>
             </div>
-            <div class="nav-controls">
-                <button class="nav-btn" onclick="goToPage(2)">UNFOLD GREETING ➔</button>
+            <div class="nav-group">
+                <button class="btn-nav" onclick="goPage(2)">OPEN GREETING ➔</button>
             </div>
         </div>
 
-        <!-- PAGE 2: PORTRAIT SCRATCH CARD -->
-        <div class="page" id="page2">
-            <div class="chapter-title">✨ MAIN PORTRAIT SURPRISE ✨</div>
-            <div class="single-scratch-card" onclick="scratchAndReveal(this, event)">
-                <div class="scratch-overlay">
-                    <span style="font-size:1.5rem;">👑</span>
-                    <span>SCRATCH TO REVEAL</span>
-                </div>
+        <!-- PAGE 2 -->
+        <div class="page" id="p2">
+            <div class="title">CHAPTER I • MAIN SURPRISE</div>
+            <div class="scratch-card" onclick="reveal(this)">
+                <div class="scratch-overlay">SCRATCH TO REVEAL 👑</div>
                 <img id="imgMain" src="https://images.unsplash.com/photo-1513151233558-d860c5398176?w=600">
             </div>
-            <p style="font-size:0.75rem; color:#ffb3c1;">Tap image to scratch & burst flower petals 🌸</p>
-            <div class="nav-controls">
-                <button class="nav-btn secondary" onclick="goToPage(1)">BACK</button>
-                <button class="nav-btn" onclick="goToPage(3)">MEMORIES COLLAGE ➔</button>
+            <div class="nav-group">
+                <button class="btn-nav btn-secondary" onclick="goPage(1)">BACK</button>
+                <button class="btn-nav" onclick="goPage(3)">MEMORIES COLLAGE ➔</button>
             </div>
         </div>
 
-        <!-- PAGE 3: 4-PHOTO COLLAGE GRID PAGE -->
-        <div class="page" id="page3">
-            <div class="chapter-title" id="albumTitle">💖 MEMORIES COLLAGE 💖</div>
-            <div class="collage-grid">
-                <div class="photo-card" onclick="scratchAndReveal(this, event)">
-                    <div class="scratch-overlay">✨ UNLOCK</div>
-                    <img id="img0" src="https://images.unsplash.com/photo-1513151233558-d860c5398176?w=600">
-                </div>
-                <div class="photo-card" onclick="scratchAndReveal(this, event)">
-                    <div class="scratch-overlay">🌸 REVEAL</div>
-                    <img id="img1" src="https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=600">
-                </div>
-                <div class="photo-card" onclick="scratchAndReveal(this, event)">
-                    <div class="scratch-overlay">💖 SURPRISE</div>
-                    <img id="img2" src="https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=600">
-                </div>
-                <div class="photo-card" onclick="scratchAndReveal(this, event)">
-                    <div class="scratch-overlay">⭐ OPEN ME</div>
-                    <img id="img3" src="https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=600">
-                </div>
+        <!-- PAGE 3 -->
+        <div class="page" id="p3">
+            <div class="title" id="t3">HAPPY BIRTHDAY QUEEN! 👑</div>
+            <div class="grid-2x2">
+                <div class="photo-card" onclick="reveal(this)"><div class="scratch-overlay">UNLOCK</div><img id="img0"></div>
+                <div class="photo-card" onclick="reveal(this)"><div class="scratch-overlay">REVEAL</div><img id="img1"></div>
+                <div class="photo-card" onclick="reveal(this)"><div class="scratch-overlay">SURPRISE</div><img id="img2"></div>
+                <div class="photo-card" onclick="reveal(this)"><div class="scratch-overlay">OPEN ME</div><img id="img3"></div>
             </div>
-            <p style="font-size:0.72rem; color:#ffb3c1;">Tap each photo card to unlock magical moments ✨</p>
-            <div class="nav-controls">
-                <button class="nav-btn secondary" onclick="goToPage(2)">BACK</button>
-                <button class="nav-btn" onclick="goToPage(4)">READ WISHES ➔</button>
+            <div class="nav-group">
+                <button class="btn-nav btn-secondary" onclick="goPage(2)">BACK</button>
+                <button class="btn-nav" onclick="goPage(4)">READ WISHES ➔</button>
             </div>
         </div>
 
-        <!-- PAGE 4: WISHES & CAKE PAGE -->
-        <div class="page" id="page4">
-            <div class="chapter-title">🎂 SPECIAL BIRTHDAY WISHES 🎂</div>
-            <div style="font-size: 2.8rem; margin: 4px 0;">🎉🎂🎈</div>
-            <div class="wish-box" id="wishText">
-                May your birthday be filled with endless joy, magic, warmth, and beautiful smiles! Keep shining bright always! ✨💖
+        <!-- PAGE 4 -->
+        <div class="page" id="p4">
+            <div class="title">CHAPTER III • SPECIAL WISHES</div>
+            
+            <div class="cake-area" onclick="blowCandle()">
+                <div class="candle-flame" id="flame"></div>
+                <div class="cake-emoji">🎂</div>
+                <p id="cakeHint" style="font-size: 0.7rem; color: #ffd700; margin-top: 4px;">Tap to blow the candle! 💨</p>
             </div>
-            <div class="nav-controls">
-                <button class="nav-btn secondary" onclick="goToPage(3)">BACK</button>
-                <button class="nav-btn" onclick="goToPage(1)">REPLAY 🔄</button>
+
+            <div class="wish-text" id="wishText">
+                May your day be filled with endless joy, laughter, warmth, and beautiful surprises! Happy Birthday! ✨🌸
+            </div>
+
+            <div class="nav-group">
+                <button class="btn-nav btn-secondary" onclick="goPage(3)">BACK</button>
+                <button class="btn-nav" onclick="goPage(1)">REPLAY 🔄</button>
             </div>
         </div>
 
@@ -272,119 +173,60 @@
 
     <script>
         const audio = document.getElementById('bgAudio');
-        const musicBtn = document.getElementById('musicBtn');
-        let currentPage = 1;
-
-        const DEFAULT_SONGS = {
-            p1: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-            p2: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
-            p3: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
-            p4: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3"
+        const defaultSongs = {
+            s1: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
+            s2: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3",
+            s3: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3",
+            s4: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3"
         };
 
         window.onload = function() {
-            applySavedStyles();
-            playPageMusic(1);
-            startParticleRain();
+            let title = localStorage.getItem('wb_title');
+            if(title) {
+                document.getElementById('t1').innerText = title;
+                document.getElementById('t3').innerText = title;
+            }
+
+            let wish = localStorage.getItem('wb_wish');
+            if(wish) document.getElementById('wishText').innerText = wish;
+
+            let photos = localStorage.getItem('wb_photos');
+            if(photos) {
+                let list = photos.split('|||');
+                if(list[0]) document.getElementById('imgMain').src = list[0];
+                list.forEach((s, i) => { if(document.getElementById('img'+i)) document.getElementById('img'+i).src = s; });
+            }
+
+            playMusic(1);
         };
 
-        function applySavedStyles() {
-            const font = localStorage.getItem('cfg_font') || "'Poppins', sans-serif";
-            document.documentElement.style.setProperty('--font-main', font);
-
-            const savedTitle = localStorage.getItem('cfg_title');
-            if (savedTitle) {
-                document.getElementById('albumTitle').innerText = savedTitle;
-                document.getElementById('titlePage1').innerText = savedTitle;
-            }
-
-            const savedWish = localStorage.getItem('cfg_wish');
-            if (savedWish) document.getElementById('wishText').innerText = savedWish;
-
-            const corners = localStorage.getItem('cfg_corners') || '18px';
-            document.documentElement.style.setProperty('--border-radius', corners);
-
-            const savedPhotos = localStorage.getItem('cfg_photos');
-            if (savedPhotos) {
-                const photos = savedPhotos.split('|||');
-                if (photos[0]) document.getElementById('imgMain').src = photos[0];
-                photos.forEach((src, idx) => {
-                    if (src && document.getElementById(`img${idx}`)) {
-                        document.getElementById(`img${idx}`).src = src;
-                    }
-                });
-            }
-        }
-
-        function goToPage(pageNum) {
+        function goPage(n) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.getElementById(`page${pageNum}`).classList.add('active');
-            currentPage = pageNum;
-            playPageMusic(pageNum);
+            document.getElementById('p'+n).classList.add('active');
+            playMusic(n);
         }
 
-        function playPageMusic(pageNum) {
-            const savedSongs = JSON.parse(localStorage.getItem('cfg_multi_songs') || '{}');
-            const songKey = `p${pageNum}`;
-            const songData = savedSongs[songKey];
-            
-            const songUrl = (songData && songData.trim() !== '') ? songData : DEFAULT_SONGS[songKey];
-
-            if (audio.src !== songUrl) {
-                audio.src = songUrl;
-                audio.play().then(() => musicBtn.classList.add('playing')).catch(() => {});
+        function playMusic(n) {
+            let saved = JSON.parse(localStorage.getItem('wb_songs') || '{}');
+            let url = saved['s'+n] || defaultSongs['s'+n];
+            if(url && audio.src !== url) {
+                audio.src = url;
+                audio.play().catch(() => {});
             }
         }
 
         function toggleAudio() {
-            if (audio.paused) {
-                audio.play();
-                musicBtn.classList.add('playing');
-            } else {
-                audio.pause();
-                musicBtn.classList.remove('playing');
-            }
+            if(audio.paused) audio.play(); else audio.pause();
         }
 
-        function scratchAndReveal(card, e) {
-            const overlay = card.querySelector('.scratch-overlay');
-            if (overlay) overlay.classList.add('revealed');
-
-            const bg = document.getElementById('bgLayer');
-            bg.classList.add('flash');
-            setTimeout(() => bg.classList.remove('flash'), 500);
-
-            const pType = localStorage.getItem('cfg_particles') || 'flower';
-            const icons = pType === 'star' ? ['⭐', '✨', '💫'] : pType === 'glitter' ? ['💖', '💎', '✨'] : ['🌸', '🌺', '✨', '💖'];
-
-            for (let i = 0; i < 16; i++) {
-                const p = document.createElement('div');
-                p.className = 'particle';
-                p.innerText = icons[Math.floor(Math.random() * icons.length)];
-                p.style.left = (e.clientX + (Math.random() * 90 - 45)) + 'px';
-                p.style.top = (e.clientY + (Math.random() * 90 - 45)) + 'px';
-                p.style.animationDuration = (1.2 + Math.random() * 1.5) + 's';
-                document.getElementById('particleContainer').appendChild(p);
-
-                setTimeout(() => p.remove(), 2000);
-            }
+        function reveal(el) {
+            let overlay = el.querySelector('.scratch-overlay');
+            if(overlay) overlay.classList.add('revealed');
         }
 
-        function startParticleRain() {
-            const container = document.getElementById('particleContainer');
-            const pType = localStorage.getItem('cfg_particles') || 'flower';
-            const icons = pType === 'star' ? ['⭐', '✨'] : pType === 'glitter' ? ['💖', '✨'] : ['🌸', '✨'];
-
-            setInterval(() => {
-                const p = document.createElement('div');
-                p.className = 'particle';
-                p.innerText = icons[Math.floor(Math.random() * icons.length)];
-                p.style.left = Math.random() * 100 + 'vw';
-                p.style.top = '-20px';
-                p.style.animationDuration = (3.5 + Math.random() * 2.5) + 's';
-                container.appendChild(p);
-                setTimeout(() => p.remove(), 5000);
-            }, 700);
+        function blowCandle() {
+            document.getElementById('flame').classList.add('off');
+            document.getElementById('cakeHint').innerText = "✨ Candle blown out! 🎉";
         }
     </script>
 </body>
