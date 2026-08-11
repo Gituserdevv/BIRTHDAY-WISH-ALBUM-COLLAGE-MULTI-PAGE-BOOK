@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Royal Studio | Compact Audio Waveform Dashboard</title>
+    <title>Studio Master Administration Dashboard</title>
     <style>
         :root {
             --bg-gradient: linear-gradient(135deg, #fff5f7 0%, #ffe6ea 100%);
@@ -29,10 +29,7 @@
             font-size: 0.8rem;
         }
 
-        .master-wrapper {
-            width: 100%; max-width: 1550px; margin: 0 auto;
-            display: flex; flex-direction: column; gap: 10px;
-        }
+        .master-wrapper { width: 100%; max-width: 1550px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px; }
 
         .header-panel {
             background: var(--panel-bg); border: 1px solid var(--border-soft);
@@ -42,10 +39,7 @@
         .header-panel h1 { margin: 0; font-size: 1.1rem; color: var(--pink-accent); font-weight: 800; }
         .header-panel p { margin: 0; color: var(--rose-gold); font-size: 0.75rem; }
 
-        .dashboard-grid {
-            display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 10px; align-items: start;
-        }
-
+        .dashboard-grid { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 10px; align-items: start; }
         .column { display: flex; flex-direction: column; gap: 10px; }
 
         .card-section {
@@ -79,60 +73,24 @@
         }
         .slot-preview img { width: 100%; height: 100%; object-fit: cover; }
 
-        .upload-btn {
-            background: var(--pink-accent); color: #fff; text-align: center;
-            padding: 3px 0; border-radius: 5px; font-size: 0.65rem; font-weight: 700; cursor: pointer; flex: 1;
-        }
-        .delete-btn {
-            background: var(--danger-red); color: #fff; border: none; border-radius: 5px;
-            padding: 3px 6px; font-size: 0.65rem; cursor: pointer;
-        }
+        .upload-btn { background: var(--pink-accent); color: #fff; text-align: center; padding: 3px 0; border-radius: 5px; font-size: 0.65rem; font-weight: 700; cursor: pointer; flex: 1; }
+        .delete-btn { background: var(--danger-red); color: #fff; border: none; border-radius: 5px; padding: 3px 6px; font-size: 0.65rem; cursor: pointer; }
         input[type="file"] { display: none; }
 
-        .btn-submit {
-            padding: 6px 14px; background: linear-gradient(135deg, #ff758f 0%, #ff4d6d 100%);
-            color: #fff; font-weight: 800; font-size: 0.78rem; border: none; border-radius: 8px; cursor: pointer;
-        }
-        .btn-reset {
-            padding: 6px 14px; background: #fff; color: var(--text-dark);
-            border: 1px solid var(--pink-soft); font-weight: 700; font-size: 0.78rem; border-radius: 8px; cursor: pointer;
-        }
+        .btn-submit { padding: 6px 14px; background: linear-gradient(135deg, #ff758f 0%, #ff4d6d 100%); color: #fff; font-weight: 800; font-size: 0.78rem; border: none; border-radius: 8px; cursor: pointer; }
+        .btn-reset { padding: 6px 14px; background: #fff; color: var(--text-dark); border: 1px solid var(--pink-soft); font-weight: 700; font-size: 0.78rem; border-radius: 8px; cursor: pointer; }
 
-        /* INSTAGRAM STORY STYLE WAVEFORM SCRUBBER */
-        .insta-search-card {
-            background: #fff; border: 1px solid var(--pink-soft); border-radius: 8px;
-            padding: 8px; margin-top: 6px; display: flex; flex-direction: column; gap: 6px;
-        }
+        .insta-search-card { background: #fff; border: 1px solid var(--pink-soft); border-radius: 8px; padding: 8px; margin-top: 6px; display: flex; flex-direction: column; gap: 6px; }
+        .insta-wave-box { position: relative; width: 100%; height: 40px; background: #fff0f3; border-radius: 6px; overflow: hidden; display: flex; align-items: center; cursor: pointer; user-select: none; }
+        .insta-wave-canvas { width: 100%; height: 100%; display: block; }
+        
+        .play-head { position: absolute; top: 0; bottom: 0; width: 2px; background: var(--danger-red); left: 0%; z-index: 5; pointer-events: none; }
+        .trim-overlay { position: absolute; top: 0; bottom: 0; background: rgba(255, 117, 143, 0.35); border-left: 3px solid var(--pink-accent); border-right: 3px solid var(--pink-accent); pointer-events: none; z-index: 4; }
 
-        .insta-wave-box {
-            position: relative; width: 100%; height: 38px; background: #fff0f3;
-            border-radius: 6px; overflow: hidden; display: flex; align-items: center; cursor: pointer;
-        }
-
-        .insta-wave-canvas {
-            width: 100%; height: 100%; display: block;
-        }
-
-        .play-head {
-            position: absolute; top: 0; bottom: 0; width: 2px; background: var(--danger-red);
-            left: 0%; z-index: 5; pointer-events: none;
-        }
-
-        .trim-overlay {
-            position: absolute; top: 0; bottom: 0; background: rgba(255, 117, 143, 0.3);
-            border-left: 2px solid var(--pink-accent); border-right: 2px solid var(--pink-accent);
-            pointer-events: none; z-index: 4;
-        }
-
-        .btn-chip {
-            background: var(--pink-accent); color: #fff; border: none; padding: 3px 8px;
-            border-radius: 5px; font-size: 0.7rem; font-weight: 700; cursor: pointer;
-        }
+        .btn-chip { background: var(--pink-accent); color: #fff; border: none; padding: 3px 8px; border-radius: 5px; font-size: 0.7rem; font-weight: 700; cursor: pointer; }
         .btn-play { background: var(--success-green); }
 
-        .pages-audio-grid {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
-        }
+        .pages-audio-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
     </style>
 </head>
 <body>
@@ -150,7 +108,6 @@
         </div>
 
         <div class="dashboard-grid">
-            <!-- LEFT COLUMN -->
             <div class="column">
                 <div class="card-section">
                     <h2>🖼️ Dedicated Page Photos (4 Primary Slots)</h2>
@@ -224,12 +181,11 @@
                 </div>
             </div>
 
-            <!-- RIGHT COLUMN: INSTA WAVE & PAGES AUDIO -->
             <div class="column">
                 <div class="card-section">
                     <h2>🎧 Music Search & Insta Story Scrubber</h2>
                     <div style="display:flex; gap:6px;">
-                        <input type="text" id="songQuery" placeholder="Search track (e.g. gumnaam, kesariya...)">
+                        <input type="text" id="songQuery" placeholder="Search track (e.g. gumnam, kesariya...)">
                         <button class="btn-chip" style="width:80px;" onclick="searchMusic()">Search</button>
                     </div>
                     <div id="searchResultsBox"></div>
@@ -242,8 +198,8 @@
                             <span style="font-size:0.7rem; font-weight:700; color:var(--pink-accent);">1. Cover Song</span>
                             <input type="text" id="songUrl_p1" placeholder="MP3 URL">
                             <div class="form-grid-2">
-                                <input type="number" id="start_p1" placeholder="Start" value="0">
-                                <input type="number" id="end_p1" placeholder="End" value="30">
+                                <div class="input-group"><label>Start (Sec)</label><input type="number" id="start_p1" value="0"></div>
+                                <div class="input-group"><label>End (Sec)</label><input type="number" id="end_p1" value="30"></div>
                             </div>
                             <button class="btn-chip btn-play" onclick="previewAudioSlot(1)">▶ Play Cut</button>
                         </div>
@@ -252,8 +208,8 @@
                             <span style="font-size:0.7rem; font-weight:700; color:var(--pink-accent);">2. Scratch Song</span>
                             <input type="text" id="songUrl_p2" placeholder="MP3 URL">
                             <div class="form-grid-2">
-                                <input type="number" id="start_p2" placeholder="Start" value="0">
-                                <input type="number" id="end_p2" placeholder="End" value="30">
+                                <div class="input-group"><label>Start (Sec)</label><input type="number" id="start_p2" value="0"></div>
+                                <div class="input-group"><label>End (Sec)</label><input type="number" id="end_p2" value="30"></div>
                             </div>
                             <button class="btn-chip btn-play" onclick="previewAudioSlot(2)">▶ Play Cut</button>
                         </div>
@@ -262,8 +218,8 @@
                             <span style="font-size:0.7rem; font-weight:700; color:var(--pink-accent);">3. Gallery Song</span>
                             <input type="text" id="songUrl_p3" placeholder="MP3 URL">
                             <div class="form-grid-2">
-                                <input type="number" id="start_p3" placeholder="Start" value="0">
-                                <input type="number" id="end_p3" placeholder="End" value="30">
+                                <div class="input-group"><label>Start (Sec)</label><input type="number" id="start_p3" value="0"></div>
+                                <div class="input-group"><label>End (Sec)</label><input type="number" id="end_p3" value="30"></div>
                             </div>
                             <button class="btn-chip btn-play" onclick="previewAudioSlot(3)">▶ Play Cut</button>
                         </div>
@@ -272,8 +228,8 @@
                             <span style="font-size:0.7rem; font-weight:700; color:var(--pink-accent);">🕯️ 4. Candle Page Song</span>
                             <input type="text" id="songUrl_p4" placeholder="MP3 URL">
                             <div class="form-grid-2">
-                                <input type="number" id="start_p4" placeholder="Start" value="0">
-                                <input type="number" id="end_p4" placeholder="End" value="30">
+                                <div class="input-group"><label>Start (Sec)</label><input type="number" id="start_p4" value="0"></div>
+                                <div class="input-group"><label>End (Sec)</label><input type="number" id="end_p4" value="30"></div>
                             </div>
                             <button class="btn-chip btn-play" onclick="previewAudioSlot(4)">▶ Play Cut</button>
                         </div>
@@ -288,6 +244,7 @@
     <script>
         let albumPhotos = ["", "", "", ""];
         let activeAudioTrack = null;
+        let trackSelections = {};
 
         const DEFAULT_CONFIG = {
             photos: [
@@ -308,9 +265,7 @@
             wishNote: "Wishing you a wonderful year ahead filled with happiness! Happy Birthday! 🎉"
         };
 
-        window.onload = function() {
-            loadSavedConfig();
-        };
+        window.onload = function() { loadSavedConfig(); };
 
         function loadSavedConfig() {
             const savedPhotos = localStorage.getItem('cfg_photos');
@@ -367,14 +322,8 @@
             reader.readAsDataURL(file);
         }
 
-        function handleUrlInput(url, index) {
-            albumPhotos[index] = url;
-            if (url) updatePreview(index, url);
-        }
-
-        function updatePreview(index, src) {
-            document.getElementById(`preview${index + 1}`).innerHTML = `<img src="${src}">`;
-        }
+        function handleUrlInput(url, index) { albumPhotos[index] = url; if (url) updatePreview(index, url); }
+        function updatePreview(index, src) { document.getElementById(`preview${index + 1}`).innerHTML = `<img src="${src}">`; }
 
         function removePhoto(index, updateStorage = true) {
             albumPhotos[index] = "";
@@ -384,7 +333,6 @@
             if(updateStorage) localStorage.setItem('cfg_photos', albumPhotos.join('|||'));
         }
 
-        /* SEARCH & INSTA WAVE SCRUBBER DRAWING */
         async function searchMusic() {
             const query = document.getElementById('songQuery').value.trim();
             if (!query) return alert("Search term enter karein!");
@@ -403,21 +351,23 @@
                 }
 
                 data.results.forEach((track, idx) => {
+                    trackSelections[idx] = { start: 0, end: 15, duration: 30 };
                     const card = document.createElement('div');
                     card.className = 'insta-search-card';
                     card.innerHTML = `
                         <div style="display:flex; justify-content:space-between; align-items:center;">
                             <span><b>${track.trackName}</b> <small style="color:#888;">(${track.artistName})</small></span>
                             <div style="display:flex; gap:4px;">
-                                <button class="btn-chip btn-play" id="pBtn_${idx}" onclick="toggleInstaPlay('${track.previewUrl}', ${idx})">▶ Play</button>
-                                <button class="btn-chip" onclick="applyToSlotPrompt('${track.previewUrl}')">Use Song</button>
+                                <button class="btn-chip btn-play" id="pBtn_${idx}" onclick="toggleInstaPlay('${track.previewUrl}', ${idx})">▶ Play Selection</button>
+                                <button class="btn-chip" onclick="applyToSlotPrompt('${track.previewUrl}', ${idx})">Use Song</button>
                             </div>
                         </div>
-                        <div class="insta-wave-box" onclick="scrubInstaWave(event, '${track.previewUrl}', ${idx})">
+                        <div class="insta-wave-box" id="waveBox_${idx}" onmousedown="startWaveDrag(event, '${track.previewUrl}', ${idx})">
                             <canvas class="insta-wave-canvas" id="canvas_${idx}"></canvas>
                             <div class="play-head" id="head_${idx}"></div>
-                            <div class="trim-overlay" id="trim_${idx}" style="left:0%; width:100%;"></div>
+                            <div class="trim-overlay" id="trim_${idx}" style="left:0%; width:50%;"></div>
                         </div>
+                        <div style="font-size:0.65rem; color:#666;" id="timeText_${idx}">Selected: 0s - 15s</div>
                     `;
                     box.appendChild(card);
                     drawWaveformCanvas(`canvas_${idx}`);
@@ -432,65 +382,88 @@
             if(!canvas) return;
             const ctx = canvas.getContext('2d');
             canvas.width = canvas.offsetWidth || 300;
-            canvas.height = 38;
+            canvas.height = 40;
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             const numBars = 45;
             const barWidth = (canvas.width / numBars) - 2;
 
             for(let i=0; i<numBars; i++) {
-                const h = Math.floor(Math.random() * 26) + 6;
+                const h = Math.floor(Math.random() * 28) + 6;
                 const x = i * (barWidth + 2);
                 const y = (canvas.height - h) / 2;
-                ctx.fillStyle = "#ffccd5";
+                ctx.fillStyle = "#ff758f";
                 ctx.fillRect(x, y, barWidth, h);
             }
+        }
+
+        function startWaveDrag(e, url, idx) {
+            const box = document.getElementById(`waveBox_${idx}`);
+            const rect = box.getBoundingClientRect();
+            let startPct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+
+            function onMouseMove(moveEvent) {
+                let currentPct = Math.max(0, Math.min(1, (moveEvent.clientX - rect.left) / rect.width));
+                let minPct = Math.min(startPct, currentPct);
+                let maxPct = Math.max(startPct, currentPct);
+
+                if (maxPct - minPct < 0.05) maxPct = Math.min(1, minPct + 0.1);
+
+                const trim = document.getElementById(`trim_${idx}`);
+                trim.style.left = (minPct * 100) + '%';
+                trim.style.width = ((maxPct - minPct) * 100) + '%';
+
+                const totalSec = trackSelections[idx].duration;
+                const startSec = Math.round(minPct * totalSec);
+                const endSec = Math.round(maxPct * totalSec);
+
+                trackSelections[idx].start = startSec;
+                trackSelections[idx].end = endSec;
+
+                document.getElementById(`timeText_${idx}`).innerText = `Selected: ${startSec}s - ${endSec}s`;
+            }
+
+            function onMouseUp() {
+                window.removeEventListener('mousemove', onMouseMove);
+                window.removeEventListener('mouseup', onMouseUp);
+            }
+
+            window.addEventListener('mousemove', onMouseMove);
+            window.addEventListener('mouseup', onMouseUp);
         }
 
         function toggleInstaPlay(url, idx) {
             const player = document.getElementById('globalPreviewPlayer');
             const btn = document.getElementById(`pBtn_${idx}`);
             const head = document.getElementById(`head_${idx}`);
+            const sel = trackSelections[idx];
 
             if(activeAudioTrack === url && !player.paused) {
                 player.pause();
-                btn.innerText = "▶ Play";
+                btn.innerText = "▶ Play Selection";
             } else {
                 player.src = url;
+                player.currentTime = sel.start;
                 player.play();
                 btn.innerText = "⏸ Pause";
                 activeAudioTrack = url;
 
                 player.ontimeupdate = function() {
-                    const pct = (player.currentTime / player.duration) * 100;
+                    const pct = (player.currentTime / sel.duration) * 100;
                     if(head) head.style.left = pct + '%';
+
+                    if(player.currentTime >= sel.end) {
+                        player.pause();
+                        btn.innerText = "▶ Play Selection";
+                    }
                 };
-
-                player.onended = function() {
-                    btn.innerText = "▶ Play";
-                    if(head) head.style.left = '0%';
-                };
-            }
-        }
-
-        function scrubInstaWave(event, url, idx) {
-            const box = event.currentTarget;
-            const rect = box.getBoundingClientRect();
-            const clickX = event.clientX - rect.left;
-            const pct = clickX / rect.width;
-
-            const player = document.getElementById('globalPreviewPlayer');
-            if(player.src.includes(url)) {
-                player.currentTime = pct * player.duration;
-            } else {
-                toggleInstaPlay(url, idx);
             }
         }
 
         function previewAudioSlot(pageIndex) {
             const url = document.getElementById(`songUrl_p${pageIndex}`).value;
             const start = parseFloat(document.getElementById(`start_p${pageIndex}`).value) || 0;
-            const end = parseFloat(document.getElementById(`end_p${pageIndex}`).value) || 0;
+            const end = parseFloat(document.getElementById(`end_p${pageIndex}`).value) || 30;
 
             if(!url) return alert(`Page ${pageIndex} ke liye Audio URL missing hai!`);
 
@@ -499,19 +472,21 @@
             player.currentTime = start;
             player.play();
 
-            if(end > start) {
-                const duration = (end - start) * 1000;
-                setTimeout(() => {
-                    if(!player.paused && player.src.includes(url)) player.pause();
-                }, duration);
-            }
+            player.ontimeupdate = function() {
+                if(player.currentTime >= end) {
+                    player.pause();
+                }
+            };
         }
 
-        function applyToSlotPrompt(url) {
-            const slotNum = prompt("Kounse Page / Candle Page par ye gana lagana hai? (1, 2, 3, ya 4):", "4");
+        function applyToSlotPrompt(url, idx) {
+            const sel = trackSelections[idx];
+            const slotNum = prompt("Kounse Page par lagana hai? (1, 2, 3, ya 4):", "4");
             if(slotNum >= 1 && slotNum <= 4) {
                 document.getElementById(`songUrl_p${slotNum}`).value = url;
-                alert(`Page ${slotNum} par song active ho gaya!`);
+                document.getElementById(`start_p${slotNum}`).value = sel.start;
+                document.getElementById(`end_p${slotNum}`).value = sel.end;
+                alert(`Page ${slotNum} par ${sel.start}s se ${sel.end}s tak song set ho gaya!`);
             }
         }
 
