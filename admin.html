@@ -3,222 +3,156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Studio Master Administration Dashboard</title>
+    <title>Master Studio Administrator</title>
     <style>
         :root {
-            --bg-gradient: linear-gradient(135deg, #fff5f7 0%, #ffe6ea 100%);
-            --panel-bg: rgba(255, 255, 255, 0.95);
-            --pink-accent: #ff758f;
-            --rose-gold: #c97a8e;
-            --pink-soft: #ffccd5;
-            --pink-light: #fff0f3;
-            --text-dark: #3a2228;
-            --border-soft: rgba(255, 117, 143, 0.3);
-            --shadow-soft: 0 4px 15px rgba(255, 117, 143, 0.1);
-            --danger-red: #ff4d6d;
-            --success-green: #2ec4b6;
+            --bg: #fff5f7;
+            --card-bg: #ffffff;
+            --accent: #ff758f;
+            --dark: #3a2228;
+            --border: #ffccd5;
         }
+        * { box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; transition: all 0.2s; }
+        body { background: var(--bg); color: var(--dark); margin: 0; padding: 15px; font-size: 0.8rem; }
+        .wrapper { max-width: 1400px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+        .header { background: var(--card-bg); border: 1px solid var(--border); padding: 12px 20px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(255,117,143,0.1); }
+        .header h1 { margin: 0; font-size: 1.1rem; color: var(--accent); }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .panel { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 12px; }
+        .panel h2 { margin: 0 0 10px 0; font-size: 0.85rem; color: var(--accent); border-bottom: 1px solid var(--bg); padding-bottom: 4px; }
+        
+        .form-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+        .form-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .form-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
 
-        * { box-sizing: border-box; transition: all 0.15s ease; }
+        .group { display: flex; flex-direction: column; gap: 3px; }
+        .group label { font-size: 0.7rem; font-weight: 700; }
+        input, select { padding: 5px 8px; border: 1px solid var(--border); border-radius: 6px; font-size: 0.75rem; width: 100%; }
 
-        body {
-            background: var(--bg-gradient);
-            color: var(--text-dark);
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            margin: 0; padding: 10px 15px;
-            font-size: 0.8rem;
-        }
+        .photo-slot { background: var(--bg); border: 1px dashed var(--border); border-radius: 8px; padding: 6px; text-align: center; }
+        .preview { width: 100%; height: 50px; background: #fff; border-radius: 6px; overflow: hidden; margin-bottom: 4px; border: 1px solid var(--border); display:flex; align-items:center; justify-content:center;}
+        .preview img { width: 100%; height: 100%; object-fit: cover; }
 
-        .master-wrapper { width: 100%; max-width: 1550px; margin: 0 auto; display: flex; flex-direction: column; gap: 10px; }
-
-        .header-panel {
-            background: var(--panel-bg); border: 1px solid var(--border-soft);
-            border-radius: 12px; padding: 8px 18px;
-            display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow-soft);
-        }
-        .header-panel h1 { margin: 0; font-size: 1.1rem; color: var(--pink-accent); font-weight: 800; }
-        .header-panel p { margin: 0; color: var(--rose-gold); font-size: 0.75rem; }
-
-        .dashboard-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-items: start; }
-        .column { display: flex; flex-direction: column; gap: 10px; }
-
-        .card-section {
-            background: var(--panel-bg); border: 1px solid var(--border-soft);
-            border-radius: 12px; padding: 10px 12px; box-shadow: var(--shadow-soft);
-        }
-        .card-section h2 {
-            margin: 0 0 8px 0; font-size: 0.85rem; color: var(--pink-accent);
-            display: flex; align-items: center; justify-content: space-between;
-            border-bottom: 1px solid var(--pink-light); padding-bottom: 4px;
-        }
-
-        .form-grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
-        .form-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
-        .form-grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
-
-        .input-group { display: flex; flex-direction: column; gap: 2px; }
-        .input-group label { font-size: 0.7rem; font-weight: 700; color: var(--text-dark); }
-
-        input[type="text"], input[type="number"], select, textarea {
-            width: 100%; padding: 4px 6px; background: #fff; color: var(--text-dark);
-            border: 1px solid var(--pink-soft); border-radius: 6px; font-size: 0.75rem; outline: none;
-        }
-
-        .slot-card {
-            background: var(--pink-light); border: 1px dashed var(--pink-soft);
-            border-radius: 8px; padding: 4px; display: flex; flex-direction: column; gap: 4px; align-items: center;
-        }
-        .slot-preview {
-            width: 100%; height: 50px; background: #fff; border-radius: 6px;
-            display: flex; align-items: center; justify-content: center; overflow: hidden; border: 1px solid var(--pink-soft);
-        }
-        .slot-preview img { width: 100%; height: 100%; object-fit: cover; }
-
-        .upload-btn { background: var(--pink-accent); color: #fff; text-align: center; padding: 3px 0; border-radius: 5px; font-size: 0.65rem; font-weight: 700; cursor: pointer; flex: 1; }
-        .delete-btn { background: var(--danger-red); color: #fff; border: none; border-radius: 5px; padding: 3px 6px; font-size: 0.65rem; cursor: pointer; }
-        input[type="file"] { display: none; }
-
-        .btn-submit { padding: 6px 14px; background: linear-gradient(135deg, #ff758f 0%, #ff4d6d 100%); color: #fff; font-weight: 800; font-size: 0.78rem; border: none; border-radius: 8px; cursor: pointer; }
-        .btn-reset { padding: 6px 14px; background: #fff; color: var(--text-dark); border: 1px solid var(--pink-soft); font-weight: 700; font-size: 0.78rem; border-radius: 8px; cursor: pointer; }
-
-        .btn-chip { background: var(--pink-accent); color: #fff; border: none; padding: 3px 8px; border-radius: 5px; font-size: 0.7rem; font-weight: 700; cursor: pointer; }
-        .btn-play { background: var(--success-green); }
-
-        .pages-audio-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .btn-main { background: var(--accent); color: #fff; border: none; padding: 8px 16px; font-weight: 700; border-radius: 8px; cursor: pointer; }
+        .btn-reset { background: #fff; border: 1px solid var(--border); padding: 8px 16px; font-weight: 700; border-radius: 8px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <div class="master-wrapper">
-        <div class="header-panel">
+    <div class="wrapper">
+        <div class="header">
             <div>
-                <h1>🌸 Studio Master Administration Dashboard</h1>
-                <p>Synced Engine for Photo Grids, Glow Effects & Multi-Page Audio</p>
+                <h1>🌸 Master Studio Administrator</h1>
+                <p style="margin:0; font-size:0.7rem; color:#888;">Full Control over Text, Sizes, Animations, Photos & Music</p>
             </div>
             <div style="display:flex; gap:8px;">
-                <button class="btn-reset" onclick="resetToDefaults()">Reset Defaults 🔄</button>
-                <button class="btn-submit" onclick="saveMasterConfig()">Save & Apply ✨</button>
+                <button class="btn-reset" onclick="resetDefaults()">Reset 🔄</button>
+                <button class="btn-main" onclick="saveMasterSettings()">Save & Apply ✨</button>
             </div>
         </div>
 
-        <div class="dashboard-grid">
-            <!-- LEFT COLUMN -->
-            <div class="column">
-                <div class="card-section">
-                    <h2>🖼️ Collage Photo Grid (4 Assets)</h2>
-                    <div class="form-grid-4">
-                        <div class="slot-card">
-                            <span style="font-size:0.65rem; font-weight:700;">1. Photo 1</span>
-                            <div class="slot-preview" id="preview1"></div>
-                            <div style="display:flex; gap:2px; width:100%;">
-                                <label for="file1" class="upload-btn">Upload</label>
-                                <button class="delete-btn" onclick="removePhoto(0)">🗑️</button>
-                            </div>
-                            <input type="file" id="file1" accept="image/*" onchange="handleImageUpload(event, 0)">
-                            <input type="text" id="url1" placeholder="URL..." onchange="handleUrlInput(this.value, 0)">
+        <div class="grid">
+            <!-- LEFT PANEL -->
+            <div style="display:flex; flex-direction:column; gap:12px;">
+                <div class="panel">
+                    <h2>🖼️ Collage Photo Grid (4 Slot Uploads)</h2>
+                    <div class="form-4">
+                        <div class="photo-slot">
+                            <div class="preview" id="prev0">Photo 1</div>
+                            <input type="file" onchange="uploadPhoto(event, 0)" accept="image/*">
                         </div>
-
-                        <div class="slot-card">
-                            <span style="font-size:0.65rem; font-weight:700;">2. Photo 2</span>
-                            <div class="slot-preview" id="preview2"></div>
-                            <div style="display:flex; gap:2px; width:100%;">
-                                <label for="file2" class="upload-btn">Upload</label>
-                                <button class="delete-btn" onclick="removePhoto(1)">🗑️</button>
-                            </div>
-                            <input type="file" id="file2" accept="image/*" onchange="handleImageUpload(event, 1)">
-                            <input type="text" id="url2" placeholder="URL..." onchange="handleUrlInput(this.value, 1)">
+                        <div class="photo-slot">
+                            <div class="preview" id="prev1">Photo 2</div>
+                            <input type="file" onchange="uploadPhoto(event, 1)" accept="image/*">
                         </div>
-
-                        <div class="slot-card">
-                            <span style="font-size:0.65rem; font-weight:700;">3. Photo 3</span>
-                            <div class="slot-preview" id="preview3"></div>
-                            <div style="display:flex; gap:2px; width:100%;">
-                                <label for="file3" class="upload-btn">Upload</label>
-                                <button class="delete-btn" onclick="removePhoto(2)">🗑️</button>
-                            </div>
-                            <input type="file" id="file3" accept="image/*" onchange="handleImageUpload(event, 2)">
-                            <input type="text" id="url3" placeholder="URL..." onchange="handleUrlInput(this.value, 2)">
+                        <div class="photo-slot">
+                            <div class="preview" id="prev2">Photo 3</div>
+                            <input type="file" onchange="uploadPhoto(event, 2)" accept="image/*">
                         </div>
-
-                        <div class="slot-card">
-                            <span style="font-size:0.65rem; font-weight:700;">4. Photo 4</span>
-                            <div class="slot-preview" id="preview4"></div>
-                            <div style="display:flex; gap:2px; width:100%;">
-                                <label for="file4" class="upload-btn">Upload</label>
-                                <button class="delete-btn" onclick="removePhoto(3)">🗑️</button>
-                            </div>
-                            <input type="file" id="file4" accept="image/*" onchange="handleImageUpload(event, 3)">
-                            <input type="text" id="url4" placeholder="URL..." onchange="handleUrlInput(this.value, 3)">
+                        <div class="photo-slot">
+                            <div class="preview" id="prev3">Photo 4</div>
+                            <input type="file" onchange="uploadPhoto(event, 3)" accept="image/*">
                         </div>
                     </div>
                 </div>
 
-                <div class="card-section">
-                    <h2>🎨 Custom Theme & Visual Filters</h2>
-                    <div class="form-grid-3">
-                        <div class="input-group">
-                            <label>Album Theme</label>
-                            <select id="cfgTheme">
-                                <option value="pink">Pink Glow</option>
-                                <option value="gold">Royal Gold</option>
-                                <option value="midnight">Midnight Dark</option>
+                <div class="panel">
+                    <h2>✍️ Text Customization & Font Styles</h2>
+                    <div class="form-3">
+                        <div class="group">
+                            <label>Album Title Text</label>
+                            <input type="text" id="cfgTitle" value="CHAPTER II • MEMORIES COLLAGE">
+                        </div>
+                        <div class="group">
+                            <label>Font Family Style</label>
+                            <select id="cfgFont">
+                                <option value="'Poppins', sans-serif">Modern Clean (Poppins)</option>
+                                <option value="'Dancing Script', cursive">Romantic Cursive Script</option>
+                                <option value="'Playfair Display', serif">Royal Serif</option>
                             </select>
                         </div>
-                        <div class="input-group">
-                            <label>Photo Filter Tone</label>
-                            <select id="cfgImageFilter">
-                                <option value="none">Normal</option>
-                                <option value="vintage">Vintage</option>
-                                <option value="softpink">Romantic Pink</option>
+                        <div class="group">
+                            <label>Title Size</label>
+                            <select id="cfgTitleSize">
+                                <option value="0.9rem">Small</option>
+                                <option value="1.1rem" selected>Medium</option>
+                                <option value="1.4rem">Large</option>
                             </select>
                         </div>
-                        <div class="input-group">
-                            <label>Album Title</label>
-                            <input type="text" id="cfgTitle" placeholder="Chapter Name...">
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <h2>📐 Layout, Photo Sizes & Animations</h2>
+                    <div class="form-3">
+                        <div class="group">
+                            <label>Photo Grid Height</label>
+                            <select id="cfgPhotoHeight">
+                                <option value="110px">Compact (110px)</option>
+                                <option value="140px" selected>Medium (140px)</option>
+                                <option value="170px">Large (170px)</option>
+                            </select>
+                        </div>
+                        <div class="group">
+                            <label>Photo Corner Curves</label>
+                            <select id="cfgBorderRadius">
+                                <option value="6px">Sharp Curves (6px)</option>
+                                <option value="14px" selected>Smooth Curves (14px)</option>
+                                <option value="24px">Extra Rounded (24px)</option>
+                            </select>
+                        </div>
+                        <div class="group">
+                            <label>Blast Particle Effect</label>
+                            <select id="cfgParticleType">
+                                <option value="flower">Flowers 🌸 & Pink Glow</option>
+                                <option value="star">Stars ⭐ & Gold Sparkles</option>
+                                <option value="glitter">Glitter Hearts 💖</option>
+                            </select>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- RIGHT COLUMN -->
-            <div class="column">
-                <div class="card-section">
-                    <h2>🎵 Multi-Page Audio Sync</h2>
-                    <div class="pages-audio-grid">
-                        <div class="slot-card" style="align-items:stretch; background:#fff;">
-                            <span style="font-size:0.7rem; font-weight:700; color:var(--pink-accent);">Page 1 Cover Song</span>
-                            <input type="text" id="songUrl_p1" placeholder="MP3 Link...">
-                            <div class="form-grid-2">
-                                <div class="input-group"><label>Start (s)</label><input type="number" id="start_p1" value="0"></div>
-                                <div class="input-group"><label>End (s)</label><input type="number" id="end_p1" value="30"></div>
-                            </div>
+            <!-- RIGHT PANEL -->
+            <div style="display:flex; flex-direction:column; gap:12px;">
+                <div class="panel">
+                    <h2>🎵 Page Wise Music Sync (Leave Blank for Built-in Auto Songs)</h2>
+                    <div class="form-2">
+                        <div class="group" style="background:var(--bg); padding:6px; border-radius:6px;">
+                            <label style="color:var(--accent)">1. Cover Page Song</label>
+                            <input type="text" id="songUrl_p1" placeholder="MP3 Link (Auto Default)">
                         </div>
-
-                        <div class="slot-card" style="align-items:stretch; background:#fff;">
-                            <span style="font-size:0.7rem; font-weight:700; color:var(--pink-accent);">Page 2 Scratch Song</span>
-                            <input type="text" id="songUrl_p2" placeholder="MP3 Link...">
-                            <div class="form-grid-2">
-                                <div class="input-group"><label>Start (s)</label><input type="number" id="start_p2" value="0"></div>
-                                <div class="input-group"><label>End (s)</label><input type="number" id="end_p2" value="30"></div>
-                            </div>
+                        <div class="group" style="background:var(--bg); padding:6px; border-radius:6px;">
+                            <label style="color:var(--accent)">2. Scratch Card Song</label>
+                            <input type="text" id="songUrl_p2" placeholder="MP3 Link (Auto Default)">
                         </div>
-
-                        <div class="slot-card" style="align-items:stretch; background:#fff5f7; border-color:var(--pink-accent);">
-                            <span style="font-size:0.7rem; font-weight:700; color:var(--pink-accent);">Page 3 Collage Song</span>
-                            <input type="text" id="songUrl_p3" placeholder="MP3 Link...">
-                            <div class="form-grid-2">
-                                <div class="input-group"><label>Start (s)</label><input type="number" id="start_p3" value="0"></div>
-                                <div class="input-group"><label>End (s)</label><input type="number" id="end_p3" value="30"></div>
-                            </div>
+                        <div class="group" style="background:var(--bg); padding:6px; border-radius:6px;">
+                            <label style="color:var(--accent)">3. Collage Page Song</label>
+                            <input type="text" id="songUrl_p3" placeholder="MP3 Link (Auto Default)">
                         </div>
-
-                        <div class="slot-card" style="align-items:stretch; background:#fff;">
-                            <span style="font-size:0.7rem; font-weight:700; color:var(--pink-accent);">Page 4 Wishes Song</span>
-                            <input type="text" id="songUrl_p4" placeholder="MP3 Link...">
-                            <div class="form-grid-2">
-                                <div class="input-group"><label>Start (s)</label><input type="number" id="start_p4" value="0"></div>
-                                <div class="input-group"><label>End (s)</label><input type="number" id="end_p4" value="30"></div>
-                            </div>
+                        <div class="group" style="background:var(--bg); padding:6px; border-radius:6px;">
+                            <label style="color:var(--accent)">4. Candle/Wish Page Song</label>
+                            <input type="text" id="songUrl_p4" placeholder="MP3 Link (Auto Default)">
                         </div>
                     </div>
                 </div>
@@ -227,89 +161,65 @@
     </div>
 
     <script>
-        let albumPhotos = [
-            "https://images.unsplash.com/photo-1513151233558-d860c5398176?w=600",
-            "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=600",
-            "https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=600",
-            "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=600"
-        ];
+        let photos = ["", "", "", ""];
 
-        window.onload = function() { loadSavedConfig(); };
-
-        function loadSavedConfig() {
-            const savedPhotos = localStorage.getItem('cfg_photos');
-            if (savedPhotos) albumPhotos = savedPhotos.split('|||');
-
-            albumPhotos.forEach((src, idx) => {
-                if (src && idx < 4) {
-                    updatePreview(idx, src);
-                    document.getElementById(`url${idx + 1}`).value = src.startsWith('data:') ? '' : src;
-                }
-            });
-
-            document.getElementById('cfgTheme').value = localStorage.getItem('cfg_theme') || 'pink';
-            document.getElementById('cfgImageFilter').value = localStorage.getItem('cfg_image_filter') || 'none';
-            document.getElementById('cfgTitle').value = localStorage.getItem('cfg_title') || 'CHAPTER II • MEMORIES COLLAGE';
-
-            const multiSongs = JSON.parse(localStorage.getItem('cfg_multi_songs') || '{}');
-            for(let i=1; i<=4; i++) {
-                const song = multiSongs[`p${i}`] || { url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", start: 0, end: 30 };
-                document.getElementById(`songUrl_p${i}`).value = song.url || '';
-                document.getElementById(`start_p${i}`).value = song.start || 0;
-                document.getElementById(`end_p${i}`).value = song.end || 30;
+        window.onload = function() {
+            const saved = localStorage.getItem('cfg_photos');
+            if (saved) {
+                photos = saved.split('|||');
+                photos.forEach((src, idx) => {
+                    if (src) document.getElementById(`prev${idx}`).innerHTML = `<img src="${src}">`;
+                });
             }
-        }
+            document.getElementById('cfgTitle').value = localStorage.getItem('cfg_title') || 'CHAPTER II • MEMORIES COLLAGE';
+            document.getElementById('cfgFont').value = localStorage.getItem('cfg_font') || "'Poppins', sans-serif";
+            document.getElementById('cfgTitleSize').value = localStorage.getItem('cfg_title_size') || "1.1rem";
+            document.getElementById('cfgPhotoHeight').value = localStorage.getItem('cfg_photo_height') || "140px";
+            document.getElementById('cfgBorderRadius').value = localStorage.getItem('cfg_border_radius') || "14px";
+            document.getElementById('cfgParticleType').value = localStorage.getItem('cfg_particle_type') || "flower";
 
-        function handleImageUpload(event, index) {
+            const songs = JSON.parse(localStorage.getItem('cfg_multi_songs') || '{}');
+            for(let i=1; i<=4; i++) {
+                if (songs[`p${i}`]) document.getElementById(`songUrl_p${i}`).value = songs[`p${i}`].url || '';
+            }
+        };
+
+        function uploadPhoto(event, idx) {
             const file = event.target.files[0];
             if (!file) return;
-
             const reader = new FileReader();
             reader.onload = function(e) {
-                albumPhotos[index] = e.target.result;
-                updatePreview(index, e.target.result);
+                photos[idx] = e.target.result;
+                document.getElementById(`prev${idx}`).innerHTML = `<img src="${e.target.result}">`;
             };
             reader.readAsDataURL(file);
         }
 
-        function handleUrlInput(url, index) {
-            albumPhotos[index] = url;
-            if (url) updatePreview(index, url);
-        }
-
-        function updatePreview(index, src) {
-            document.getElementById(`preview${index + 1}`).innerHTML = `<img src="${src}">`;
-        }
-
-        function removePhoto(index) {
-            albumPhotos[index] = "";
-            document.getElementById(`preview${index + 1}`).innerHTML = `<span style="color:#aaa; font-size:0.6rem;">Empty Grid</span>`;
-            document.getElementById(`url${index + 1}`).value = "";
-            document.getElementById(`file${index + 1}`).value = "";
-        }
-
-        function resetToDefaults() {
-            if (confirm("Reset all settings to default photos & audio?")) {
+        function resetDefaults() {
+            if(confirm("Reset all customizations?")) {
                 localStorage.clear();
                 location.reload();
             }
         }
 
-        function saveMasterConfig() {
-            localStorage.setItem('cfg_photos', albumPhotos.join('|||'));
-            localStorage.setItem('cfg_theme', document.getElementById('cfgTheme').value);
-            localStorage.setItem('cfg_image_filter', document.getElementById('cfgImageFilter').value);
+        function saveMasterSettings() {
+            localStorage.setItem('cfg_photos', photos.join('|||'));
             localStorage.setItem('cfg_title', document.getElementById('cfgTitle').value);
+            localStorage.setItem('cfg_font', document.getElementById('cfgFont').value);
+            localStorage.setItem('cfg_title_size', document.getElementById('cfgTitleSize').value);
+            localStorage.setItem('cfg_photo_height', document.getElementById('cfgPhotoHeight').value);
+            localStorage.setItem('cfg_border_radius', document.getElementById('cfgBorderRadius').value);
+            localStorage.setItem('cfg_particle_type', document.getElementById('cfgParticleType').value);
 
-            const multiSongs = {
-                p1: { url: document.getElementById('songUrl_p1').value, start: parseFloat(document.getElementById('start_p1').value) || 0, end: parseFloat(document.getElementById('end_p1').value) || 30 },
-                p2: { url: document.getElementById('songUrl_p2').value, start: parseFloat(document.getElementById('start_p2').value) || 0, end: parseFloat(document.getElementById('end_p2').value) || 30 },
-                p3: { url: document.getElementById('songUrl_p3').value, start: parseFloat(document.getElementById('start_p3').value) || 0, end: parseFloat(document.getElementById('end_p3').value) || 30 },
-                p4: { url: document.getElementById('songUrl_p4').value, start: parseFloat(document.getElementById('start_p4').value) || 0, end: parseFloat(document.getElementById('end_p4').value) || 30 }
+            const songs = {
+                p1: { url: document.getElementById('songUrl_p1').value },
+                p2: { url: document.getElementById('songUrl_p2').value },
+                p3: { url: document.getElementById('songUrl_p3').value },
+                p4: { url: document.getElementById('songUrl_p4').value }
             };
+            localStorage.setItem('cfg_multi_songs', JSON.stringify(songs));
 
-            localStorage.setItem('cfg_multi_songs', JSON.stringify(multiSongs));
-            alert("Settings Saved Successfully! Reload your main album page to see the 4-photo grid.");
+            alert("All Configurations & Customizations Applied Successfully! ✨");
         }
     </script>
 </body>
