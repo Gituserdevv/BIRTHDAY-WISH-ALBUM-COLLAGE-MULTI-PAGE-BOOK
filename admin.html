@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aesthetic Control Center ✨</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --accent: #ff8fa3; --bg: #0d070b; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background: var(--bg); color: #fff; padding: 20px; display: flex; justify-content: center; }
+        .admin-card { width: 100%; max-width: 550px; background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 143, 163, 0.2); border-radius: 20px; padding: 25px; backdrop-filter: blur(15px); }
+        h2 { color: var(--accent); margin-bottom: 20px; text-align: center; font-weight: 600; font-size: 1.3rem; }
+        .section { margin-bottom: 18px; }
+        label { display: block; font-size: 0.75rem; color: #ffb3c1; margin-bottom: 6px; letter-spacing: 1px; text-transform: uppercase; }
+        input, textarea, select { width: 100%; padding: 12px; background: rgba(0,0,0,0.4); border: 1px solid rgba(255, 143, 163, 0.2); color: #fff; border-radius: 10px; font-size: 0.85rem; margin-bottom: 8px; outline: none; }
+        button { background: linear-gradient(135deg, #ff758f, #ffb3c1); color: #000; font-weight: 600; padding: 12px; border: none; border-radius: 12px; cursor: pointer; width: 100%; font-size: 0.9rem; transition: 0.3s; }
+        button:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255, 117, 143, 0.4); }
+    </style>
+</head>
+<body>
+    <div class="admin-card">
+        <h2>✨ Aesthetic Card Customizer</h2>
+        
+        <div class="section">
+            <label>1. Aesthetic Palette Style</label>
+            <select id="themeStyle">
+                <option value="rose-gold">Blush & Champagne (Sleek Aesthetic)</option>
+                <option value="royal-gold">Velvet Wine & Gold (Rich Classic)</option>
+                <option value="midnight-galaxy">Cosmic Silver & Lilac (Deep Metallic)</option>
+                <option value="emerald-gold">Emerald & Diamond (Luxe Glow)</option>
+            </select>
+        </div>
+
+        <div class="section">
+            <label>2. Receiver & Sender</label>
+            <input type="text" id="receiverName" placeholder="For Whom? (e.g. Princess)">
+            <input type="text" id="senderName" placeholder="From Whom?">
+        </div>
+
+        <div class="section">
+            <label>3. Expiry & Passcode</label>
+            <input type="datetime-local" id="expiryDate">
+            <input type="text" id="passcode" placeholder="Master Passcode (e.g. 1234)">
+        </div>
+
+        <div class="section">
+            <label>4. Personal Wishes (Comma Separated)</label>
+            <textarea id="wishesList" rows="3" placeholder="Wish 1, Wish 2"></textarea>
+        </div>
+
+        <div class="section">
+            <label>5. Photo URLs (Comma Separated)</label>
+            <textarea id="photoUrls" rows="3" placeholder="Photo Links..."></textarea>
+        </div>
+
+        <button onclick="saveSettings()">Apply Aesthetic Changes ✨</button>
+    </div>
+
+    <script>
+        document.getElementById('themeStyle').value = localStorage.getItem('cfg_theme') || "rose-gold";
+        document.getElementById('receiverName').value = localStorage.getItem('cfg_receiver') || "Birthday Girl";
+        document.getElementById('senderName').value = localStorage.getItem('cfg_sender') || "Someone Special";
+        document.getElementById('expiryDate').value = localStorage.getItem('cfg_expiry') || "2026-08-15T23:59";
+        document.getElementById('passcode').value = localStorage.getItem('cfg_passcode') || "1234";
+        document.getElementById('wishesList').value = localStorage.getItem('cfg_wishes') || "May your year be as gorgeous and bright as your smile ✨, Wishing you endless love and happiness., Stay iconic!";
+        document.getElementById('photoUrls').value = localStorage.getItem('cfg_photos') || "https://picsum.photos/400/500?random=1,https://picsum.photos/400/500?random=2,https://picsum.photos/400/500?random=3,https://picsum.photos/400/500?random=4";
+
+        function saveSettings() {
+            localStorage.setItem('cfg_theme', document.getElementById('themeStyle').value);
+            localStorage.setItem('cfg_receiver', document.getElementById('receiverName').value);
+            localStorage.setItem('cfg_sender', document.getElementById('senderName').value);
+            localStorage.setItem('cfg_expiry', document.getElementById('expiryDate').value);
+            localStorage.setItem('cfg_passcode', document.getElementById('passcode').value);
+            localStorage.setItem('cfg_wishes', document.getElementById('wishesList').value);
+            localStorage.setItem('cfg_photos', document.getElementById('photoUrls').value);
+            alert("Updated successfully! Open index.html to view.");
+        }
+    </script>
+</body>
+</html>
