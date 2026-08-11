@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aesthetic Memory Suite ✨</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Italiana&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --accent: #ffb3c1;
+            --accent-glow: rgba(255, 179, 193, 0.4);
+            --glass-bg: rgba(20, 10, 15, 0.65);
+            --border-line: rgba(255, 179, 193, 0.25);
+            --bg-gradient: radial-gradient(circle at 50% 30%, #2b0b18 0%, #080306 100%);
+        }
+
+        body.theme-royal-gold {
+            --accent: #f3d085;
+            --accent-glow: rgba(243, 208, 133, 0.4);
+            --glass-bg: rgba(25, 10, 10, 0.7);
+            --border-line: rgba(243, 208, 133, 0.25);
+            --bg-gradient: radial-gradient(circle at 50% 30%, #29080c 0%, #050102 100%);
+        }
+
+        body.theme-midnight-galaxy {
+            --accent: #c8b6ff;
+            --accent-glow: rgba(200, 182, 255, 0.4);
+            --glass-bg: rgba(10, 12, 25, 0.7);
+            --border-line: rgba(200, 182, 255, 0.25);
+            --bg-gradient: radial-gradient(circle at 50% 30%, #101633 0%, #03040a 100%);
+        }
+
+        body.theme-emerald-gold {
+            --accent: #90e0ef;
+            --accent-glow: rgba(144, 224, 239, 0.4);
+            --glass-bg: rgba(8, 22, 18, 0.7);
+            --border-line: rgba(144, 224, 239, 0.25);
+            --bg-gradient: radial-gradient(circle at 50% 30%, #06291d 0%, #020a07 100%);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: var(--bg-gradient);
+            height: 100vh; display: flex; align-items: center; justify-content: center;
+            font-family: 'Plus Jakarta Sans', sans-serif; overflow: hidden; color: #fff;
+        }
+
+        #bgCanvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 0; }
+
+        .card-container {
+            width: 360px; height: 560px; position: relative; z-index: 10;
+        }
+
+        .card-page {
+            width: 100%; height: 100%; position: absolute; background: var(--glass-bg);
+            backdrop-filter: blur(25px); border-radius: 24px; padding: 30px 24px;
+            display: flex; flex-direction: column; align-items: center; justify-content: space-between;
+            text-align: center; border: 1px solid var(--border-line);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.7);
+            opacity: 0; pointer-events: none; transform: scale(0.95); transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .card-page.active { opacity: 1; pointer-events: auto; transform: scale(1); }
+
+        h1.title {
+            font-family: 'Italiana', serif; font-size: 2.2rem; font-weight: 400;
+            background: linear-gradient(135deg, #fff 30%, var(--accent) 100%);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            letter-spacing: 1px;
+        }
+
+        .tag { font-size: 0.65rem; letter-spacing: 3px; text-transform: uppercase; color: var(--accent); opacity: 0.8; }
+
+        /* --- FLICKER & SHINE EFFECT --- */
+        .flicker-frame {
+            position: relative; border-radius: 16px; overflow: hidden;
+            border: 1px solid var(--border-line);
+            box-shadow: 0 0 15px var(--accent-glow);
+            animation: flickerGlow 2.5s infinite alternate ease-in-out;
+        }
+
+        .flicker-frame::after {
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: linear-gradient(60deg, transparent 30%, rgba(255,255,255,0.25) 50%, transparent 70%);
+            transform: rotate(30deg); animation: shineBorder 4s infinite linear; pointer-events: none;
+        }
+
+        @keyframes flickerGlow {
+            0% { opacity: 0.85; box-shadow: 0 0 10px var(--accent-glow); }
+            50% { opacity: 1; box-shadow: 0 0 25px var(--accent); }
+            100% { opacity: 0.9; box-shadow: 0 0 12px var(--accent-glow); }
+        }
+
+        @keyframes shineBorder {
+            0% { transform: translateY(-100%) rotate(30deg); }
+            100% { transform: translateY(100%) rotate(30deg); }
+        }
+
+        .flicker-frame img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+        /* --- SCRATCH & TAP FRAME --- */
+        .scratch-container { width: 210px; height: 210px; }
+        .scratch-canvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; cursor: pointer; z-index: 2; }
+
+        /* ALBUM GRID */
+        .album-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; width: 100%; }
+        .grid-box { height: 110px; width: 100%; }
+
+        .typewriter-text { font-size: 0.85rem; color: #e2e2e2; line-height: 1.6; font-weight: 300; white-space: pre-wrap; }
+
+        .action-btn {
+            background: rgba(255, 255, 255, 0.05); border: 1px solid var(--border-line);
+            color: var(--accent); padding: 12px 28px; border-radius: 40px;
+            font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase;
+            cursor: pointer; transition: all 0.3s ease; backdrop-filter: blur(10px);
+        }
+        .action-btn:hover { background: var(--accent); color: #000; box-shadow: 0 0 20px var(--accent-glow); }
+
+        /* CAKE ANIMATION */
+        .cake-wrapper { position: relative; width: 90px; height: 90px; margin: 15px 0; }
+        .cake-body { position: absolute; bottom: 0; width: 100%; height: 40px; background: rgba(255,255,255,0.1); border-radius: 10px 10px 0 0; border-top: 2px solid var(--accent); }
+        .candle-stick { position: absolute; bottom: 40px; left: 50%; width: 6px; height: 25px; background: #fff; border-radius: 3px; transform: translateX(-50%); }
+        .candle-flame {
+            position: absolute; bottom: 65px; left: 50%; width: 12px; height: 20px;
+            background: radial-gradient(ellipse, #ffd166 0%, #ff5e00 70%, transparent 100%);
+            border-radius: 50%; transform: translateX(-50%); animation: flameWobble 0.2s infinite alternate;
+        }
+        @keyframes flameWobble { 0% { transform: translateX(-50%) scale(1); } 100% { transform: translateX(-50%) scale(1.15); } }
+    </style>
+</head>
+<body>
+
+    <canvas id="bgCanvas"></canvas>
+
+    <div class="card-container">
+        <!-- PAGE 1 -->
+        <div class="card-page active" id="p1">
+            <div class="tag" id="p1-sender">Special Memory</div>
+            <h1 class="title" id="p1-title">Happy Birthday</h1>
+            <div style="min-height: 60px;"><p class="typewriter-text" data-text="A minimal memory suite for someone extra special..."></p></div>
+            <button class="action-btn" onclick="switchPage(2)">ENTER SUITE ✨</button>
+        </div>
+
+        <!-- PAGE 2 (Scratch / Tap Photo) -->
+        <div class="card-page" id="p2">
+            <div class="tag">Chapter I • Reveal</div>
+            <div style="font-size: 0.8rem; color: #aaa;">Scratch or Tap below to uncover</div>
+            <div class="flicker-frame scratch-container">
+                <img id="img-scratch" src="" alt="Memory">
+                <canvas id="scratchCanvas" class="scratch-canvas"></canvas>
+            </div>
+            <button class="action-btn" onclick="switchPage(3)">NEXT GALLERY ➔</button>
+        </div>
+
+        <!-- PAGE 3 (Gallery) -->
+        <div class="card-page" id="p3">
+            <div class="tag">Chapter II • Moments</div>
+            <div class="album-grid" id="albumGrid"></div>
+            <button class="action-btn" onclick="switchPage(4)">READ WISHES ➔</button>
+        </div>
+
+        <!-- PAGE 4 (Wishes) -->
+        <div class="card-page" id="p4">
+            <div class="tag">Chapter III • Notes</div>
+            <div style="min-height: 200px; display:flex; align-items:center;"><p class="typewriter-text" id="wishesTypewriter" data-text=""></p></div>
+            <button class="action-btn" onclick="switchPage(5)">BLOW CANDLE ➔</button>
+        </div>
+
+        <!-- PAGE 5 (Blow Candle) -->
+        <div class="card-page" id="p5">
+            <div class="tag">Make a Wish</div>
+            <h1 class="title" id="p5-receiver">Happy Birthday</h1>
+            <div class="cake-wrapper">
+                <div class="candle-flame" id="flame"></div>
+                <div class="candle-stick"></div>
+                <div class="cake-body"></div>
+            </div>
+            <p style="font-size: 0.75rem; color: var(--accent);" id="micNote">Blow into mic or tap flame ✨</p>
+        </div>
+    </div>
+
+    <script>
+        const cfg = {
+            theme: localStorage.getItem('cfg_theme') || "rose-gold",
+            receiver: localStorage.getItem('cfg_receiver') || "Birthday Girl",
+            sender: localStorage.getItem('cfg_sender') || "Someone Special",
+            expiry: localStorage.getItem('cfg_expiry') || "2026-08-15T23:59",
+            passcode: localStorage.getItem('cfg_passcode') || "1234",
+            wishes: (localStorage.getItem('cfg_wishes') || "Wishing you warmth and joy., May all your big dreams turn real.").split(','),
+            photos: (localStorage.getItem('cfg_photos') || "https://picsum.photos/400/500?random=1,https://picsum.photos/400/500?random=2,https://picsum.photos/400/500?random=3,https://picsum.photos/400/500?random=4").split(',')
+        };
+
+        if (cfg.theme !== "rose-gold") document.body.classList.add(`theme-${cfg.theme}`);
+
+        document.getElementById('p1-sender').innerText = `From ${cfg.sender}`;
+        document.getElementById('p1-title').innerText = `Happy Birthday ${cfg.receiver}`;
+        document.getElementById('p5-receiver').innerText = `To ${cfg.receiver}`;
+        document.getElementById('img-scratch').src = cfg.photos[0] || "https://picsum.photos/400/500";
+        document.getElementById('wishesTypewriter').setAttribute('data-text', cfg.wishes.join('\n\n✨ '));
+
+        const grid = document.getElementById('albumGrid');
+        cfg.photos.slice(0, 4).forEach(url => {
+            const div = document.createElement('div');
+            div.className = 'flicker-frame grid-box';
+            div.innerHTML = `<img src="${url.trim()}">`;
+            grid.appendChild(div);
+        });
+
+        function switchPage(pageNo) {
+            document.querySelectorAll('.card-page').forEach(p => p.classList.remove('active'));
+            const target = document.getElementById(`p${pageNo}`);
+            target.classList.add('active');
+            
+            const textEl = target.querySelector('.typewriter-text');
+            if (textEl) {
+                const txt = textEl.getAttribute('data-text');
+                textEl.innerHTML = ''; let i = 0;
+                function type() {
+                    if (i < txt.length) {
+                        textEl.innerHTML += (txt.charAt(i) === '\n') ? '<br>' : txt.charAt(i);
+                        i++; setTimeout(type, 25);
+                    }
+                }
+                type();
+            }
+
+            if (pageNo === 2) initScratchAndTap();
+            if (pageNo === 5) initCandle();
+        }
+
+        function initScratchAndTap() {
+            const canvas = document.getElementById('scratchCanvas');
+            if (!canvas || canvas.dataset.done) return;
+            canvas.dataset.done = "true";
+            const ctx = canvas.getContext('2d');
+            canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight;
+
+            ctx.fillStyle = '#221118'; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#ffb3c1'; ctx.font = '500 12px "Plus Jakarta Sans"'; ctx.textAlign = 'center';
+            ctx.fillText('SCRATCH OR TAP HERE', canvas.width/2, canvas.height/2);
+
+            let scratching = false;
+            function clearAt(x, y) {
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.beginPath(); ctx.arc(x, y, 22, 0, Math.PI * 2); ctx.fill();
+            }
+
+            canvas.addEventListener('mousedown', () => scratching = true);
+            canvas.addEventListener('mouseup', () => scratching = false);
+            canvas.addEventListener('mousemove', (e) => {
+                if(!scratching) return;
+                const rect = canvas.getBoundingClientRect();
+                clearAt(e.clientX - rect.left, e.clientY - rect.top);
+            });
+
+            canvas.addEventListener('touchstart', () => scratching = true);
+            canvas.addEventListener('touchend', () => scratching = false);
+            canvas.addEventListener('touchmove', (e) => {
+                if(!scratching) return;
+                const rect = canvas.getBoundingClientRect();
+                clearAt(e.touches[0].clientX - rect.left, e.touches[0].clientY - rect.top);
+            });
+
+            // TAP REVEAL SUPPORT
+            canvas.addEventListener('click', (e) => {
+                const rect = canvas.getBoundingClientRect();
+                clearAt(e.clientX - rect.left, e.clientY - rect.top);
+            });
+        }
+
+        function initCandle() {
+            const flame = document.getElementById('flame');
+            flame.onclick = () => {
+                flame.style.display = 'none';
+                confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } });
+            };
+
+            navigator.mediaDevices?.getUserMedia({ audio: true }).then(stream => {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const mic = ctx.createMediaStreamSource(stream);
+                const analyzer = ctx.createAnalyser(); mic.connect(analyzer);
+                const data = new Uint8Array(analyzer.frequencyBinCount);
+                function check() {
+                    analyzer.getByteFrequencyData(data);
+                    if (data.reduce((a, b) => a + b) / data.length > 40) {
+                        flame.style.display = 'none';
+                        confetti({ particleCount: 150, spread: 90, origin: { y: 0.6 } });
+                        stream.getTracks().forEach(t => t.stop()); return;
+                    }
+                    requestAnimationFrame(check);
+                }
+                check();
+            }).catch(() => {});
+        }
+
+        // Bokeh Background
+        const bg = document.getElementById('bgCanvas'), bCtx = bg.getContext('2d');
+        bg.width = window.innerWidth; bg.height = window.innerHeight;
+        let pts = Array.from({length: 30}, () => ({x: Math.random()*bg.width, y: Math.random()*bg.height, r: Math.random()*3+1, s: -(Math.random()*0.3+0.1)}));
+        function drawBg() {
+            bCtx.clearRect(0,0,bg.width,bg.height);
+            bCtx.fillStyle = 'rgba(255, 179, 193, 0.2)';
+            pts.forEach(p => { p.y += p.s; if(p.y < 0) p.y = bg.height; bCtx.beginPath(); bCtx.arc(p.x, p.y, p.r, 0, Math.PI*2); bCtx.fill(); });
+            requestAnimationFrame(drawBg);
+        }
+        drawBg(); switchPage(1);
+    </script>
+</body>
+</html>
