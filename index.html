@@ -222,6 +222,30 @@
 
     <audio id="bdayAudio" loop></audio>
 
+    <!-- ==================== YAHAN PASTE KAREIN (EXACT PLACE) ==================== -->
+    <script src="music.js"></script>
+    <script>
+        // Pagewise Custom Audio Sync Logic
+        function playTimelineAudio(pageNo) {
+            const audio = document.getElementById('bdayAudio');
+            let savedTimeline = null;
+            
+            try { savedTimeline = JSON.parse(localStorage.getItem('cfg_audio_timeline')); } catch(e){}
+            
+            const timeline = savedTimeline || (typeof PAGE_AUDIO_TIMELINE !== 'undefined' ? PAGE_AUDIO_TIMELINE : null);
+            
+            if (timeline && timeline[`page${pageNo}`]) {
+                const config = timeline[`page${pageNo}`];
+                if (config.url && audio.src !== config.url) {
+                    audio.src = config.url;
+                }
+                audio.currentTime = config.startTime || 0;
+                audio.play().catch(() => {});
+            }
+        }
+    </script>
+    <!-- ========================================================================= -->
+    
      <!-- index.html ke <body> tag ke bilkul aakhri me bdayAudio tag ke niche yeh 2 lines add karein -->
 
 <script src="photos.js"></script>
