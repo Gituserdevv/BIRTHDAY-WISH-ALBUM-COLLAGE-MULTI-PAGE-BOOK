@@ -222,6 +222,22 @@
 
     <audio id="bdayAudio" loop></audio>
 
+     <!-- index.html ke <body> tag ke bilkul aakhri me bdayAudio tag ke niche yeh 2 lines add karein -->
+
+<script src="photos.js"></script>
+
+<script>
+    // JS Auto-load Photos Logic
+    const activePhotos = (typeof MY_CUSTOM_PHOTOS !== 'undefined' && MY_CUSTOM_PHOTOS.length > 0) 
+        ? MY_CUSTOM_PHOTOS 
+        : (localStorage.getItem('cfg_photos') || "").split(',');
+
+    if (activePhotos.length > 0) {
+        if(document.getElementById('cover-img')) document.getElementById('cover-img').src = activePhotos[0];
+        if(document.getElementById('img-scratch')) document.getElementById('img-scratch').src = activePhotos[0];
+    }
+</script>
+    
     <script>
         const cfg = {
             theme: localStorage.getItem('cfg_theme') || "rose-gold",
@@ -386,5 +402,7 @@
         }
         drawBg();
     </script>
+
+    
 </body>
 </html>
