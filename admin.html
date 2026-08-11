@@ -1,86 +1,149 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Greeting Book Studio Admin</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Wish Book Admin Studio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
-        body { background: #1a1a2e; color: #fff; padding: 20px; max-width: 900px; margin: 0 auto; }
-        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; background: #16213e; padding: 15px 20px; border-radius: 12px; }
-        h1 { font-size: 1.2rem; color: #e94560; }
-        .btn { padding: 10px 20px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
-        .btn-save { background: #e94560; color: #fff; }
-        .btn-reset { background: #0f3460; color: #fff; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 15px; }
-        .card { background: #16213e; padding: 15px; border-radius: 12px; border: 1px solid #0f3460; }
-        .card-title { color: #e94560; font-weight: 700; margin-bottom: 12px; border-bottom: 1px solid #0f3460; padding-bottom: 5px; }
-        .input-group { margin-bottom: 10px; }
-        label { display: block; font-size: 0.8rem; margin-bottom: 4px; color: #a2a8d3; }
-        input[type="text"], textarea, select { width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #0f3460; background: #0f3460; color: #fff; }
-        textarea { height: 60px; }
-        .photo-slots { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
-        .slot img { width: 100%; height: 50px; object-fit: cover; border-radius: 4px; }
-        .slot input { font-size: 0.6rem; width: 100%; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body {
+            background: #fff0f3;
+            color: #2b2d42;
+            padding: 30px 15px;
+            max-width: 960px;
+            margin: 0 auto;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            background: #ffffff;
+            padding: 20px 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(255, 182, 193, 0.3);
+            border: 1px solid #ffe3e8;
+        }
+        h1 { font-size: 1.3rem; color: #ff4d6d; font-weight: 800; display: flex; align-items: center; gap: 8px; }
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 30px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+        }
+        .btn-save { background: linear-gradient(135deg, #ff4d6d, #ff758f); color: #fff; box-shadow: 0 5px 15px rgba(255, 77, 109, 0.4); }
+        .btn-save:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255, 77, 109, 0.6); }
+        .btn-reset { background: #fff; color: #707070; border: 1px solid #e0e0e0; margin-right: 8px; }
+        .btn-reset:hover { background: #f5f5f5; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 20px; }
+        .card {
+            background: #ffffff;
+            padding: 24px;
+            border-radius: 20px;
+            border: 1px solid #ffe3e8;
+            box-shadow: 0 10px 25px rgba(255, 182, 193, 0.15);
+        }
+        .card-title {
+            color: #ff4d6d;
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-bottom: 2px solid #fff0f3;
+            padding-bottom: 10px;
+        }
+        .input-group { margin-bottom: 15px; }
+        label { display: block; font-size: 0.8rem; margin-bottom: 6px; color: #5f5f5f; font-weight: 600; }
+        input[type="text"], textarea, select {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 12px;
+            border: 1.5px solid #ffe3e8;
+            background: #fff9fa;
+            color: #2b2d42;
+            font-size: 0.88rem;
+            outline: none;
+            transition: border 0.3s ease;
+        }
+        input[type="text"]:focus, textarea:focus, select:focus { border-color: #ff4d6d; background: #fff; }
+        textarea { height: 80px; resize: none; }
+        .photo-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        .photo-box {
+            background: #fff0f3;
+            border: 1.5px dashed #ffb3c1;
+            border-radius: 14px;
+            padding: 10px;
+            text-align: center;
+            position: relative;
+        }
+        .photo-box img { width: 100%; height: 90px; object-fit: cover; border-radius: 8px; margin-bottom: 8px; }
+        .file-btn { font-size: 0.7rem; width: 100%; }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>🛠️ Wish Book Administrator</h1>
+        <h1>🌸 Wish Book Control Panel</h1>
         <div>
-            <button class="btn btn-reset" onclick="resetData()">Reset</button>
+            <button class="btn btn-reset" onclick="resetData()">Reset Default</button>
             <button class="btn btn-save" onclick="saveData()">Save Changes ✨</button>
         </div>
     </header>
 
     <div class="grid">
         <div class="card">
-            <div class="card-title">🎭 Occasion & Theme</div>
+            <div class="card-title">📝 Greetings & Title</div>
             <div class="input-group">
                 <label>Preset Event</label>
                 <select id="cfgOccasion" onchange="autoFill()">
-                    <option value="birthday">Birthday Celebration</option>
-                    <option value="anniversary">Anniversary</option>
-                    <option value="love">Love / Valentine</option>
+                    <option value="birthday">Birthday Queen 👑</option>
+                    <option value="anniversary">Anniversary Special 🥂</option>
+                    <option value="love">Romantic Surprise 💖</option>
                 </select>
             </div>
             <div class="input-group">
-                <label>Main Title</label>
-                <input type="text" id="cfgTitle" value="HAPPY BIRTHDAY QUEEN! 👑">
+                <label>Card Title</label>
+                <input type="text" id="cfgTitle" value="Happy Birthday Queen! 👑">
             </div>
             <div class="input-group">
-                <label>Wish Text</label>
-                <textarea id="cfgWish">May your day be filled with endless joy, laughter, warmth, and beautiful surprises! Happy Birthday! ✨🌸</textarea>
+                <label>Heartfelt Wish Text</label>
+                <textarea id="cfgWish">May your day be filled with endless joy, sweet laughter, warmth, and magical surprises! Keep shining bright like the star you are! ✨🌸</textarea>
             </div>
         </div>
 
         <div class="card">
-            <div class="card-title">🖼️ Upload Photos (4 Slots)</div>
-            <div class="photo-slots">
-                <div class="slot"><img id="p0"><input type="file" onchange="up(0, event)"></div>
-                <div class="slot"><img id="p1"><input type="file" onchange="up(1, event)"></div>
-                <div class="slot"><img id="p2"><input type="file" onchange="up(2, event)"></div>
-                <div class="slot"><img id="p3"><input type="file" onchange="up(3, event)"></div>
+            <div class="card-title">📸 Photo Collage (4 Slots)</div>
+            <div class="photo-grid">
+                <div class="photo-box"><img id="preview0"><input type="file" class="file-btn" onchange="uploadImage(0, event)"></div>
+                <div class="photo-box"><img id="preview1"><input type="file" class="file-btn" onchange="uploadImage(1, event)"></div>
+                <div class="photo-box"><img id="preview2"><input type="file" class="file-btn" onchange="uploadImage(2, event)"></div>
+                <div class="photo-box"><img id="preview3"><input type="file" class="file-btn" onchange="uploadImage(3, event)"></div>
             </div>
         </div>
 
-        <div class="card">
-            <div class="card-title">🎵 Page Songs (MP3 Links)</div>
-            <div class="input-group"><label>Page 1 Song</label><input type="text" id="s1"></div>
-            <div class="input-group"><label>Page 2 Song</label><input type="text" id="s2"></div>
-            <div class="input-group"><label>Page 3 Song</label><input type="text" id="s3"></div>
-            <div class="input-group"><label>Page 4 Song</label><input type="text" id="s4"></div>
+        <div class="card" style="grid-column: 1 / -1;">
+            <div class="card-title">🎵 Background Music MP3 Links</div>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                <div class="input-group"><label>Page 1 Soundtrack</label><input type="text" id="s1" placeholder="Direct MP3 Link"></div>
+                <div class="input-group"><label>Page 2 Soundtrack</label><input type="text" id="s2" placeholder="Direct MP3 Link"></div>
+                <div class="input-group"><label>Page 3 Soundtrack</label><input type="text" id="s3" placeholder="Direct MP3 Link"></div>
+                <div class="input-group"><label>Page 4 Soundtrack</label><input type="text" id="s4" placeholder="Direct MP3 Link"></div>
+            </div>
         </div>
     </div>
 
     <script>
         let photos = [
-            'https://images.unsplash.com/photo-1513151233558-d860c5398176?w=400',
-            'https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=400',
-            'https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=400',
-            'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=400'
+            'https://images.unsplash.com/photo-1513151233558-d860c5398176?w=500',
+            'https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=500',
+            'https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=500',
+            'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=500'
         ];
 
         window.onload = function() {
@@ -88,8 +151,8 @@
             if (localStorage.getItem('wb_wish')) document.getElementById('cfgWish').value = localStorage.getItem('wb_wish');
             
             let pSaved = localStorage.getItem('wb_photos');
-            if (pSaved) photos = pSaved.split('|||');
-            photos.forEach((src, i) => { if(document.getElementById('p'+i)) document.getElementById('p'+i).src = src; });
+            if (pSaved) photos = JSON.parse(pSaved);
+            photos.forEach((src, i) => { if(document.getElementById('preview'+i)) document.getElementById('preview'+i).src = src; });
 
             let sSaved = JSON.parse(localStorage.getItem('wb_songs') || '{}');
             if(sSaved.s1) document.getElementById('s1').value = sSaved.s1;
@@ -101,45 +164,61 @@
         function autoFill() {
             let o = document.getElementById('cfgOccasion').value;
             if(o === 'birthday') {
-                document.getElementById('cfgTitle').value = "HAPPY BIRTHDAY QUEEN! 👑";
-                document.getElementById('cfgWish').value = "May your day be filled with endless joy, laughter, warmth, and beautiful surprises! Happy Birthday! ✨🌸";
+                document.getElementById('cfgTitle').value = "Happy Birthday Queen! 👑";
+                document.getElementById('cfgWish').value = "May your day be filled with endless joy, sweet laughter, warmth, and magical surprises! Keep shining bright! ✨🌸";
             } else if(o === 'anniversary') {
-                document.getElementById('cfgTitle').value = "HAPPY ANNIVERSARY! 🥂💍";
-                document.getElementById('cfgWish').value = "Wishing you both another year of togetherness and everlasting happiness!";
+                document.getElementById('cfgTitle').value = "Happy Anniversary! 🥂💍";
+                document.getElementById('cfgWish').value = "Wishing us another beautiful year filled with love, laughter, and endless memories!";
             } else {
-                document.getElementById('cfgTitle').value = "MY FOREVER LOVE 💖🌹";
-                document.getElementById('cfgWish').value = "Every moment with you feels like magic. Thank you for being in my life!";
+                document.getElementById('cfgTitle').value = "My Forever Love 💖🌹";
+                document.getElementById('cfgWish').value = "Every single moment with you is special. Thank you for making my world so bright!";
             }
         }
 
-        function up(i, e) {
-            let file = e.target.files[0];
+        function uploadImage(index, event) {
+            let file = event.target.files[0];
             if(file) {
-                let r = new FileReader();
-                r.onload = function(evt) {
-                    photos[i] = evt.target.result;
-                    document.getElementById('p'+i).src = evt.target.result;
+                let img = new Image();
+                let reader = new FileReader();
+                reader.onload = function(e) {
+                    img.src = e.target.result;
+                    img.onload = function() {
+                        let canvas = document.createElement('canvas');
+                        let ctx = canvas.getContext('2d');
+                        let maxW = 500;
+                        let scale = maxW / img.width;
+                        canvas.width = maxW;
+                        canvas.height = img.height * scale;
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        let compressed = canvas.toDataURL('image/jpeg', 0.7);
+                        photos[index] = compressed;
+                        document.getElementById('preview'+index).src = compressed;
+                    };
                 };
-                r.readAsDataURL(file);
+                reader.readAsDataURL(file);
             }
         }
 
         function saveData() {
-            localStorage.setItem('wb_title', document.getElementById('cfgTitle').value);
-            localStorage.setItem('wb_wish', document.getElementById('cfgWish').value);
-            localStorage.setItem('wb_photos', photos.join('|||'));
-            let songs = {
-                s1: document.getElementById('s1').value,
-                s2: document.getElementById('s2').value,
-                s3: document.getElementById('s3').value,
-                s4: document.getElementById('s4').value
-            };
-            localStorage.setItem('wb_songs', JSON.stringify(songs));
-            alert('Saved successfully!');
+            try {
+                localStorage.setItem('wb_title', document.getElementById('cfgTitle').value);
+                localStorage.setItem('wb_wish', document.getElementById('cfgWish').value);
+                localStorage.setItem('wb_photos', JSON.stringify(photos));
+                let songs = {
+                    s1: document.getElementById('s1').value,
+                    s2: document.getElementById('s2').value,
+                    s3: document.getElementById('s3').value,
+                    s4: document.getElementById('s4').value
+                };
+                localStorage.setItem('wb_songs', JSON.stringify(songs));
+                alert('Saved successfully! Open main page to see changes ✨');
+            } catch(e) {
+                alert('Storage full! Try uploading slightly smaller image files.');
+            }
         }
 
         function resetData() {
-            if(confirm('Reset all saved settings?')) {
+            if(confirm('Reset all settings to default theme?')) {
                 localStorage.clear();
                 location.reload();
             }
