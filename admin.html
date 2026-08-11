@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wish Book Admin Studio</title>
+    <title>Wish Book Admin Studio & Music Suite</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
         body {
             background: #fff0f3;
             color: #2b2d42;
-            padding: 30px 15px;
-            max-width: 960px;
+            padding: 25px 15px;
+            max-width: 1000px;
             margin: 0 auto;
         }
         header {
@@ -27,19 +27,24 @@
         }
         h1 { font-size: 1.3rem; color: #ff4d6d; font-weight: 800; display: flex; align-items: center; gap: 8px; }
         .btn {
-            padding: 12px 24px;
+            padding: 12px 22px;
             border: none;
             border-radius: 30px;
             font-weight: 700;
             cursor: pointer;
             transition: all 0.3s ease;
             font-size: 0.85rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
         }
         .btn-save { background: linear-gradient(135deg, #ff4d6d, #ff758f); color: #fff; box-shadow: 0 5px 15px rgba(255, 77, 109, 0.4); }
         .btn-save:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(255, 77, 109, 0.6); }
         .btn-reset { background: #fff; color: #707070; border: 1px solid #e0e0e0; margin-right: 8px; }
         .btn-reset:hover { background: #f5f5f5; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(420px, 1fr)); gap: 20px; }
+        .btn-preview { background: #ff4d6d; color: #fff; padding: 6px 14px; font-size: 0.75rem; border-radius: 12px; }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(440px, 1fr)); gap: 20px; }
         .card {
             background: #ffffff;
             padding: 24px;
@@ -54,7 +59,7 @@
             margin-bottom: 18px;
             display: flex;
             align-items: center;
-            gap: 8px;
+            justify-content: space-between;
             border-bottom: 2px solid #fff0f3;
             padding-bottom: 10px;
         }
@@ -72,7 +77,9 @@
             transition: border 0.3s ease;
         }
         input[type="text"]:focus, textarea:focus, select:focus { border-color: #ff4d6d; background: #fff; }
-        textarea { height: 80px; resize: none; }
+        textarea { height: 85px; resize: none; }
+        
+        /* Photo Upload Styling */
         .photo-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
         .photo-box {
             background: #fff0f3;
@@ -84,23 +91,37 @@
         }
         .photo-box img { width: 100%; height: 90px; object-fit: cover; border-radius: 8px; margin-bottom: 8px; }
         .file-btn { font-size: 0.7rem; width: 100%; }
+
+        /* Music Controls Section */
+        .audio-row {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 12px;
+            background: #fff9fa;
+            padding: 10px 14px;
+            border-radius: 12px;
+            border: 1px solid #ffe3e8;
+        }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>🌸 Wish Book Control Panel</h1>
+        <h1>🌸 Wish Book Control & Music Studio</h1>
         <div>
             <button class="btn btn-reset" onclick="resetData()">Reset Default</button>
-            <button class="btn btn-save" onclick="saveData()">Save Changes ✨</button>
+            <button class="btn btn-save" onclick="saveData()">Save All Changes ✨</button>
         </div>
     </header>
 
     <div class="grid">
+        <!-- Greetings & Text -->
         <div class="card">
-            <div class="card-title">📝 Greetings & Title</div>
+            <div class="card-title">📝 Greetings & Animated Wish Text</div>
             <div class="input-group">
-                <label>Preset Event</label>
+                <label>Preset Event Type</label>
                 <select id="cfgOccasion" onchange="autoFill()">
                     <option value="birthday">Birthday Queen 👑</option>
                     <option value="anniversary">Anniversary Special 🥂</option>
@@ -108,17 +129,18 @@
                 </select>
             </div>
             <div class="input-group">
-                <label>Card Title</label>
+                <label>Main Title (Animated)</label>
                 <input type="text" id="cfgTitle" value="Happy Birthday Queen! 👑">
             </div>
             <div class="input-group">
-                <label>Heartfelt Wish Text</label>
-                <textarea id="cfgWish">May your day be filled with endless joy, sweet laughter, warmth, and magical surprises! Keep shining bright like the star you are! ✨🌸</textarea>
+                <label>Heartfelt Wish Text (Typewriter Style)</label>
+                <textarea id="cfgWish">May your special day be filled with endless magic, joyful laughter, warm hugs, and sweet surprises! Keep shining bright like the star you are! ✨🎂🌸</textarea>
             </div>
         </div>
 
+        <!-- Photo Collage & Blinking Decor -->
         <div class="card">
-            <div class="card-title">📸 Photo Collage (4 Slots)</div>
+            <div class="card-title">📸 Photo Collage & Blink Decor (4 Slots)</div>
             <div class="photo-grid">
                 <div class="photo-box"><img id="preview0"><input type="file" class="file-btn" onchange="uploadImage(0, event)"></div>
                 <div class="photo-box"><img id="preview1"><input type="file" class="file-btn" onchange="uploadImage(1, event)"></div>
@@ -127,16 +149,74 @@
             </div>
         </div>
 
+        <!-- Music Selector & Live Preview Player -->
         <div class="card" style="grid-column: 1 / -1;">
-            <div class="card-title">🎵 Background Music MP3 Links</div>
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
-                <div class="input-group"><label>Page 1 Soundtrack</label><input type="text" id="s1" placeholder="Direct MP3 Link"></div>
-                <div class="input-group"><label>Page 2 Soundtrack</label><input type="text" id="s2" placeholder="Direct MP3 Link"></div>
-                <div class="input-group"><label>Page 3 Soundtrack</label><input type="text" id="s3" placeholder="Direct MP3 Link"></div>
-                <div class="input-group"><label>Page 4 Soundtrack</label><input type="text" id="s4" placeholder="Direct MP3 Link"></div>
+            <div class="card-title">
+                <span>🎵 Music Selection, MP3 Links & Live Preview</span>
+                <span style="font-size: 0.75rem; color: #8d99ae; font-weight: 500;">Select Preset Songs or Paste Custom MP3 Links</span>
+            </div>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px;">
+                <!-- Page 1 Song -->
+                <div>
+                    <label>Page 1 Music (Cover)</label>
+                    <div class="audio-row">
+                        <select id="preset1" onchange="applyPreset(1)">
+                            <option value="">-- Preset Song --</option>
+                            <option value="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a82d02.mp3">Acoustic Happy Birthday 🎸</option>
+                            <option value="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3">Romantic Ambient Piano 🎹</option>
+                        </select>
+                        <button class="btn btn-preview" onclick="previewSong('s1')">▶ Play/Pause</button>
+                    </div>
+                    <input type="text" id="s1" placeholder="Or Custom MP3 Direct URL">
+                </div>
+
+                <!-- Page 2 Song -->
+                <div>
+                    <label>Page 2 Music (Spotlight)</label>
+                    <div class="audio-row">
+                        <select id="preset2" onchange="applyPreset(2)">
+                            <option value="">-- Preset Song --</option>
+                            <option value="https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3">Magical Acoustic Breeze 🌸</option>
+                            <option value="https://cdn.pixabay.com/download/audio/2022/10/14/audio_9939f792e3.mp3">Sweet Love Melody 💖</option>
+                        </select>
+                        <button class="btn btn-preview" onclick="previewSong('s2')">▶ Play/Pause</button>
+                    </div>
+                    <input type="text" id="s2" placeholder="Or Custom MP3 Direct URL">
+                </div>
+
+                <!-- Page 3 Song -->
+                <div>
+                    <label>Page 3 Music (Collage)</label>
+                    <div class="audio-row">
+                        <select id="preset3" onchange="applyPreset(3)">
+                            <option value="">-- Preset Song --</option>
+                            <option value="https://cdn.pixabay.com/download/audio/2022/03/10/audio_c8c8a82d02.mp3">Upbeat Birthday Party 🎉</option>
+                            <option value="https://cdn.pixabay.com/download/audio/2022/01/26/audio_d0a13f69d2.mp3">Gentle Acoustic Guitar 🎸</option>
+                        </select>
+                        <button class="btn btn-preview" onclick="previewSong('s3')">▶ Play/Pause</button>
+                    </div>
+                    <input type="text" id="s3" placeholder="Or Custom MP3 Direct URL">
+                </div>
+
+                <!-- Page 4 Song -->
+                <div>
+                    <label>Page 4 Music (Cake & Sparkles)</label>
+                    <div class="audio-row">
+                        <select id="preset4" onchange="applyPreset(4)">
+                            <option value="">-- Preset Song --</option>
+                            <option value="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a82d02.mp3">Grand Celebration Tune ✨</option>
+                            <option value="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3">Sweet Emotional Wish 🎂</option>
+                        </select>
+                        <button class="btn btn-preview" onclick="previewSong('s4')">▶ Play/Pause</button>
+                    </div>
+                    <input type="text" id="s4" placeholder="Or Custom MP3 Direct URL">
+                </div>
             </div>
         </div>
     </div>
+
+    <audio id="previewAudio"></audio>
 
     <script>
         let photos = [
@@ -145,6 +225,8 @@
             'https://images.unsplash.com/photo-1464349095431-e9a21285b5f3?w=500',
             'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=500'
         ];
+
+        let prevAudio = document.getElementById('previewAudio');
 
         window.onload = function() {
             if (localStorage.getItem('wb_title')) document.getElementById('cfgTitle').value = localStorage.getItem('wb_title');
@@ -165,13 +247,31 @@
             let o = document.getElementById('cfgOccasion').value;
             if(o === 'birthday') {
                 document.getElementById('cfgTitle').value = "Happy Birthday Queen! 👑";
-                document.getElementById('cfgWish').value = "May your day be filled with endless joy, sweet laughter, warmth, and magical surprises! Keep shining bright! ✨🌸";
+                document.getElementById('cfgWish').value = "May your special day be filled with endless magic, joyful laughter, warm hugs, and sweet surprises! Keep shining bright! ✨🎂🌸";
             } else if(o === 'anniversary') {
                 document.getElementById('cfgTitle').value = "Happy Anniversary! 🥂💍";
-                document.getElementById('cfgWish').value = "Wishing us another beautiful year filled with love, laughter, and endless memories!";
+                document.getElementById('cfgWish').value = "Wishing us another glorious year filled with unconditional love, sweet laughter, and lifelong memories!";
             } else {
                 document.getElementById('cfgTitle').value = "My Forever Love 💖🌹";
-                document.getElementById('cfgWish').value = "Every single moment with you is special. Thank you for making my world so bright!";
+                document.getElementById('cfgWish').value = "Every single moment with you feels like a dream come true. Thank you for filling my world with happiness!";
+            }
+        }
+
+        function applyPreset(num) {
+            let sel = document.getElementById('preset' + num);
+            if(sel.value) {
+                document.getElementById('s' + num).value = sel.value;
+            }
+        }
+
+        function previewSong(key) {
+            let url = document.getElementById(key).value;
+            if(!url) { alert('Please enter or select an MP3 URL first!'); return; }
+            if(prevAudio.src === url && !prevAudio.paused) {
+                prevAudio.pause();
+            } else {
+                prevAudio.src = url;
+                prevAudio.play().catch(e => alert('Cannot play audio link. Ensure it is a direct .mp3 URL!'));
             }
         }
 
@@ -211,9 +311,9 @@
                     s4: document.getElementById('s4').value
                 };
                 localStorage.setItem('wb_songs', JSON.stringify(songs));
-                alert('Saved successfully! Open main page to see changes ✨');
+                alert('Saved successfully! Open main page to see live magic & song changes ✨');
             } catch(e) {
-                alert('Storage full! Try uploading slightly smaller image files.');
+                alert('Storage limit reached! Please use slightly smaller photo files.');
             }
         }
 
