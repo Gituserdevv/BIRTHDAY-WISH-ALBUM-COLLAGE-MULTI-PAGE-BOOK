@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Royal Studio | Master Administration Dashboard</title>
+    <title>Royal Studio | Advanced Multi-Audio Administration Dashboard</title>
     <style>
         :root {
             --bg-gradient: linear-gradient(135deg, #fff5f7 0%, #ffe6ea 50%, #fff0f3 100%);
@@ -16,6 +16,7 @@
             --border-soft: rgba(255, 117, 143, 0.3);
             --shadow-soft: 0 10px 25px rgba(255, 117, 143, 0.12);
             --danger-red: #ff4d6d;
+            --success-green: #2ec4b6;
         }
 
         * {
@@ -35,25 +36,6 @@
             align-items: flex-start;
             position: relative;
             overflow-x: hidden;
-        }
-
-        .petal {
-            position: fixed;
-            background: #ffb3c1;
-            border-radius: 150% 0 150% 0;
-            opacity: 0.35;
-            pointer-events: none;
-            z-index: 1;
-            animation: floatPetals 10s linear infinite;
-        }
-        .petal:nth-child(1) { width: 14px; height: 14px; left: 5%; animation-duration: 8s; }
-        .petal:nth-child(2) { width: 20px; height: 20px; left: 25%; animation-duration: 10s; animation-delay: 2s; }
-        .petal:nth-child(3) { width: 12px; height: 12px; left: 75%; animation-duration: 7s; animation-delay: 1s; }
-        .petal:nth-child(4) { width: 18px; height: 18px; left: 90%; animation-duration: 11s; animation-delay: 3s; }
-
-        @keyframes floatPetals {
-            0% { transform: translateY(-10vh) rotate(0deg); opacity: 0.4; }
-            100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
         }
 
         .master-wrapper {
@@ -97,7 +79,7 @@
 
         .dashboard-grid {
             display: grid;
-            grid-template-columns: 1.3fr 1fr;
+            grid-template-columns: 1fr 1.2fr;
             gap: 15px;
             align-items: start;
         }
@@ -228,9 +210,7 @@
             cursor: pointer;
         }
 
-        input[type="file"] {
-            display: none;
-        }
+        input[type="file"] { display: none; }
 
         .btn-submit {
             padding: 10px 18px;
@@ -255,6 +235,24 @@
             cursor: pointer;
         }
 
+        /* MULTI AUDIO MAPPING CARDS */
+        .page-audio-box {
+            background: #ffffff;
+            border: 1.5px solid var(--pink-soft);
+            border-radius: 12px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .page-audio-box h3 {
+            margin: 0 0 8px 0;
+            font-size: 0.85rem;
+            color: var(--pink-accent);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
         .song-result-item {
             background: #ffffff;
             padding: 8px 10px;
@@ -267,8 +265,19 @@
             font-size: 0.8rem;
         }
 
-        .song-result-item button {
+        .action-chip {
             background: var(--pink-accent);
+            color: #fff;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .play-chip {
+            background: var(--success-green);
             color: #fff;
             border: none;
             padding: 4px 8px;
@@ -281,16 +290,11 @@
 </head>
 <body>
 
-    <div class="petal"></div>
-    <div class="petal"></div>
-    <div class="petal"></div>
-    <div class="petal"></div>
-
     <div class="master-wrapper">
         <div class="header-panel">
             <div>
                 <h1>🌸 Studio Master Administration Dashboard</h1>
-                <p>Manage Photos, Audio Engine, Custom Code Injection & Wishes</p>
+                <p>Multi-Song Mapping, Audio Trimmer & Photo Studio</p>
             </div>
             <div class="header-actions">
                 <button class="btn-reset" onclick="resetToDefaults()">Reset Defaults 🔄</button>
@@ -299,8 +303,8 @@
         </div>
 
         <div class="dashboard-grid">
+            <!-- LEFT COLUMN: PHOTOS & CONFIG -->
             <div class="column">
-                <!-- PHOTO ASSET MANAGER WITH REMOVE BUTTON -->
                 <div class="card-section">
                     <h2>🖼️ Dedicated Page Photos (4 Primary Slots)</h2>
                     <div class="form-grid-4">
@@ -316,7 +320,7 @@
                         </div>
 
                         <div class="slot-card">
-                            <span style="font-size:0.75rem; font-weight:700;">2. Scratch Card</span>
+                            <span style="font-size:0.75rem; font-weight:700;">2. Scratch</span>
                             <div class="slot-preview" id="preview2"><span style="color:#aaa; font-size:0.7rem;">No Asset</span></div>
                             <div class="slot-actions">
                                 <label for="file2" class="upload-btn">Upload</label>
@@ -350,9 +354,8 @@
                     </div>
                 </div>
 
-                <!-- GENERAL CONFIGURATION -->
                 <div class="card-section">
-                    <h2>✨ General Configuration & Lock Screen</h2>
+                    <h2>✨ Album Config & Messages</h2>
                     <div class="form-grid-2" style="margin-bottom:8px;">
                         <div class="input-group">
                             <label>Album Title Name</label>
@@ -363,81 +366,116 @@
                             <input type="text" id="cfgRecipient" placeholder="Sarah">
                         </div>
                     </div>
-                    <div class="form-grid-2">
-                        <div class="input-group">
-                            <label>Passcode / Keylock</label>
-                            <input type="text" id="cfgPasscode" placeholder="Optional Passcode">
-                        </div>
-                        <div class="input-group">
-                            <label>Theme Animation</label>
-                            <select id="cfgTheme">
-                                <option value="petals">Floating Petals</option>
-                                <option value="hearts">Floating Hearts</option>
-                                <option value="stars">Sparkling Stars</option>
-                            </select>
-                        </div>
+                    <div class="input-group" style="margin-bottom:8px;">
+                        <label>Scratch Card Reward Text</label>
+                        <input type="text" id="cfgScratchText">
+                    </div>
+                    <div class="input-group">
+                        <label>Heartfelt Note</label>
+                        <textarea id="cfgWishNote" rows="2"></textarea>
                     </div>
                 </div>
 
-                <!-- CODE INJECTION ENGINE -->
                 <div class="card-section">
-                    <h2>⚡ Inject Custom Code / Upgrade Module</h2>
+                    <h2>⚡ Live Code Injection Engine</h2>
                     <div class="input-group">
-                        <label>Paste Script / Custom JS Feature Code below to execute on runtime:</label>
-                        <textarea id="cfgInjectedCode" rows="3" placeholder="// Paste custom JS code here or script URL...&#10;console.log('Custom plugin active!');"></textarea>
+                        <textarea id="cfgInjectedCode" rows="2" placeholder="// Paste custom JS code here..."></textarea>
                     </div>
                     <div style="display:flex; gap:8px; margin-top:8px;">
-                        <button class="btn-submit" style="background:var(--pink-accent); font-size:0.78rem;" onclick="injectLiveCode()">Inject & Test Code Live 🚀</button>
+                        <button class="btn-submit" style="background:var(--pink-accent); font-size:0.78rem;" onclick="injectLiveCode()">Inject Code 🚀</button>
                         <button class="btn-reset" style="font-size:0.78rem;" onclick="clearInjectedCode()">Remove Code ❌</button>
                     </div>
                 </div>
             </div>
 
+            <!-- RIGHT COLUMN: MULTI-SONG & AUDIO TRIMMER -->
             <div class="column">
-                <!-- AUDIO SEARCH & TIMELINE ENGINE -->
                 <div class="card-section">
-                    <h2>🎵 Audio Engine & Multi-Search API</h2>
+                    <h2>🎧 Live Track Search & Preview Player</h2>
                     <div class="input-group">
-                        <label>Online Track Search Engine (Hindi/English Tracks Compatible)</label>
+                        <label>Search Music Online (Hindi / International)</label>
                         <div style="display:flex; gap:6px;">
-                            <input type="text" id="songQuery" placeholder="Search track name e.g., gumnaam, sarar...">
+                            <input type="text" id="songQuery" placeholder="Type song name e.g., gumnaam, kesariya...">
                             <button style="width:100px; background:var(--pink-accent); color:white; border:none; border-radius:10px; font-weight:bold; cursor:pointer;" onclick="searchMusic()">Search</button>
                         </div>
                     </div>
                     <div id="searchResultsBox"></div>
-
-                    <div class="input-group" style="margin-top:8px;">
-                        <label>Direct Track MP3 URL</label>
-                        <input type="text" id="cfgAudioUrl" placeholder="https://domain.com/song.mp3">
-                    </div>
-
-                    <label style="margin-top:10px; font-size:0.78rem; font-weight:700; display:block;">⏱️ Audio Offset Timestamps (Seconds)</label>
-                    <div class="form-grid-4">
-                        <div class="input-group"><label>Cover</label><input type="number" id="time1" value="0"></div>
-                        <div class="input-group"><label>Scratch</label><input type="number" id="time2" value="10"></div>
-                        <div class="input-group"><label>Gallery</label><input type="number" id="time3" value="25"></div>
-                        <div class="input-group"><label>Wishes</label><input type="number" id="time4" value="40"></div>
-                    </div>
                 </div>
 
-                <!-- SECRET MESSAGES & NOTES -->
                 <div class="card-section">
-                    <h2>💌 Secret Text & Wish Greeting Note</h2>
-                    <div class="input-group" style="margin-bottom:8px;">
-                        <label>Scratch Card Revealed Text</label>
-                        <input type="text" id="cfgScratchText" placeholder="You get 1 free trip anywhere with me! 🎟️">
+                    <h2>🎵 Multi-Song Mapper & Precision Trimmer</h2>
+
+                    <!-- PAGE 1 AUDIO -->
+                    <div class="page-audio-box">
+                        <h3>
+                            <span>1. Cover Page Song</span>
+                            <button class="play-chip" onclick="previewAudioSlot(1)">▶️ Test Play</button>
+                        </h3>
+                        <div class="input-group" style="margin-bottom:6px;">
+                            <input type="text" id="songUrl_p1" placeholder="Audio MP3 URL for Page 1">
+                        </div>
+                        <div class="form-grid-2">
+                            <div class="input-group"><label>Start Cut (Sec)</label><input type="number" id="start_p1" value="0"></div>
+                            <div class="input-group"><label>End Cut (Sec)</label><input type="number" id="end_p1" value="30"></div>
+                        </div>
                     </div>
-                    <div class="input-group">
-                        <label>Heartfelt Note (Page 4)</label>
-                        <textarea id="cfgWishNote" rows="3" placeholder="Custom birthday wish message..."></textarea>
+
+                    <!-- PAGE 2 AUDIO -->
+                    <div class="page-audio-box">
+                        <h3>
+                            <span>2. Scratch Card Page Song</span>
+                            <button class="play-chip" onclick="previewAudioSlot(2)">▶️ Test Play</button>
+                        </h3>
+                        <div class="input-group" style="margin-bottom:6px;">
+                            <input type="text" id="songUrl_p2" placeholder="Audio MP3 URL for Page 2">
+                        </div>
+                        <div class="form-grid-2">
+                            <div class="input-group"><label>Start Cut (Sec)</label><input type="number" id="start_p2" value="0"></div>
+                            <div class="input-group"><label>End Cut (Sec)</label><input type="number" id="end_p2" value="30"></div>
+                        </div>
                     </div>
+
+                    <!-- PAGE 3 AUDIO -->
+                    <div class="page-audio-box">
+                        <h3>
+                            <span>3. Gallery Page Song</span>
+                            <button class="play-chip" onclick="previewAudioSlot(3)">▶️ Test Play</button>
+                        </h3>
+                        <div class="input-group" style="margin-bottom:6px;">
+                            <input type="text" id="songUrl_p3" placeholder="Audio MP3 URL for Page 3">
+                        </div>
+                        <div class="form-grid-2">
+                            <div class="input-group"><label>Start Cut (Sec)</label><input type="number" id="start_p3" value="0"></div>
+                            <div class="input-group"><label>End Cut (Sec)</label><input type="number" id="end_p3" value="30"></div>
+                        </div>
+                    </div>
+
+                    <!-- PAGE 4 AUDIO -->
+                    <div class="page-audio-box">
+                        <h3>
+                            <span>4. Wishes Page Song</span>
+                            <button class="play-chip" onclick="previewAudioSlot(4)">▶️ Test Play</button>
+                        </h3>
+                        <div class="input-group" style="margin-bottom:6px;">
+                            <input type="text" id="songUrl_p4" placeholder="Audio MP3 URL for Page 4">
+                        </div>
+                        <div class="form-grid-2">
+                            <div class="input-group"><label>Start Cut (Sec)</label><input type="number" id="start_p4" value="0"></div>
+                            <div class="input-group"><label>End Cut (Sec)</label><input type="number" id="end_p4" value="30"></div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Hidden Global Audio Player for Previews -->
+    <audio id="globalPreviewPlayer" style="display:none;"></audio>
+
     <script>
         let albumPhotos = ["", "", "", ""];
+        let activeSearchTracks = [];
 
         const DEFAULT_CONFIG = {
             photos: [
@@ -448,10 +486,12 @@
             ],
             title: "Happy Birthday Queen! 👑",
             recipient: "Sarah",
-            passcode: "",
-            theme: "petals",
-            audioUrl: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3",
-            timeline: { page1: { startTime: 0 }, page2: { startTime: 10 }, page3: { startTime: 25 }, page4: { startTime: 40 } },
+            songs: {
+                p1: { url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3", start: 0, end: 30 },
+                p2: { url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3", start: 0, end: 30 },
+                p3: { url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3", start: 0, end: 30 },
+                p4: { url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3", start: 0, end: 30 }
+            },
             scratchText: "You win a dinner date & unlimited ice cream! 🍨",
             wishNote: "Wishing you a wonderful year ahead filled with happiness, health, and success! Happy Birthday! 🎉"
         };
@@ -462,11 +502,7 @@
 
         function loadSavedConfig() {
             const savedPhotos = localStorage.getItem('cfg_photos');
-            if (savedPhotos) {
-                albumPhotos = savedPhotos.split('|||');
-            } else {
-                albumPhotos = [...DEFAULT_CONFIG.photos];
-            }
+            albumPhotos = savedPhotos ? savedPhotos.split('|||') : [...DEFAULT_CONFIG.photos];
 
             albumPhotos.forEach((src, idx) => {
                 if (src) {
@@ -479,20 +515,17 @@
 
             document.getElementById('cfgTitle').value = localStorage.getItem('cfg_title') || DEFAULT_CONFIG.title;
             document.getElementById('cfgRecipient').value = localStorage.getItem('cfg_recipient') || DEFAULT_CONFIG.recipient;
-            document.getElementById('cfgPasscode').value = localStorage.getItem('cfg_passcode') || DEFAULT_CONFIG.passcode;
-            document.getElementById('cfgTheme').value = localStorage.getItem('cfg_theme') || DEFAULT_CONFIG.theme;
-            
-            document.getElementById('cfgAudioUrl').value = localStorage.getItem('cfg_music') || DEFAULT_CONFIG.audioUrl;
-
-            const timeline = JSON.parse(localStorage.getItem('cfg_audio_timeline') || JSON.stringify(DEFAULT_CONFIG.timeline));
-            document.getElementById('time1').value = timeline.page1 ? timeline.page1.startTime : 0;
-            document.getElementById('time2').value = timeline.page2 ? timeline.page2.startTime : 10;
-            document.getElementById('time3').value = timeline.page3 ? timeline.page3.startTime : 25;
-            document.getElementById('time4').value = timeline.page4 ? timeline.page4.startTime : 40;
-
             document.getElementById('cfgScratchText').value = localStorage.getItem('cfg_scratch_text') || DEFAULT_CONFIG.scratchText;
             document.getElementById('cfgWishNote').value = localStorage.getItem('cfg_wish_note') || DEFAULT_CONFIG.wishNote;
             document.getElementById('cfgInjectedCode').value = localStorage.getItem('cfg_injected_code') || "";
+
+            const multiSongs = JSON.parse(localStorage.getItem('cfg_multi_songs') || JSON.stringify(DEFAULT_CONFIG.songs));
+            for(let i=1; i<=4; i++) {
+                const songData = multiSongs[`p${i}`] || { url: '', start: 0, end: 30 };
+                document.getElementById(`songUrl_p${i}`).value = songData.url || '';
+                document.getElementById(`start_p${i}`).value = songData.start || 0;
+                document.getElementById(`end_p${i}`).value = songData.end || 30;
+            }
         }
 
         function handleImageUpload(event, index) {
@@ -508,15 +541,13 @@
                     const ctx = canvas.getContext('2d');
                     
                     const maxDim = 800;
-                    let width = img.width;
-                    let height = img.height;
+                    let width = img.width, height = img.height;
                     if (width > maxDim || height > maxDim) {
                         if (width > height) { height = Math.round((height * maxDim) / width); width = maxDim; }
                         else { width = Math.round((width * maxDim) / height); height = maxDim; }
                     }
 
-                    canvas.width = width;
-                    canvas.height = height;
+                    canvas.width = width; canvas.height = height;
                     ctx.drawImage(img, 0, 0, width, height);
 
                     const compressedBase64 = canvas.toDataURL('image/jpeg', 0.75);
@@ -533,8 +564,7 @@
         }
 
         function updatePreview(index, src) {
-            const container = document.getElementById(`preview${index + 1}`);
-            container.innerHTML = `<img src="${src}">`;
+            document.getElementById(`preview${index + 1}`).innerHTML = `<img src="${src}">`;
         }
 
         function removePhoto(index, updateStorage = true) {
@@ -550,46 +580,83 @@
             if (!query) return alert("Search term enter karein!");
 
             const box = document.getElementById('searchResultsBox');
-            box.innerHTML = "<p style='font-size:0.75rem; color:#888;'>Searching iTunes API for Hindi & World tracks...</p>";
+            box.innerHTML = "<p style='font-size:0.75rem; color:#888;'>Searching songs...</p>";
 
             try {
                 const res = await fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(query)}&media=music&limit=4`);
                 const data = await res.json();
                 
                 box.innerHTML = "";
-                if (!data.results || data.results.length === 0) {
-                    box.innerHTML = "<p style='font-size:0.75rem; color:red;'>No tracks found. Enter direct MP3 URL.</p>";
+                activeSearchTracks = data.results || [];
+
+                if (activeSearchTracks.length === 0) {
+                    box.innerHTML = "<p style='font-size:0.75rem; color:red;'>No tracks found. Direct MP3 URL enter karein.</p>";
                     return;
                 }
 
-                data.results.forEach(track => {
+                activeSearchTracks.forEach((track, index) => {
                     const el = document.createElement('div');
                     el.className = 'song-result-item';
                     el.innerHTML = `
                         <span><b>${track.trackName}</b> - ${track.artistName}</span>
-                        <button onclick="selectTrack('${track.previewUrl}')">Use Song</button>
+                        <div style="display:flex; gap:4px;">
+                            <button class="play-chip" onclick="playPreviewUrl('${track.previewUrl}')">▶️ Play</button>
+                            <button class="action-chip" onclick="applyToSlotPrompt('${track.previewUrl}')">Use Song</button>
+                        </div>
                     `;
                     box.appendChild(el);
                 });
             } catch (e) {
-                box.innerHTML = "<p style='font-size:0.75rem; color:red;'>Audio search error. Use direct URL.</p>";
+                box.innerHTML = "<p style='font-size:0.75rem; color:red;'>Audio search error. Direct URL use karein.</p>";
             }
         }
 
-        function selectTrack(url) {
-            document.getElementById('cfgAudioUrl').value = url;
-            alert("Song Track Selected Successfully!");
+        function playPreviewUrl(url) {
+            const player = document.getElementById('globalPreviewPlayer');
+            player.src = url;
+            player.currentTime = 0;
+            player.play();
+        }
+
+        function previewAudioSlot(pageIndex) {
+            const url = document.getElementById(`songUrl_p${pageIndex}`).value;
+            const start = parseFloat(document.getElementById(`start_p${pageIndex}`).value) || 0;
+            const end = parseFloat(document.getElementById(`end_p${pageIndex}`).value) || 0;
+
+            if(!url) return alert(`Page ${pageIndex} ke liye koi Audio URL add nahi hai!`);
+
+            const player = document.getElementById('globalPreviewPlayer');
+            player.src = url;
+            player.currentTime = start;
+            player.play();
+
+            if(end > start) {
+                const duration = (end - start) * 1000;
+                setTimeout(() => {
+                    if(!player.paused && player.src.includes(url)) {
+                        player.pause();
+                    }
+                }, duration);
+            }
+        }
+
+        function applyToSlotPrompt(url) {
+            const slotNum = prompt("Kounse Photo / Page par ye gana lagana hai? (Enter 1, 2, 3, ya 4):", "1");
+            if(slotNum >= 1 && slotNum <= 4) {
+                document.getElementById(`songUrl_p${slotNum}`).value = url;
+                alert(`Page ${slotNum} par audio assign ho gaya hai!`);
+            }
         }
 
         function injectLiveCode() {
             const code = document.getElementById('cfgInjectedCode').value;
-            if (!code.trim()) return alert("Pehle code enter karein!");
+            if (!code.trim()) return alert("Code enter karein!");
             try {
                 eval(code);
                 localStorage.setItem('cfg_injected_code', code);
-                alert("Custom code injected and executed successfully! 🚀");
+                alert("Code injected successfully! 🚀");
             } catch (err) {
-                alert("Code Execution Error: " + err.message);
+                alert("Code Error: " + err.message);
             }
         }
 
@@ -603,7 +670,7 @@
             if (confirm("Reset all settings to default configuration?")) {
                 localStorage.clear();
                 loadSavedConfig();
-                alert("All settings reset to defaults!");
+                alert("Settings reset to defaults!");
             }
         }
 
@@ -611,24 +678,19 @@
             localStorage.setItem('cfg_photos', albumPhotos.join('|||'));
             localStorage.setItem('cfg_title', document.getElementById('cfgTitle').value);
             localStorage.setItem('cfg_recipient', document.getElementById('cfgRecipient').value);
-            localStorage.setItem('cfg_passcode', document.getElementById('cfgPasscode').value);
-            localStorage.setItem('cfg_theme', document.getElementById('cfgTheme').value);
-
-            localStorage.setItem('cfg_music', document.getElementById('cfgAudioUrl').value);
-            
-            const timeline = {
-                page1: { startTime: parseInt(document.getElementById('time1').value) || 0 },
-                page2: { startTime: parseInt(document.getElementById('time2').value) || 10 },
-                page3: { startTime: parseInt(document.getElementById('time3').value) || 25 },
-                page4: { startTime: parseInt(document.getElementById('time4').value) || 40 }
-            };
-            localStorage.setItem('cfg_audio_timeline', JSON.stringify(timeline));
-
             localStorage.setItem('cfg_scratch_text', document.getElementById('cfgScratchText').value);
             localStorage.setItem('cfg_wish_note', document.getElementById('cfgWishNote').value);
             localStorage.setItem('cfg_injected_code', document.getElementById('cfgInjectedCode').value);
 
-            alert("All configuration settings deployed successfully! ✨");
+            const multiSongs = {
+                p1: { url: document.getElementById('songUrl_p1').value, start: parseFloat(document.getElementById('start_p1').value) || 0, end: parseFloat(document.getElementById('end_p1').value) || 30 },
+                p2: { url: document.getElementById('songUrl_p2').value, start: parseFloat(document.getElementById('start_p2').value) || 0, end: parseFloat(document.getElementById('end_p2').value) || 30 },
+                p3: { url: document.getElementById('songUrl_p3').value, start: parseFloat(document.getElementById('start_p3').value) || 0, end: parseFloat(document.getElementById('end_p3').value) || 30 },
+                p4: { url: document.getElementById('songUrl_p4').value, start: parseFloat(document.getElementById('start_p4').value) || 0, end: parseFloat(document.getElementById('end_p4').value) || 30 }
+            };
+
+            localStorage.setItem('cfg_multi_songs', JSON.stringify(multiSongs));
+            alert("All Multi-Song & Trimmer configurations deployed successfully! ✨");
         }
     </script>
 </body>
