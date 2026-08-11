@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Special Birthday Greeting</title>
+    <title>Special Birthday Greeting Album</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Playfair+Display:ital,wght@0,600;1,600&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
@@ -20,7 +20,7 @@
             padding: 20px 10px;
         }
 
-        /* Floating Light Orbs */
+        /* Ambient Background Orbs */
         .orb {
             position: absolute;
             border-radius: 50%;
@@ -37,14 +37,14 @@
             100% { transform: translateY(-30px) rotate(10deg); }
         }
 
-        /* Main Glassmorphism Card Container */
+        /* Glassmorphism Outer Card */
         .card-container {
             position: relative;
             z-index: 5;
             width: 100%;
             max-width: 450px;
             min-height: 580px;
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
             border-radius: 28px;
@@ -57,7 +57,7 @@
             align-items: center;
         }
 
-        /* Top Header & Music Controls */
+        /* Top Header */
         .top-bar {
             width: 100%;
             display: flex;
@@ -93,7 +93,7 @@
         }
         .music-btn:hover { transform: scale(1.05); }
 
-        /* Pages System */
+        /* Page Layouts */
         .page { display: none; width: 100%; flex-direction: column; align-items: center; text-align: center; gap: 16px; }
         .page.active { display: flex; animation: fadeIn 0.6s ease-out forwards; }
 
@@ -102,7 +102,7 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Animated Title Text */
+        /* Gradient Glowing Titles */
         .main-title {
             font-family: 'Playfair Display', serif;
             font-size: 1.55rem;
@@ -118,7 +118,7 @@
             100% { filter: drop-shadow(0 0 8px rgba(255, 77, 109, 0.5)); }
         }
 
-        /* Decorated Cover Frame & Blinking Ribbon */
+        /* Cover Envelope Styling */
         .cover-envelope {
             width: 100%;
             height: 290px;
@@ -154,7 +154,7 @@
             box-shadow: 0 4px 10px rgba(255, 77, 109, 0.3);
         }
 
-        /* Blinking Image Containers */
+        /* Photo Containers & Blinking Effects */
         .spotlight-card {
             position: relative;
             width: 100%;
@@ -173,7 +173,6 @@
         }
         .spotlight-card img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* Grid Collage with Blinking Soft Borders */
         .collage-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -217,61 +216,73 @@
         }
         .scratch-overlay.revealed { opacity: 0; pointer-events: none; transform: scale(1.1); }
 
-        /* Decorated Cake & Interactive Candle Flame */
-        .cake-container {
+        /* REALISTIC ANIMATED VECTOR CAKE & CANDLE */
+        .cake-wrapper {
             position: relative;
-            margin: 10px 0;
+            width: 160px;
+            height: 160px;
+            margin: 5px auto;
             cursor: pointer;
-            padding: 18px;
-            background: radial-gradient(circle, #ffffff 60%, #fff0f3 100%);
-            border-radius: 50%;
-            box-shadow: 0 10px 30px rgba(255, 117, 143, 0.3);
-            width: 130px;
-            height: 130px;
             display: flex;
             justify-content: center;
             align-items: center;
-            border: 2px solid #ffccd5;
-            transition: transform 0.3s ease;
         }
-        .cake-container:hover { transform: scale(1.05); }
-        .cake-emoji { font-size: 4.2rem; }
 
-        /* Jalti Hui Candle Flame */
-        .flame {
+        .candle-flame {
             position: absolute;
-            top: 14px;
+            top: 10px;
             left: 50%;
             transform: translateX(-50%);
-            width: 14px;
+            width: 12px;
             height: 22px;
-            background: #ff9e00;
+            background: radial-gradient(circle, #ffea00 0%, #ff9100 60%, #ff3c00 100%);
             border-radius: 50% 50% 20% 20%;
-            box-shadow: 0 0 12px #ff9e00, 0 0 25px #ff5400, 0 0 35px #ff0000;
-            animation: flicker 0.15s infinite alternate;
+            box-shadow: 0 0 10px #ffea00, 0 0 20px #ff9100, 0 0 30px #ff3c00;
+            animation: flameFlicker 0.15s infinite alternate ease-in-out;
+            z-index: 10;
         }
-        @keyframes flicker {
+        @keyframes flameFlicker {
             0% { transform: translateX(-50%) scale(1) rotate(-2deg); }
-            100% { transform: translateX(-50%) scale(1.2) rotate(2deg); }
+            100% { transform: translateX(-50%) scale(1.15) rotate(2deg); }
         }
-        .flame.off { display: none; }
+        .candle-flame.off { display: none; }
 
-        /* Typewriter Animated Wish Box */
+        /* Dynamic Smoke Animation */
+        .smoke-particle {
+            position: absolute;
+            top: 15px;
+            left: 50%;
+            width: 8px;
+            height: 8px;
+            background: rgba(180, 180, 180, 0.7);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: riseSmoke 1.5s forwards ease-out;
+            z-index: 11;
+        }
+        @keyframes riseSmoke {
+            0% { transform: translate(-50%, 0) scale(1); opacity: 0.8; }
+            100% { transform: translate(-50%, -45px) scale(3.5); opacity: 0; filter: blur(3px); }
+        }
+
+        /* TYPEWRITER WISH BOX WITH PRESERVED SPACES */
         .wish-box {
             background: #ffffff;
             padding: 18px 16px;
             border-radius: 16px;
-            font-size: 0.88rem;
+            font-size: 0.9rem;
             line-height: 1.6;
             color: #4a4e69;
             border: 1px solid #ffe3e8;
             box-shadow: 0 6px 18px rgba(255, 182, 193, 0.15);
             width: 100%;
-            min-height: 100px;
+            min-height: 110px;
             text-align: left;
+            white-space: pre-wrap;
+            word-spacing: 2px;
         }
 
-        /* Nav Buttons */
+        /* Navigation Buttons */
         .nav-row { display: flex; gap: 10px; width: 100%; justify-content: center; margin-top: 5px; }
         .btn-primary {
             background: linear-gradient(135deg, #ff4d6d, #ff758f);
@@ -305,13 +316,13 @@
 
     <div class="card-container">
         
-        <!-- Header & Audio Status -->
+        <!-- Header Controls -->
         <div class="top-bar">
             <span class="badge">Special Keepsake</span>
             <button class="music-btn" onclick="toggleAudio()"><span id="musicIcon">🎶</span> <span id="musicText">Playing</span></button>
         </div>
 
-        <!-- PAGE 1: DECORATED COVER -->
+        <!-- PAGE 1: COVER -->
         <div class="page active" id="p1">
             <div class="main-title" id="t1">Happy Birthday Queen! 👑</div>
             <div class="cover-envelope">
@@ -325,7 +336,7 @@
             </div>
         </div>
 
-        <!-- PAGE 2: SPOTLIGHT -->
+        <!-- PAGE 2: SPOTLIGHT PHOTO -->
         <div class="page" id="p2">
             <div class="main-title">Chapter I • Spotlight</div>
             <div class="spotlight-card" onclick="revealOverlay(this)">
@@ -338,7 +349,7 @@
             </div>
         </div>
 
-        <!-- PAGE 3: GRID COLLAGE -->
+        <!-- PAGE 3: COLLAGE GRID -->
         <div class="page" id="p3">
             <div class="main-title" id="t3">Sweet Memories 🌸</div>
             <div class="collage-grid">
@@ -353,15 +364,33 @@
             </div>
         </div>
 
-        <!-- PAGE 4: CAKE, JALTI HUI CANDLE & SPARKLES EXPLOSION -->
+        <!-- PAGE 4: ANIMATED CAKE, BLOW FLAME & TYPEWRITER -->
         <div class="page" id="p4">
             <div class="main-title">Chapter III • Make A Wish</div>
             
-            <div class="cake-container" onclick="explodeSparkles()">
-                <div class="flame" id="candleFlame"></div>
-                <div class="cake-emoji">🎂</div>
+            <div class="cake-wrapper" id="cakeContainer" onclick="explodeSparkles()">
+                <div class="candle-flame" id="candleFlame"></div>
+                <!-- High Quality SVG Birthday Cake -->
+                <svg width="130" height="130" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Base Plate -->
+                    <ellipse cx="100" cy="170" rx="85" ry="15" fill="#f0a6ca" />
+                    <!-- Bottom Layer -->
+                    <rect x="35" y="110" width="130" height="50" rx="10" fill="#ff758f" />
+                    <path d="M35 125 C 50 135, 70 115, 85 125 C 100 135, 120 115, 135 125 C 150 135, 165 120, 165 125 L 165 110 L 35 110 Z" fill="#ffffff" opacity="0.9"/>
+                    <!-- Top Layer -->
+                    <rect x="55" y="70" width="90" height="42" rx="8" fill="#ffb3c1" />
+                    <path d="M55 82 C 65 90, 80 75, 90 85 C 105 92, 120 78, 130 85 C 140 90, 145 82, 145 82 L 145 70 L 55 70 Z" fill="#ffffff" opacity="0.9"/>
+                    <!-- Candle Body -->
+                    <rect x="96" y="32" width="8" height="38" rx="3" fill="#ffd166" />
+                    <rect x="96" y="36" width="8" height="4" fill="#ff4d6d" />
+                    <rect x="96" y="46" width="8" height="4" fill="#ff4d6d" />
+                    <rect x="96" y="56" width="8" height="4" fill="#ff4d6d" />
+                    <!-- Wick -->
+                    <line x1="100" y1="32" x2="100" y2="25" stroke="#333" stroke-width="2"/>
+                </svg>
             </div>
-            <p id="cakeHint" style="font-size: 0.78rem; color: #ff4d6d; font-weight: 700; margin-top: -8px;">
+
+            <p id="cakeHint" style="font-size: 0.78rem; color: #ff4d6d; font-weight: 700; margin-top: -6px;">
                 🔥 Tap the Cake to Blow Flame & Spark Fireworks! ✨
             </p>
 
@@ -417,40 +446,66 @@
             }
         }
 
+        /* FIXED TYPEWRITER logic (Preserves spaces) */
         function startTypewriter() {
             let box = document.getElementById('wishText');
-            box.innerText = "";
+            box.innerHTML = "";
             typewriterIndex = 0;
+            
             function type() {
                 if (typewriterIndex < fullWishText.length) {
-                    box.innerText += fullWishText.charAt(typewriterIndex);
+                    let char = fullWishText.charAt(typewriterIndex);
+                    if (char === ' ') {
+                        box.innerHTML += '&nbsp;';
+                    } else {
+                        box.innerHTML += char;
+                    }
                     typewriterIndex++;
-                    setTimeout(type, 35);
+                    setTimeout(type, 30);
                 }
             }
             type();
         }
 
+        /* CAKE BLOW & MULTI-STAGE FIREWORKS EXPLOSION */
         function explodeSparkles() {
-            // Blow Flame
-            document.getElementById('candleFlame').classList.add('off');
-            document.getElementById('cakeHint').innerText = "🎉 Wish Granted! Happy Birthday! 💖✨";
+            const flame = document.getElementById('candleFlame');
+            const cakeContainer = document.getElementById('cakeContainer');
 
-            // Fireworks & Glitters Explosion using Canvas Confetti
-            var count = 200;
-            var defaults = { origin: { y: 0.7 } };
+            if (!flame.classList.contains('off')) {
+                flame.classList.add('off');
+                
+                // Smoke Generation
+                for (let i = 0; i < 3; i++) {
+                    let smoke = document.createElement('div');
+                    smoke.className = 'smoke-particle';
+                    smoke.style.animationDelay = (i * 0.2) + 's';
+                    cakeContainer.appendChild(smoke);
+                    setTimeout(() => smoke.remove(), 2000);
+                }
 
-            function fire(particleRatio, opts) {
-                confetti(Object.assign({}, defaults, opts, {
-                    particleCount: Math.floor(count * particleRatio)
-                }));
+                document.getElementById('cakeHint').innerText = "🎉 Wish Granted! Flame Blown! Happy Birthday! 💖✨";
+
+                // Multi-Stage Confetti & Sparkles Blast
+                let duration = 3 * 1000;
+                let animationEnd = Date.now() + duration;
+
+                let interval = setInterval(function() {
+                    let timeLeft = animationEnd - Date.now();
+                    if (timeLeft <= 0) return clearInterval(interval);
+
+                    let particleCount = 40 * (timeLeft / duration);
+                    
+                    confetti({
+                        particleCount,
+                        startVelocity: 35,
+                        spread: 360,
+                        ticks: 60,
+                        origin: { x: Math.random(), y: Math.random() - 0.2 },
+                        colors: ['#ff4d6d', '#ffb3c1', '#ffd166', '#06d6a0', '#118ab2', '#ffffff']
+                    });
+                }, 200);
             }
-
-            fire(0.25, { spread: 26, startVelocity: 55, colors: ['#ff4d6d', '#ffb3c1'] });
-            fire(0.2, { spread: 60, colors: ['#ffe5ec', '#ffffff'] });
-            fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
-            fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, colors: ['#ff758f', '#ffb3c1'] });
-            fire(0.1, { spread: 120, startVelocity: 45 });
         }
 
         function playMusic(n) {
